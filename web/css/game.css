@@ -196,10 +196,11 @@ body.force-landscape .iphone {
 
 body.force-landscape .stage {
   --header-w: min(68cqw, 72%);
-  --prize-panel-w: min(44cqw, 268px);
-  --prize-panel-gap: 6px;
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.78);
-  --panel-bottom: 0.9%;
+  --prize-panel-w: 178px;
+  --prize-panel-gap: 3px;
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
+  --prize-panel-items-shift: -62%;
+  --panel-bottom: 0.6%;
 }
 
 body.force-landscape .header-wrap {
@@ -211,7 +212,8 @@ body.force-landscape .header-img {
 }
 
 body.force-landscape .prize-panel-wrap {
-  width: min(var(--prize-panel-w), calc(100% - 24px));
+  width: min(var(--prize-panel-w), calc(100% - 28px));
+  max-width: 178px;
 }
 
 /* Phones: drop mockup frame, game fills the viewport */
@@ -273,11 +275,11 @@ body.force-landscape .prize-panel-wrap {
     --edge-x: max(7%, 22px);
     --ui-top: 8px;
     --header-w: min(66cqw, 70%);
-    --prize-panel-w: min(48cqw, 296px);
-    --prize-panel-gap: 6px;
-    --prize-panel-items-shift: -63%;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.8);
-    --panel-bottom: 1%;
+    --prize-panel-w: 194px;
+    --prize-panel-gap: 4px;
+    --prize-panel-items-shift: -62%;
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.6);
+    --panel-bottom: 0.75%;
     --petard-size: min(24cqh, 118px);
   }
 
@@ -320,7 +322,12 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .prize-panel-wrap {
-    width: min(var(--prize-panel-w), calc(100% - 24px));
+    width: min(var(--prize-panel-w), calc(100% - 28px));
+    max-width: 194px;
+  }
+
+  .prize-panel-items .panel-prize-img {
+    height: min(var(--prize-icon-h), 34px);
   }
 
   .left-ui {
@@ -333,9 +340,14 @@ body.force-landscape .prize-panel-wrap {
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
   .stage {
     --header-w: min(64cqw, 68%);
-    --prize-panel-w: min(46cqw, 280px);
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.78);
+    --prize-panel-w: 188px;
+    --prize-panel-gap: 4px;
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
     --petard-size: min(26cqh, 128px);
+  }
+
+  .prize-panel-wrap {
+    max-width: 188px;
   }
 
   .header-img {
