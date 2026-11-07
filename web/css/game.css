@@ -173,6 +173,67 @@ body {
   height: 68px;
 }
 
+/* Block portrait play on phones — landscape only */
+.orientation-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  text-align: center;
+  color: #fff;
+}
+
+.orientation-gate__card {
+  max-width: 320px;
+  padding: 28px 22px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.orientation-gate__icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 14px;
+  animation: orientationHintSpin 2.4s ease-in-out infinite;
+}
+
+.orientation-gate__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.orientation-gate__text {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  opacity: 0.88;
+}
+
+@keyframes orientationHintSpin {
+  0%,
+  100% {
+    transform: rotate(-28deg);
+  }
+  50% {
+    transform: rotate(28deg);
+  }
+}
+
+body.portrait-blocked .orientation-gate {
+  display: flex;
+}
+
+body.portrait-blocked #app {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Phones: drop mockup frame, game fills the viewport */
 @media (hover: none) and (pointer: coarse), (max-width: 768px) {
   html,

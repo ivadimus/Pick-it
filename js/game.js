@@ -1227,6 +1227,30 @@
     });
   }
 
+  function initOrientationGate() {
+    const gate = document.getElementById("orientationGate");
+    if (!gate) return;
+
+    const touchUi = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const portraitMq = window.matchMedia("(orientation: portrait)");
+
+    function update() {
+      const blocked = touchUi.matches && portraitMq.matches;
+      document.body.classList.toggle("portrait-blocked", blocked);
+      gate.setAttribute("aria-hidden", blocked ? "false" : "true");
+    }
+
+    const onMq = () => update();
+    if (touchUi.addEventListener) touchUi.addEventListener("change", onMq);
+    else touchUi.addListener(onMq);
+    if (portraitMq.addEventListener) portraitMq.addEventListener("change", onMq);
+    else portraitMq.addListener(onMq);
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", () => setTimeout(update, 120));
+    update();
+  }
+
+  initOrientationGate();
   initGameCompleteOverlay();
   initInfoPanelSwing();
   initStars();
