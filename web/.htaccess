@@ -1,0 +1,20 @@
+# Pick-it static hosting (Apache)
+DirectoryIndex index.html
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+  <FilesMatch "\.(png|jpg|jpeg|webp|gif|svg)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/png .png
+  AddType text/css .css
+  AddType application/javascript .js
+</IfModule>

@@ -1,0 +1,9 @@
+{
+  "name": "pick-it",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pick-it game — static web build for server upload",
+  "scripts": {
+    "build:web": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/build-web.ps1"
+  }
+}
