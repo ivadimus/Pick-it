@@ -173,65 +173,25 @@ body {
   height: 68px;
 }
 
-/* Block portrait play on phones — landscape only */
-.orientation-gate {
-  display: none;
+/* Phones held upright: rotate UI to forced landscape */
+body.force-landscape {
+  overflow: hidden;
+}
+
+body.force-landscape #app {
   position: fixed;
-  inset: 0;
-  z-index: 50000;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
-  text-align: center;
-  color: #fff;
+  left: 50%;
+  top: 50%;
+  padding: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center center;
 }
 
-.orientation-gate__card {
-  max-width: 320px;
-  padding: 28px 22px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-}
-
-.orientation-gate__icon {
-  font-size: 48px;
-  line-height: 1;
-  margin-bottom: 14px;
-  animation: orientationHintSpin 2.4s ease-in-out infinite;
-}
-
-.orientation-gate__title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.orientation-gate__text {
-  font-size: 0.95rem;
-  line-height: 1.45;
-  opacity: 0.88;
-}
-
-@keyframes orientationHintSpin {
-  0%,
-  100% {
-    transform: rotate(-28deg);
-  }
-  50% {
-    transform: rotate(28deg);
-  }
-}
-
-body.portrait-blocked .orientation-gate {
-  display: flex;
-}
-
-body.portrait-blocked #app {
-  visibility: hidden;
-  pointer-events: none;
+body.force-landscape .iphone {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
 }
 
 /* Phones: drop mockup frame, game fills the viewport */
@@ -354,24 +314,6 @@ body.portrait-blocked #app {
     --header-w: min(50cqw, 50%);
     --prize-panel-w: min(58cqw, 400px);
     --petard-size: min(26cqh, 128px);
-  }
-}
-
-@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-  .stage {
-    --header-w: min(70cqw, 78%);
-    --prize-panel-w: min(80cqw, 320px);
-    --petard-size: min(19cqw, 92px);
-    --panel-bottom: 1.2%;
-  }
-
-  .header-wrap {
-    max-width: calc(100% - 116px);
-  }
-
-  .top-bar {
-    min-height: 64px;
-    height: 14%;
   }
 }
 

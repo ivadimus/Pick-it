@@ -1227,30 +1227,37 @@
     });
   }
 
-  function initOrientationGate() {
-    const gate = document.getElementById("orientationGate");
-    if (!gate) return;
+  function initForcedLandscape() {
+    const app = document.getElementById("app");
+    if (!app) return;
 
     const touchUi = window.matchMedia("(hover: none) and (pointer: coarse)");
-    const portraitMq = window.matchMedia("(orientation: portrait)");
 
     function update() {
-      const blocked = touchUi.matches && portraitMq.matches;
-      document.body.classList.toggle("portrait-blocked", blocked);
-      gate.setAttribute("aria-hidden", blocked ? "false" : "true");
+      const portrait = window.innerHeight > window.innerWidth;
+      const force = touchUi.matches && portrait;
+      document.body.classList.toggle("force-landscape", force);
+      if (force) {
+        app.style.width = `${window.innerHeight}px`;
+        app.style.height = `${window.innerWidth}px`;
+      } else {
+        app.style.width = "";
+        app.style.height = "";
+      }
+      requestAnimationFrame(() => {
+        if (typeof reflowStageUi === "function") reflowStageUi();
+      });
     }
 
-    const onMq = () => update();
-    if (touchUi.addEventListener) touchUi.addEventListener("change", onMq);
-    else touchUi.addListener(onMq);
-    if (portraitMq.addEventListener) portraitMq.addEventListener("change", onMq);
-    else portraitMq.addListener(onMq);
     window.addEventListener("resize", update);
-    window.addEventListener("orientationchange", () => setTimeout(update, 120));
+    window.addEventListener("orientationchange", () => setTimeout(update, 150));
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", update);
+    }
     update();
   }
 
-  initOrientationGate();
+  initForcedLandscape();
   initGameCompleteOverlay();
   initInfoPanelSwing();
   initStars();
