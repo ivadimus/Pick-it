@@ -196,9 +196,9 @@ body.force-landscape .iphone {
 
 body.force-landscape .stage {
   --header-w: min(68cqw, 72%);
-  --prize-panel-w: 124px;
+  --prize-panel-w: 100px;
   --prize-panel-gap: 0px;
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.5);
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
   --prize-panel-items-shift: -62%;
   --panel-bottom: 0.6%;
 }
@@ -213,7 +213,7 @@ body.force-landscape .header-img {
 
 body.force-landscape .prize-panel-wrap {
   width: min(var(--prize-panel-w), calc(100% - 28px));
-  max-width: 124px;
+  max-width: 100px;
 }
 
 /* Phones: drop mockup frame, game fills the viewport */
@@ -275,10 +275,10 @@ body.force-landscape .prize-panel-wrap {
     --edge-x: max(7%, 22px);
     --ui-top: 8px;
     --header-w: min(66cqw, 70%);
-    --prize-panel-w: 132px;
+    --prize-panel-w: 108px;
     --prize-panel-gap: 0px;
     --prize-panel-items-shift: -62%;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.5);
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
     --panel-bottom: 0.75%;
     --petard-size: min(24cqh, 118px);
   }
@@ -323,17 +323,21 @@ body.force-landscape .prize-panel-wrap {
 
   .prize-panel-wrap {
     width: min(var(--prize-panel-w), calc(100% - 28px));
-    max-width: 132px;
+    max-width: 108px;
   }
 
   .prize-panel-items {
-    padding: 0 0.4%;
+    padding: 0;
     gap: 0;
     column-gap: 0;
   }
 
+  .prize-panel-items .panel-prize {
+    margin: 0 -2px;
+  }
+
   .prize-panel-items .panel-prize-img {
-    height: min(var(--prize-icon-h), 24px);
+    height: min(var(--prize-icon-h), 20px);
   }
 
   .left-ui {
@@ -346,14 +350,14 @@ body.force-landscape .prize-panel-wrap {
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
   .stage {
     --header-w: min(64cqw, 68%);
-    --prize-panel-w: 128px;
+    --prize-panel-w: 104px;
     --prize-panel-gap: 0px;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.5);
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
     --petard-size: min(26cqh, 128px);
   }
 
   .prize-panel-wrap {
-    max-width: 128px;
+    max-width: 104px;
   }
 
   .header-img {
