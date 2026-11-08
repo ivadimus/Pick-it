@@ -1188,6 +1188,14 @@
     }
   }
 
+  async function finishIntroUi() {
+    finalizePetardLanding();
+    showPrizeAndInfoPanels();
+    showIntroStep("header");
+    await wait(400);
+    enablePicking();
+  }
+
   async function runIntro() {
     buildPanel();
     const prizeOrder = shuffleArray(PRIZES.map((p) => p.id));
@@ -1195,18 +1203,18 @@
 
     await waitForStageLayout();
 
+    const flyMaxMs = PETARD_FLY_IN_MS + 300;
+    const flyWatchdog = wait(flyMaxMs).then(() => {
+      finalizePetardLanding();
+    });
+
     try {
-      await flyPetardsFromPanel();
+      await Promise.race([flyPetardsFromPanel(), flyWatchdog]);
     } catch (err) {
       console.error("runIntro flyPetards failed", err);
-      finalizePetardLanding();
+    } finally {
+      await finishIntroUi();
     }
-
-    showPrizeAndInfoPanels();
-    showIntroStep("header");
-
-    await wait(600);
-    enablePicking();
   }
 
   function reflowStageUi() {
@@ -1355,5 +1363,12 @@
   initInfoPanelSwing();
   initStars();
   initSnow();
-  waitForStageLayout().then(() => runIntro());
+  waitForStageLayout()
+    .then(() => runIntro())
+    .catch((err) => {
+      console.error("runIntro failed", err);
+      if (typeof finishIntroUi === "function") {
+        finishIntroUi();
+      }
+    });
 })();
