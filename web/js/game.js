@@ -1370,11 +1370,12 @@
     });
   }
 
-  function initForcedLandscape() {
+  function initLandscapeOnly() {
     const app = document.getElementById("app");
     if (!app) return;
 
     const touchUi = window.matchMedia("(hover: none) and (pointer: coarse)");
+    let lockTried = false;
 
     function viewportSize() {
       const vv = window.visualViewport;
@@ -1383,39 +1384,60 @@
       return { w, h };
     }
 
+    function tryLockLandscape() {
+      if (lockTried) return;
+      const { w, h } = viewportSize();
+      if (h > w) return;
+      const orient = screen.orientation;
+      if (!orient || typeof orient.lock !== "function") return;
+      lockTried = true;
+      orient.lock("landscape").catch(() => {
+        lockTried = false;
+      });
+    }
+
     function update() {
       const { w, h } = viewportSize();
       const portrait = h > w;
-      const force = touchUi.matches && portrait;
-      document.body.classList.toggle("force-landscape", force);
+      document.body.classList.toggle("portrait-blocked", portrait);
+      document.body.classList.remove("force-landscape");
       document.documentElement.classList.toggle("is-touch", touchUi.matches);
-      if (force) {
-        const rw = Math.round(h);
-        const rh = Math.round(w);
-        app.style.width = `${rw}px`;
-        app.style.height = `${rh}px`;
-        app.style.maxWidth = `${rw}px`;
-        app.style.maxHeight = `${rh}px`;
-      } else {
-        app.style.width = "";
-        app.style.height = "";
-        app.style.maxWidth = "";
-        app.style.maxHeight = "";
+
+      app.style.width = "";
+      app.style.height = "";
+      app.style.maxWidth = "";
+      app.style.maxHeight = "";
+      app.style.visibility = portrait ? "hidden" : "";
+
+      if (!portrait) {
+        tryLockLandscape();
       }
+
       requestAnimationFrame(() => {
         if (typeof reflowStageUi === "function") reflowStageUi();
       });
     }
+
+    const onFirstGesture = () => {
+      tryLockLandscape();
+    };
+    document.body.addEventListener("pointerdown", onFirstGesture, {
+      once: true,
+      passive: true,
+    });
 
     window.addEventListener("resize", update);
     window.addEventListener("orientationchange", () => setTimeout(update, 150));
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", update);
     }
+    if (screen.orientation) {
+      screen.orientation.addEventListener("change", update);
+    }
     update();
   }
 
-  initForcedLandscape();
+  initLandscapeOnly();
   initGameCompleteOverlay();
   initInfoPanelSwing();
   initStars();

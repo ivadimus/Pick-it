@@ -180,7 +180,62 @@ body {
   height: 68px;
 }
 
-/* Phones held upright: rotate UI to forced landscape */
+/* Landscape-only: block portrait with full-screen prompt */
+.rotate-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px;
+  text-align: center;
+  color: #fff;
+  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  pointer-events: auto;
+}
+
+body.portrait-blocked .rotate-overlay {
+  display: flex;
+}
+
+body.portrait-blocked #app {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.rotate-overlay-icon {
+  font-size: 3.25rem;
+  line-height: 1;
+  animation: rotateHint 2.2s ease-in-out infinite;
+}
+
+.rotate-overlay-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.rotate-overlay-hint {
+  font-size: 0.95rem;
+  opacity: 0.88;
+  max-width: 16rem;
+  line-height: 1.35;
+}
+
+@keyframes rotateHint {
+  0%,
+  100% {
+    transform: rotate(-90deg);
+  }
+  50% {
+    transform: rotate(-90deg) scale(1.08);
+  }
+}
+
+/* Legacy: CSS rotate fallback (desktop only, optional) */
 body.force-landscape {
   overflow: hidden;
 }

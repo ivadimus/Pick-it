@@ -7,9 +7,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Pick-it</title>
-  <link rel="stylesheet" href="css/game.css?v=mobile2" />
+  <link rel="stylesheet" href="css/game.css?v=landscape1" />
 </head>
 <body>
+  <div id="rotateOverlay" class="rotate-overlay" aria-live="polite">
+    <div class="rotate-overlay-icon" aria-hidden="true">↻</div>
+    <p class="rotate-overlay-title">Поверните устройство</p>
+    <p class="rotate-overlay-hint">Игра работает только в горизонтальном режиме</p>
+  </div>
   <div id="app" class="app">
     <div class="iphone iphone--landscape iphone--14-pro-max" aria-label="iPhone 14 Pro Max landscape (932×430)">
       <div class="iphone-shell">
