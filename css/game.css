@@ -27,16 +27,23 @@ body {
 .iphone {
   --iphone-logical-w: 932;
   --iphone-logical-h: 430;
+  --iphone-preview-scale: 1.3;
   aspect-ratio: var(--iphone-logical-w) / var(--iphone-logical-h);
   width: min(
-    96vw,
-    calc(100dvh * var(--iphone-logical-w) / var(--iphone-logical-h)),
-    calc(var(--iphone-logical-w) * 1px)
+    calc(96vw * var(--iphone-preview-scale)),
+    calc(
+      100dvh * var(--iphone-logical-w) / var(--iphone-logical-h) *
+        var(--iphone-preview-scale)
+    ),
+    calc(var(--iphone-logical-w) * 1px * var(--iphone-preview-scale))
   );
   height: min(
-    100dvh,
-    calc(96vw * var(--iphone-logical-h) / var(--iphone-logical-w)),
-    calc(var(--iphone-logical-h) * 1px)
+    calc(100dvh * var(--iphone-preview-scale)),
+    calc(
+      96vw * var(--iphone-logical-h) / var(--iphone-logical-w) *
+        var(--iphone-preview-scale)
+    ),
+    calc(var(--iphone-logical-h) * 1px * var(--iphone-preview-scale))
   );
   filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.65));
 }
@@ -196,10 +203,11 @@ body.force-landscape .iphone {
 
 body.force-landscape .stage {
   --header-w: min(68cqw, 72%);
-  --prize-panel-w: 100px;
+  --prize-panel-w: 106px;
   --prize-panel-gap: 0px;
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
-  --prize-panel-items-shift: -62%;
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
+  --prize-panel-item-overlap: 2px;
+  --prize-panel-items-shift: -54%;
   --panel-bottom: 0.6%;
 }
 
@@ -213,7 +221,7 @@ body.force-landscape .header-img {
 
 body.force-landscape .prize-panel-wrap {
   width: min(var(--prize-panel-w), calc(100% - 28px));
-  max-width: 100px;
+  max-width: 106px;
 }
 
 /* Phones: drop mockup frame, game fills the viewport */
@@ -236,6 +244,7 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .iphone {
+    --iphone-preview-scale: 1;
     width: 100%;
     height: 100%;
     height: 100dvh;
@@ -275,12 +284,15 @@ body.force-landscape .prize-panel-wrap {
     --edge-x: max(7%, 22px);
     --ui-top: 8px;
     --header-w: min(66cqw, 70%);
-    --prize-panel-w: 108px;
+    --prize-panel-w: 113px;
     --prize-panel-gap: 0px;
-    --prize-panel-items-shift: -62%;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
+    --prize-panel-item-overlap: 2px;
+    --prize-panel-items-shift: -54%;
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
     --panel-bottom: 0.75%;
     --petard-size: min(24cqh, 118px);
+    --info-ui-shift-x: 32px;
+    --info-panel-inset-x: 4px;
   }
 
   .top-left-controls {
@@ -323,7 +335,7 @@ body.force-landscape .prize-panel-wrap {
 
   .prize-panel-wrap {
     width: min(var(--prize-panel-w), calc(100% - 28px));
-    max-width: 108px;
+    max-width: 113px;
   }
 
   .prize-panel-items {
@@ -333,11 +345,11 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .prize-panel-items .panel-prize {
-    margin: 0 -2px;
+    margin: 0 calc(var(--prize-panel-item-overlap, 2px) * -1);
   }
 
   .prize-panel-items .panel-prize-img {
-    height: min(var(--prize-icon-h), 20px);
+    height: min(var(--prize-icon-h), 26px);
   }
 
   .left-ui {
@@ -350,14 +362,15 @@ body.force-landscape .prize-panel-wrap {
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
   .stage {
     --header-w: min(64cqw, 68%);
-    --prize-panel-w: 104px;
+    --prize-panel-w: 108px;
     --prize-panel-gap: 0px;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.46);
+    --prize-panel-item-overlap: 2px;
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
     --petard-size: min(26cqh, 128px);
   }
 
   .prize-panel-wrap {
-    max-width: 104px;
+    max-width: 108px;
   }
 
   .header-img {
@@ -514,13 +527,17 @@ body.force-landscape .prize-panel-wrap {
   --ui-top: 12px;
   --info-top: 11.8%;
   --info-panel-lift: 15px;
+  --info-ui-shift-x: 44px;
+  --info-panel-inset-x: 6px;
   --panel-bottom: 3.2%;
   --header-w: 36.8%;
-  --prize-panel-w: 632.4px;
-  --prize-panel-h: calc(var(--prize-panel-w) * 262 / 1300);
-  --prize-icon-h: calc(var(--prize-panel-h) * 1.012);
-  --prize-panel-gap: 13.5px;
-  --prize-panel-items-shift: -68%;
+  --prize-panel-w: 569px;
+  --prize-panel-h: calc(var(--prize-panel-w) * 152 / 1024);
+  --prize-icon-h: calc(var(--prize-panel-h) * 1.28);
+  --prize-panel-gap: 2px;
+  --prize-panel-item-overlap: 3px;
+  --prize-panel-items-shift: -58%;
+  --prize-panel-items-pad-x: 1.4%;
   --petard-size: min(27.3cqh, 157px);
 
   position: relative;
@@ -608,7 +625,7 @@ body.force-landscape .prize-panel-wrap {
   bottom: max(0px, calc(var(--prize-panel-bottom) - 72px));
   transform: translateX(-50%);
   width: min(var(--prize-panel-w), calc(100% - 16px));
-  aspect-ratio: 1300 / 262;
+  aspect-ratio: 1024 / 152;
   z-index: 25;
   opacity: 0;
   pointer-events: none;
@@ -654,7 +671,8 @@ body.force-landscape .prize-panel-wrap {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: fill;
+  object-fit: contain;
+  object-position: center;
 }
 
 .prize-panel-items {
@@ -671,7 +689,7 @@ body.force-landscape .prize-panel-wrap {
   align-items: center;
   justify-content: center;
   gap: var(--prize-panel-gap);
-  padding: 0 2.2%;
+  padding: 0 var(--prize-panel-items-pad-x, 1.4%);
   overflow: hidden;
 }
 
@@ -679,7 +697,10 @@ body.force-landscape .prize-panel-wrap {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  max-width: calc((100% - var(--prize-panel-gap) * 7) / 8);
+  max-width: calc(
+    (100% - var(--prize-panel-gap) * 7) / 8 + var(--prize-panel-item-overlap, 0px)
+  );
+  margin: 0 calc(var(--prize-panel-item-overlap, 0px) * -1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -735,7 +756,7 @@ body.force-landscape .prize-panel-wrap {
 
 .left-ui {
   position: absolute;
-  left: var(--edge-x);
+  left: calc(var(--edge-x) + var(--info-ui-shift-x, 0px));
   top: 0;
   bottom: 0;
   width: 11%;
@@ -780,11 +801,10 @@ body.force-landscape .prize-panel-wrap {
 
 .info-panel-wrap {
   position: absolute;
-  left: 0;
+  left: var(--info-panel-inset-x, 0px);
   top: -120%;
   width: 100%;
   max-width: 124px;
-  transform-origin: 50% 0;
 }
 
 .info-panel-wrap.dropped {
@@ -797,14 +817,6 @@ body.force-landscape .prize-panel-wrap {
 
 .info-swing.info-user-swing {
   animation: infoSwing 1s ease-in-out;
-}
-
-.info-rope {
-  width: 4px;
-  height: 28px;
-  margin: 0 auto;
-  background: linear-gradient(180deg, #8a8a8a, #5a5a5a);
-  border-radius: 2px;
 }
 
 .info-swing {
