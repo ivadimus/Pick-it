@@ -1388,12 +1388,19 @@
       const portrait = h > w;
       const force = touchUi.matches && portrait;
       document.body.classList.toggle("force-landscape", force);
+      document.documentElement.classList.toggle("is-touch", touchUi.matches);
       if (force) {
-        app.style.width = `${Math.round(h)}px`;
-        app.style.height = `${Math.round(w)}px`;
+        const rw = Math.round(h);
+        const rh = Math.round(w);
+        app.style.width = `${rw}px`;
+        app.style.height = `${rh}px`;
+        app.style.maxWidth = `${rw}px`;
+        app.style.maxHeight = `${rh}px`;
       } else {
         app.style.width = "";
         app.style.height = "";
+        app.style.maxWidth = "";
+        app.style.maxHeight = "";
       }
       requestAnimationFrame(() => {
         if (typeof reflowStageUi === "function") reflowStageUi();
