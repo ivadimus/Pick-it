@@ -33,55 +33,63 @@
     return num ? PETARD_SPECIAL_REWARD[num] || null : null;
   }
 
-  /** Unique color + burst shape per petard 1–8 */
+  /** Unique palette + burst style per petard 1–8 (matches 1.png … 8.png) */
   const FIREWORK_PROFILES = {
     1: {
-      primary: "#5cff5c",
-      secondary: "#ffe566",
-      accent: "#ffffff",
-      shape: "circle",
+      primary: "#4dff7a",
+      secondary: "#c6ff3d",
+      accent: "#e8fff0",
+      style: "peony",
+      label: "lime",
     },
     2: {
-      primary: "#ff4db8",
-      secondary: "#ffb3e6",
-      accent: "#fff0fa",
-      shape: "star",
+      primary: "#ff28a8",
+      secondary: "#ff70d8",
+      accent: "#ffe0f4",
+      style: "peony",
+      label: "magenta",
     },
     3: {
-      primary: "#ff8c2a",
-      secondary: "#ff4500",
-      accent: "#ffd4a8",
-      shape: "cross",
+      primary: "#ff9a18",
+      secondary: "#ff5c28",
+      accent: "#ffe8cc",
+      style: "peony",
+      label: "orange",
     },
     4: {
-      primary: "#3ee8d6",
-      secondary: "#ff6eb4",
-      accent: "#e0ffff",
-      shape: "ring",
+      primary: "#2ee8ff",
+      secondary: "#4ca8ff",
+      accent: "#d4f8ff",
+      style: "peony",
+      label: "cyan",
     },
     5: {
-      primary: "#4da6ff",
-      secondary: "#ffd633",
-      accent: "#ffffff",
-      shape: "spiral",
+      primary: "#ffe838",
+      secondary: "#fff06a",
+      accent: "#fffde8",
+      style: "sparkle",
+      label: "yellow",
     },
     6: {
-      primary: "#b8ff3d",
-      secondary: "#ff4757",
-      accent: "#f5ffe0",
-      shape: "diamond",
+      primary: "#3888ff",
+      secondary: "#5ce8ff",
+      accent: "#dceeff",
+      style: "peony",
+      label: "blue",
     },
     7: {
-      primary: "#ff3355",
-      secondary: "#ffc14d",
-      accent: "#ffe0e8",
-      shape: "heart",
+      primary: "#ff3d58",
+      secondary: "#ff8a48",
+      accent: "#ffe0d8",
+      style: "peony",
+      label: "coral",
     },
     8: {
-      primary: "#b57bff",
-      secondary: "#e8d4ff",
-      accent: "#ffffff",
-      shape: "willow",
+      primary: "#9048ff",
+      secondary: "#d098ff",
+      accent: "#f0e4ff",
+      style: "willow",
+      label: "violet",
     },
   };
 
@@ -113,7 +121,7 @@
    * Bottom fan spawn positions (0 = left off-screen … 1 = right off-screen), petard 1→8.
    * Matches sketch: #1 diagonal from left, #2–#3 clustered, #4–#5 center V, edges fan outward.
    */
-  const PETARD_FAN_SPAWN_T = [0.18, 0.26, 0.3, 0.46, 0.48, 0.55, 0.74, 0.86];
+  const PETARD_FAN_SPAWN_T = [0.18, 0.26, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
 
   const field = document.getElementById("field");
   const prizePanelItems = document.getElementById("prizePanelItems");
@@ -135,12 +143,22 @@
   let gameCompleteOverlayTimer = null;
   let stageBorderFireworksInterval = null;
   let stageBorderFireworksEndTimer = null;
+  let scheduleInfoIntroSwingEnd = null;
 
   const IDLE_WAIT_MS = 2000;
   const IDLE_ANIM_MS = 1000;
   const GAME_COMPLETE_OVERLAY_DELAY_MS = 2000;
-  const STAGE_BORDER_FIREWORK_INTERVAL_MS = 165;
+  const STAGE_BORDER_FIREWORK_INTERVAL_MS = 520;
+  const STAGE_BORDER_FIREWORK_SPREAD = 0.72;
+  const FW_MAX_PARTICLES = 220;
+  const FW_PETARD_BURST_SCALE = 1.52;
   const PETARD_FLY_IN_MS = 1000;
+
+  let fwCanvas = null;
+  let fwCtx = null;
+  let fwParticles = [];
+  let fwHazes = [];
+  let fwRafId = null;
 
   function wait(ms) {
     return new Promise((r) => setTimeout(r, ms));
@@ -330,7 +348,17 @@
 
     const fakeCube = document.createElement("img");
     fakeCube.src = PETARDS[Math.floor(Math.random() * PETARDS.length)];
-    playPetardFirework(x, y, fakeCube);
+    playStageFinaleFirework(x, y, fakeCube);
+  }
+
+  /** Softer bursts along the stage border (game complete). */
+  function playStageFinaleFirework(x, y, cubeImg) {
+    const num = petardNumberFromImg(cubeImg) || 1;
+    const { palette, style } = fireworkPaletteForPetard(num);
+    playRealisticFirework(x, y, palette, {
+      scale: 0.76 * STAGE_BORDER_FIREWORK_SPREAD,
+      style,
+    });
   }
 
   function startStageBorderFireworks(durationMs) {
@@ -369,7 +397,8 @@
     clearStageBorderFireworks();
     clearIdleHintTimers();
     hideHand();
-    vfxLayer.innerHTML = "";
+    resetFireworkCanvas();
+    if (vfxLayer) vfxLayer.innerHTML = "";
     setEnergy(8);
     canPick = false;
     picking = false;
@@ -394,6 +423,9 @@
         }
         void el.offsetWidth;
         el.classList.add("dropped");
+        if (typeof scheduleInfoIntroSwingEnd === "function") {
+          scheduleInfoIntroSwingEnd();
+        }
       }
       if (name === "meter") el.classList.add("visible");
     });
@@ -543,315 +575,328 @@
     };
   }
 
-  function spawnFireworkParticle(x, y, tx, ty, color, shape, size, duration, motion) {
-    const p = document.createElement("div");
-    p.className = "vfx-fw-particle shape-" + shape;
-    if (motion === "willow") p.classList.add("motion-willow");
-    if (motion === "ember") p.classList.add("motion-ember");
-    p.style.left = x + "px";
-    p.style.top = y + "px";
-    p.style.setProperty("--tx", tx + "px");
-    p.style.setProperty("--ty", ty + "px");
-    p.style.setProperty("--dur", duration + "ms");
-    p.style.setProperty("--sz", size + "px");
-    p.style.setProperty("--c", color);
-    vfxLayer.appendChild(p);
-    setTimeout(() => p.remove(), duration + 80);
+  function resetFireworkCanvas() {
+    fwParticles = [];
+    fwHazes = [];
+    if (fwRafId !== null) {
+      cancelAnimationFrame(fwRafId);
+      fwRafId = null;
+    }
+    fwCanvas = null;
+    fwCtx = null;
   }
 
-  function spawnFireworkCrackle(x, y, colors, count, spread) {
-    for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const dist = spread * (0.25 + Math.random() * 1.05);
-      spawnFireworkParticle(
+  function fwHexRgb(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || "#ffffff");
+    if (!m) return { r: 255, g: 255, b: 255 };
+    return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+  }
+
+  function fwMixRgb(a, b, t) {
+    return {
+      r: Math.round(a.r + (b.r - a.r) * t),
+      g: Math.round(a.g + (b.g - a.g) * t),
+      b: Math.round(a.b + (b.b - a.b) * t),
+    };
+  }
+
+  function ensureFireworkCanvas() {
+    if (!vfxLayer) return null;
+    if (!fwCanvas) {
+      fwCanvas = document.createElement("canvas");
+      fwCanvas.className = "vfx-fw-canvas";
+      fwCanvas.setAttribute("aria-hidden", "true");
+      vfxLayer.appendChild(fwCanvas);
+    }
+    syncFireworkCanvasSize();
+    if (!fwCtx) fwCtx = fwCanvas.getContext("2d");
+    return fwCtx;
+  }
+
+  function syncFireworkCanvasSize() {
+    const stage = document.getElementById("stage");
+    if (!stage || !fwCanvas) return;
+    const w = stage.offsetWidth || 1;
+    const h = stage.offsetHeight || 1;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    fwCanvas.width = Math.max(1, Math.floor(w * dpr));
+    fwCanvas.height = Math.max(1, Math.floor(h * dpr));
+    fwCanvas.style.width = w + "px";
+    fwCanvas.style.height = h + "px";
+    if (fwCtx) fwCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function fwPushParticle(p) {
+    if (fwParticles.length >= FW_MAX_PARTICLES) fwParticles.shift();
+    fwParticles.push(p);
+    startFireworkLoop();
+  }
+
+  function fwPushHaze(h) {
+    fwHazes.push(h);
+    startFireworkLoop();
+  }
+
+  function startFireworkLoop() {
+    if (fwRafId !== null) return;
+    fwRafId = requestAnimationFrame(stepFireworkCanvas);
+  }
+
+  function stepFireworkCanvas() {
+    const ctx = ensureFireworkCanvas();
+    if (!ctx) {
+      fwRafId = null;
+      return;
+    }
+    syncFireworkCanvasSize();
+    const stage = document.getElementById("stage");
+    const w = stage ? stage.offsetWidth : 0;
+    const h = stage ? stage.offsetHeight : 0;
+    ctx.clearRect(0, 0, w, h);
+
+    fwHazes = fwHazes.filter((hz) => {
+      hz.life -= 1;
+      if (hz.life <= 0) return false;
+      const t = hz.life / hz.maxLife;
+      const alpha = hz.alpha * t;
+      const g = ctx.createRadialGradient(hz.x, hz.y, 0, hz.x, hz.y, hz.radius);
+      g.addColorStop(0, `rgba(255,255,255,${Math.min(1, alpha * 1.25)})`);
+      g.addColorStop(0.1, `rgba(${hz.r},${hz.g},${hz.b},${alpha * 1.05})`);
+      g.addColorStop(0.38, `rgba(${hz.r},${hz.g},${hz.b},${alpha * 0.58})`);
+      g.addColorStop(1, `rgba(${hz.r},${hz.g},${hz.b},0)`);
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      return true;
+    });
+
+    fwParticles = fwParticles.filter((p) => {
+      p.px = p.x;
+      p.py = p.y;
+      p.vx *= p.drag;
+      p.vy *= p.drag;
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 1;
+      if (p.life <= 0) return false;
+
+      const lifeT = 1 - p.life / p.maxLife;
+      const white = { r: 255, g: 255, b: 255 };
+      const tint = fwMixRgb(white, { r: p.r, g: p.g, b: p.b }, Math.min(1, 0.25 + lifeT * 0.95));
+      const alpha = Math.min(1, (p.life / p.maxLife) * p.peak);
+
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      const glow = (p.glow || 1) * (p.kind === "streak" ? 24 : 18);
+      ctx.shadowBlur = glow;
+      ctx.shadowColor = `rgba(${tint.r},${tint.g},${tint.b},${Math.min(1, alpha * 1.15)})`;
+
+      if (p.kind === "streak") {
+        ctx.strokeStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
+        ctx.lineWidth = Math.max(0.75, p.size * (0.42 + alpha * 0.85));
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(p.px, p.py);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(0.5, p.size * (0.55 + alpha * 0.5)), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      return true;
+    });
+
+    if (fwParticles.length || fwHazes.length) {
+      fwRafId = requestAnimationFrame(stepFireworkCanvas);
+    } else {
+      fwRafId = null;
+    }
+  }
+
+  function fwAddLaunchTrail(x, y, palette, scale) {
+    const c0 = fwHexRgb(palette[0]);
+    const c1 = fwHexRgb(palette[1]);
+    for (let s = 0; s < 3; s++) {
+      const startX = x + (Math.random() - 0.5) * 48 * scale;
+      const startY = y + (48 + Math.random() * 36) * scale;
+      for (let i = 0; i < 7; i++) {
+        const t = i / 7;
+        const curve = Math.sin(t * Math.PI) * 18 * scale;
+        const px = startX + (x - startX) * t + curve;
+        const py = startY + (y - startY) * t;
+        const col = i % 2 === 0 ? c0 : c1;
+        fwPushParticle({
+          x: px,
+          y: py,
+          px,
+          py,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: -0.6 - Math.random() * 0.8,
+          life: 22 + i * 2,
+          maxLife: 24 + i * 2,
+          r: col.r,
+          g: col.g,
+          b: col.b,
+          size: 1.1 + Math.random() * 0.8,
+          drag: 0.98,
+          gravity: 0.02,
+          peak: 0.95,
+          kind: "dot",
+        });
+      }
+    }
+  }
+
+  function fwEmitBurst(x, y, palette, opts) {
+    if (!vfxLayer) return;
+    const ctx = ensureFireworkCanvas();
+    if (!ctx) return;
+
+    const scale = opts && opts.scale != null ? opts.scale : 1;
+    const style = (opts && opts.style) || "peony";
+    const c0 = fwHexRgb(palette[0]);
+    const c1 = fwHexRgb(palette[1]);
+    const c2 = fwHexRgb(palette[2] || palette[1]);
+
+    fwPushHaze({
+      x,
+      y,
+      life: 38,
+      maxLife: 38,
+      r: c0.r,
+      g: c0.g,
+      b: c0.b,
+      radius: 118 * scale,
+      alpha: 0.98,
+    });
+    fwPushHaze({
+      x,
+      y,
+      life: 54,
+      maxLife: 54,
+      r: c1.r,
+      g: c1.g,
+      b: c1.b,
+      radius: 188 * scale,
+      alpha: 0.58,
+    });
+    fwPushHaze({
+      x,
+      y,
+      life: 62,
+      maxLife: 62,
+      r: c2.r,
+      g: c2.g,
+      b: c2.b,
+      radius: 248 * scale,
+      alpha: 0.34,
+    });
+
+    fwAddLaunchTrail(x, y, palette, scale);
+
+    let streaks = Math.round(40 * scale);
+    let dots = Math.round(30 * scale);
+    if (style === "sparkle") {
+      streaks = Math.round(26 * scale);
+      dots = Math.round(42 * scale);
+    }
+    if (style === "willow") {
+      streaks = Math.round(34 * scale);
+      dots = Math.round(26 * scale);
+    }
+
+    for (let i = 0; i < streaks; i++) {
+      const angle = (Math.PI * 2 * i) / streaks + (Math.random() - 0.5) * 0.11;
+      const speed = (4.2 + Math.random() * 6.2) * scale;
+      let vx = Math.cos(angle) * speed;
+      let vy = Math.sin(angle) * speed - 0.65 * scale;
+      if (style === "willow" && vy < 0) vy *= 0.35;
+      const col = i % 3 === 0 ? c0 : i % 3 === 1 ? c1 : c2;
+      fwPushParticle({
         x,
         y,
-        Math.cos(angle) * dist,
-        Math.sin(angle) * dist,
-        colors[i % colors.length],
-        Math.random() > 0.55 ? "streak" : "circle",
-        3 + Math.random() * 7,
-        520 + Math.random() * 680,
-        "ember"
-      );
+        px: x,
+        py: y,
+        vx,
+        vy,
+        life: 52 + Math.floor(Math.random() * 20),
+        maxLife: 64,
+        r: col.r,
+        g: col.g,
+        b: col.b,
+        size: (1.55 + Math.random() * 1.25) * Math.min(1.35, 0.85 + scale * 0.22),
+        glow: 1.15,
+        drag: style === "willow" ? 0.965 : 0.972,
+        gravity: style === "willow" ? 0.11 : 0.085,
+        peak: 1,
+        kind: "streak",
+      });
+    }
+
+    for (let i = 0; i < dots; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = (2.4 + Math.random() * 4.2) * scale;
+      const pick = Math.random();
+      const col = pick < 0.34 ? c0 : pick < 0.67 ? c1 : c2;
+      fwPushParticle({
+        x,
+        y,
+        px: x,
+        py: y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 0.4 * scale,
+        life: 38 + Math.floor(Math.random() * 26),
+        maxLife: 60,
+        r: col.r,
+        g: col.g,
+        b: col.b,
+        size: (1 + Math.random() * 1.55) * Math.min(1.3, 0.88 + scale * 0.2),
+        drag: 0.976,
+        gravity: 0.075,
+        peak: 0.95,
+        glow: 1.12,
+        kind: "dot",
+      });
     }
   }
 
-  function spawnFireworkBurst(x, y, profile, opts) {
+  function playRealisticFirework(x, y, palette, opts) {
     const spreadScale = opts && opts.spreadScale != null ? opts.spreadScale : 1;
-    const colors = [profile.primary, profile.secondary, profile.accent];
-    const shape = profile.shape;
-    const baseDur = shape === "willow" ? 1450 : 1150;
-    const spread = (shape === "willow" ? 188 : 228) * spreadScale;
+    const scale =
+      (opts && opts.scale != null ? opts.scale : 1) *
+      (opts && opts.bloomScale != null ? opts.bloomScale : 1) *
+      spreadScale;
+    fwEmitBurst(x, y, palette, {
+      scale,
+      style: (opts && opts.style) || "peony",
+    });
+  }
 
-    if (shape === "circle") {
-      for (let i = 0; i < 78; i++) {
-        const angle = (Math.PI * 2 * i) / 36 + Math.random() * 0.2;
-        const dist = spread * (0.55 + Math.random() * 0.85);
-        spawnFireworkParticle(
-          x,
-          y,
-          Math.cos(angle) * dist,
-          Math.sin(angle) * dist,
-          colors[i % 3],
-          "circle",
-          10 + Math.random() * 16,
-          baseDur,
-          "burst"
-        );
-      }
-      return;
-    }
-
-    if (shape === "star") {
-      for (let arm = 0; arm < 5; arm++) {
-        const angle = -Math.PI / 2 + (Math.PI * 2 * arm) / 5;
-        for (let step = 1; step <= 8; step++) {
-          const dist = spread * (0.25 + step * 0.2);
-          spawnFireworkParticle(
-            x,
-            y,
-            Math.cos(angle) * dist,
-            Math.sin(angle) * dist,
-            colors[step % 3],
-            "star",
-            11 + step * 2.5,
-            baseDur,
-            "burst"
-          );
-        }
-      }
-      for (let i = 0; i < 36; i++) {
-        const angle = (Math.PI * 2 * i) / 36;
-        const dist = spread * (0.35 + Math.random() * 0.55);
-        spawnFireworkParticle(
-          x,
-          y,
-          Math.cos(angle) * dist,
-          Math.sin(angle) * dist,
-          colors[i % 3],
-          "star",
-          6 + Math.random() * 8,
-          baseDur * 0.9,
-          "ember"
-        );
-      }
-      return;
-    }
-
-    if (shape === "cross") {
-      for (let i = 0; i < 4; i++) {
-        const angle = (Math.PI / 2) * i;
-        for (let step = 1; step <= 10; step++) {
-          const dist = spread * (0.2 + step * 0.18);
-          spawnFireworkParticle(
-            x,
-            y,
-            Math.cos(angle) * dist,
-            Math.sin(angle) * dist,
-            colors[i % 3],
-            "streak",
-            7 + Math.random() * 8,
-            baseDur,
-            "burst"
-          );
-        }
-      }
-      for (let i = 0; i < 4; i++) {
-        const angle = Math.PI / 4 + (Math.PI / 2) * i;
-        for (let step = 1; step <= 6; step++) {
-          const dist = spread * (0.15 + step * 0.14);
-          spawnFireworkParticle(
-            x,
-            y,
-            Math.cos(angle) * dist,
-            Math.sin(angle) * dist,
-            colors[i % 3],
-            "streak",
-            5 + Math.random() * 5,
-            baseDur,
-            "ember"
-          );
-        }
-      }
-      return;
-    }
-
-    if (shape === "ring") {
-      for (let i = 0; i < 58; i++) {
-        const angle = (Math.PI * 2 * i) / 28;
-        const dist = spread * 0.72;
-        spawnFireworkParticle(
-          x,
-          y,
-          Math.cos(angle) * dist,
-          Math.sin(angle) * dist,
-          colors[i % 3],
-          "ring",
-          10 + Math.random() * 10,
-          baseDur,
-          "burst"
-        );
-      }
-      for (let ring = 0; ring < 2; ring++) {
-        for (let i = 0; i < 24; i++) {
-          const angle = (Math.PI * 2 * i) / 24;
-          const dist = spread * (0.48 + ring * 0.28);
-          spawnFireworkParticle(
-            x,
-            y,
-            Math.cos(angle) * dist,
-            Math.sin(angle) * dist,
-            colors[(i + ring) % 3],
-            "circle",
-            6 + Math.random() * 6,
-            baseDur * 0.85,
-            "ember"
-          );
-        }
-      }
-      return;
-    }
-
-    if (shape === "spiral") {
-      for (let i = 0; i < 72; i++) {
-        const angle = i * 0.62;
-        const dist = spread * (0.15 + (i / 32) * 0.85);
-        spawnFireworkParticle(
-          x,
-          y,
-          Math.cos(angle) * dist,
-          Math.sin(angle) * dist,
-          colors[i % 3],
-          "diamond",
-          8 + Math.random() * 12,
-          baseDur,
-          "burst"
-        );
-      }
-      return;
-    }
-
-    if (shape === "diamond") {
-      for (let i = 0; i < 4; i++) {
-        const angle = Math.PI / 4 + (Math.PI / 2) * i;
-        for (let step = 1; step <= 8; step++) {
-          const dist = spread * (0.22 + step * 0.2);
-          spawnFireworkParticle(
-            x,
-            y,
-            Math.cos(angle) * dist,
-            Math.sin(angle) * dist,
-            colors[step % 3],
-            "diamond",
-            10 + Math.random() * 10,
-            baseDur,
-            "burst"
-          );
-        }
-      }
-      return;
-    }
-
-    if (shape === "heart") {
-      for (let i = 0; i < 54; i++) {
-        const t = (Math.PI * 2 * i) / 26;
-        const hx = 16 * Math.pow(Math.sin(t), 3);
-        const hy =
-          -(13 * Math.cos(t) -
-            5 * Math.cos(2 * t) -
-            2 * Math.cos(3 * t) -
-            Math.cos(4 * t));
-        const scale = spread / 22;
-        spawnFireworkParticle(
-          x,
-          y,
-          hx * scale,
-          hy * scale,
-          colors[i % 3],
-          "circle",
-          9 + Math.random() * 9,
-          baseDur,
-          "burst"
-        );
-      }
-      return;
-    }
-
-    if (shape === "willow") {
-      for (let i = 0; i < 52; i++) {
-        const angle = (Math.PI * 2 * i) / 24 + (Math.random() - 0.5) * 0.35;
-        const dist = spread * (0.45 + Math.random() * 0.55);
-        spawnFireworkParticle(
-          x,
-          y,
-          Math.cos(angle) * dist,
-          Math.sin(angle) * dist * 0.35,
-          colors[i % 3],
-          "streak",
-          6 + Math.random() * 8,
-          baseDur,
-          "willow"
-        );
-      }
-      spawnFireworkCrackle(x, y, colors, 45, spread * 0.85);
-    }
+  function fireworkPaletteForPetard(num) {
+    const profile = FIREWORK_PROFILES[num] || FIREWORK_PROFILES[1];
+    return {
+      palette: [profile.primary, profile.secondary, profile.accent],
+      style: profile.style,
+    };
   }
 
   function playPetardFirework(x, y, cubeImg) {
     const num = petardNumberFromImg(cubeImg) || 1;
-    const profile = FIREWORK_PROFILES[num] || FIREWORK_PROFILES[1];
-    const palette = [profile.primary, profile.secondary, profile.accent];
-
-    const burst = document.createElement("div");
-    burst.className = "vfx-burst vfx-fw-burst";
-    burst.style.left = x + "px";
-    burst.style.top = y + "px";
-
-    const flash = document.createElement("div");
-    flash.className = "vfx-fw-flash";
-    flash.style.setProperty("--fw-primary", profile.primary);
-    flash.style.setProperty("--fw-secondary", profile.secondary);
-
-    const core = document.createElement("div");
-    core.className = "vfx-fw-core";
-    core.style.setProperty("--fw-primary", profile.primary);
-
-    const smoke = document.createElement("div");
-    smoke.className = "vfx-fw-smoke";
-
-    const raysWrap = document.createElement("div");
-    raysWrap.className = "vfx-rays-wrap";
-    const rays = document.createElement("div");
-    rays.className = "vfx-fw-rays";
-    rays.style.setProperty("--fw-primary", profile.primary);
-    rays.style.setProperty("--fw-secondary", profile.secondary);
-    const rays2 = document.createElement("div");
-    rays2.className = "vfx-fw-rays vfx-fw-rays-outer";
-    rays2.style.setProperty("--fw-primary", profile.secondary);
-    rays2.style.setProperty("--fw-secondary", profile.primary);
-    raysWrap.appendChild(rays);
-    raysWrap.appendChild(rays2);
-
-    burst.appendChild(flash);
-    burst.appendChild(core);
-    burst.appendChild(smoke);
-    burst.appendChild(raysWrap);
-    vfxLayer.appendChild(burst);
-
-    spawnFireworkBurst(x, y, profile);
-    spawnFireworkCrackle(x, y, palette, 95, 240);
-
-    setTimeout(() => {
-      spawnFireworkBurst(x, y, profile, { spreadScale: 0.52 });
-      spawnFireworkCrackle(x, y, palette, 55, 165);
-    }, 110);
-
-    setTimeout(() => {
-      spawnFireworkCrackle(x, y, palette, 40, 200);
-    }, 280);
-
-    setTimeout(() => burst.remove(), 2100);
+    const { palette, style } = fireworkPaletteForPetard(num);
+    const scaleMul = style === "sparkle" ? 1.08 : style === "willow" ? 1.02 : 1;
+    playRealisticFirework(x, y, palette, {
+      scale: FW_PETARD_BURST_SCALE * scaleMul,
+      spreadScale: 1,
+      style,
+    });
   }
 
   function playCharacterRevealSparkles(x, y) {
@@ -1165,6 +1210,9 @@
       if (specialReward.includes("Peggy.png")) {
         slot.el.classList.add("reward-peggy");
       }
+      if (specialReward.includes("Carrie.png")) {
+        slot.el.classList.add("reward-carrie");
+      }
       if (specialReward.includes("Mole.png")) {
         slot.el.classList.add("reward-mole");
       }
@@ -1240,7 +1288,6 @@
 
     function scheduleIntroSwingEnd() {
       if (introSwingTimer !== null) clearTimeout(introSwingTimer);
-      wrap.classList.remove("info-intro-swing-done");
       introSwingTimer = setTimeout(() => {
         introSwingTimer = null;
         if (!wrap.classList.contains("dropped")) return;
@@ -1251,14 +1298,7 @@
       }, INTRO_SWING_TOTAL_MS);
     }
 
-    const dropObserver = new MutationObserver(() => {
-      if (wrap.classList.contains("dropped")) scheduleIntroSwingEnd();
-    });
-    dropObserver.observe(wrap, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    if (wrap.classList.contains("dropped")) scheduleIntroSwingEnd();
+    scheduleInfoIntroSwingEnd = scheduleIntroSwingEnd;
 
     function playUserSwing() {
       if (!wrap.classList.contains("dropped")) return;
