@@ -14,8 +14,8 @@
   const PETARD_SPECIAL_REWARD = {
     1: "Assets/Sam.png",
     2: "Assets/Mia.png",
-    3: "Assets/Oscar.png",
-    4: "Assets/Sanny.png",
+    3: "Assets/Sanny.png",
+    4: "Assets/Oscar.png",
     5: "Assets/Peggy.png",
     6: "Assets/Hoppy.png",
     7: "Assets/Carrie.png",
@@ -107,11 +107,11 @@
 
   /** 1→8 left to right, arc heights; x compressed toward center */
   const SLOT_LAYOUT = [
-    { x: 16, y: 63, rotate: 12 },
-    { x: 28, y: 33, rotate: 11 },
-    { x: 32, y: 62, rotate: 10 },
-    { x: 44, y: 40, rotate: 8 },
-    { x: 51, y: 64, rotate: 5 },
+    { x: 11, y: 50, rotate: 12 },
+    { x: 23, y: 58, rotate: 11 },
+    { x: 35, y: 62, rotate: 10 },
+    { x: 48, y: 37, rotate: 8 },
+    { x: 55, y: 64, rotate: 5 },
     { x: 64, y: 38, rotate: 8 },
     { x: 74, y: 59, rotate: -11 },
     { x: 88, y: 42, rotate: -14 },
@@ -121,7 +121,7 @@
    * Bottom fan spawn positions (0 = left off-screen … 1 = right off-screen), petard 1→8.
    * Matches sketch: #1 diagonal from left, #2–#3 clustered, #4–#5 center V, edges fan outward.
    */
-  const PETARD_FAN_SPAWN_T = [0.18, 0.26, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
+  const PETARD_FAN_SPAWN_T = [0.18, 0.22, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
 
   const field = document.getElementById("field");
   const prizePanelItems = document.getElementById("prizePanelItems");
