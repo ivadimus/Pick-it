@@ -146,6 +146,19 @@
     return new Promise((r) => setTimeout(r, ms));
   }
 
+  function waitForStageLayout() {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    });
+  }
+
+  function restartPetardFloat(cubeImg) {
+    if (!cubeImg) return;
+    cubeImg.style.animation = "none";
+    void cubeImg.offsetWidth;
+    cubeImg.style.animation = "";
+  }
+
   function shuffleArray(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -440,6 +453,16 @@
     return 1 - Math.pow(1 - t, 3);
   }
 
+  function finalizePetardLanding() {
+    slots.forEach((s) => {
+      s.el.style.left = s.layoutX + "%";
+      s.el.style.top = s.layoutY + "%";
+      s.el.classList.remove("petard-fly-in", "intro-hidden", "disabled", "opening");
+      s.el.classList.remove("pickable", "idle-hint", "waiting-first-pick");
+      restartPetardFloat(s.cubeImg);
+    });
+  }
+
   function flyPetardsFromPanel() {
     const spawns = getPetardSpawnPercents(slots.length);
 
@@ -467,6 +490,14 @@
 
     return new Promise((resolve) => {
       const t0 = performance.now();
+      let finished = false;
+
+      function completeLanding() {
+        if (finished) return;
+        finished = true;
+        finalizePetardLanding();
+        resolve();
+      }
 
       function frame(now) {
         const raw = Math.min(1, (now - t0) / PETARD_FLY_IN_MS);
@@ -480,16 +511,12 @@
         if (raw < 1) {
           requestAnimationFrame(frame);
         } else {
-          slots.forEach((s) => {
-            s.el.style.left = s.layoutX + "%";
-            s.el.style.top = s.layoutY + "%";
-            s.el.classList.remove("petard-fly-in");
-          });
-          resolve();
+          completeLanding();
         }
       }
 
       requestAnimationFrame(frame);
+      setTimeout(completeLanding, PETARD_FLY_IN_MS + 200);
     });
   }
 
@@ -975,6 +1002,15 @@
     return canPick && !picking && energy > 0 && slots.some((s) => !s.opened);
   }
 
+  function isHandHintActive() {
+    return (
+      showHandOnFirstPick &&
+      handTargetSlot !== null &&
+      handPointer &&
+      handPointer.classList.contains("visible")
+    );
+  }
+
   function updatePickableSlots() {
     slots.forEach((s) => {
       s.el.classList.remove("waiting-first-pick");
@@ -994,7 +1030,7 @@
         s.el.classList.remove("disabled");
         return;
       }
-      if (showHandOnFirstPick && handTargetSlot !== null) {
+      if (isHandHintActive()) {
         if (s.index === handTargetSlot) {
           s.el.classList.add("pickable");
           s.el.classList.remove("disabled", "idle-hint");
@@ -1037,6 +1073,8 @@
 
   function enablePicking() {
     canPick = true;
+    picking = false;
+    finalizePetardLanding();
     if (showHandOnFirstPick) {
       const hint = pickHintSlotIndex();
       if (hint !== null) {
@@ -1061,7 +1099,7 @@
 
   async function onCubeClick(index) {
     if (!canPick || picking || energy <= 0) return;
-    if (showHandOnFirstPick && handTargetSlot !== null && index !== handTargetSlot) return;
+    if (isHandHintActive() && index !== handTargetSlot) return;
 
     const slot = slots[index];
     if (!slot || slot.opened) return;
@@ -1155,7 +1193,14 @@
     const prizeOrder = shuffleArray(PRIZES.map((p) => p.id));
     buildField(prizeOrder);
 
-    await flyPetardsFromPanel();
+    await waitForStageLayout();
+
+    try {
+      await flyPetardsFromPanel();
+    } catch (err) {
+      console.error("runIntro flyPetards failed", err);
+      finalizePetardLanding();
+    }
 
     showPrizeAndInfoPanels();
     showIntroStep("header");
@@ -1310,5 +1355,5 @@
   initInfoPanelSwing();
   initStars();
   initSnow();
-  runIntro();
+  waitForStageLayout().then(() => runIntro());
 })();
