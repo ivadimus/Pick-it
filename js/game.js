@@ -199,13 +199,7 @@
       img.src = p.src;
       img.alt = "";
 
-      const done = document.createElement("img");
-      done.className = "panel-prize-done";
-      done.src = "Assets/Done.png";
-      done.alt = "";
-
       el.appendChild(img);
-      el.appendChild(done);
       prizePanelItems.appendChild(el);
     });
   }
