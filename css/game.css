@@ -735,9 +735,9 @@ body.force-landscape .prize-panel-wrap {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  height: 34%;
+  height: 48%;
   width: auto;
-  max-width: 62%;
+  max-width: 78%;
   object-fit: contain;
   opacity: 0;
   pointer-events: none;
