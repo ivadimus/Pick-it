@@ -1376,13 +1376,21 @@
 
     const touchUi = window.matchMedia("(hover: none) and (pointer: coarse)");
 
+    function viewportSize() {
+      const vv = window.visualViewport;
+      const w = vv ? vv.width : window.innerWidth;
+      const h = vv ? vv.height : window.innerHeight;
+      return { w, h };
+    }
+
     function update() {
-      const portrait = window.innerHeight > window.innerWidth;
+      const { w, h } = viewportSize();
+      const portrait = h > w;
       const force = touchUi.matches && portrait;
       document.body.classList.toggle("force-landscape", force);
       if (force) {
-        app.style.width = `${window.innerHeight}px`;
-        app.style.height = `${window.innerWidth}px`;
+        app.style.width = `${Math.round(h)}px`;
+        app.style.height = `${Math.round(w)}px`;
       } else {
         app.style.width = "";
         app.style.height = "";

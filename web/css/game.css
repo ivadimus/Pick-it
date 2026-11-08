@@ -203,12 +203,13 @@ body.force-landscape .iphone {
 
 body.force-landscape .stage {
   --header-w: min(78.2cqw, 82.8%);
-  --prize-panel-w: 106px;
-  --prize-panel-gap: 0px;
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
+  --prize-panel-w: min(84cqw, 560px);
+  --prize-panel-gap: 1px;
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --panel-bottom: 0.6%;
+  --prize-panel-rise-offset: min(96px, 22cqh);
 }
 
 body.force-landscape .header-wrap {
@@ -221,17 +222,44 @@ body.force-landscape .header-img {
 
 body.force-landscape .prize-panel-wrap {
   width: min(var(--prize-panel-w), calc(100% - 28px));
-  max-width: 106px;
+  max-width: none;
 }
 
 /* Phones: drop mockup frame, game fills the viewport */
 @media (hover: none) and (pointer: coarse), (max-width: 768px) {
-  html,
-  body {
+  html {
     height: 100%;
     height: 100dvh;
+    height: -webkit-fill-available;
     width: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    height: -webkit-fill-available;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
     background: #0a1020;
+  }
+
+  #app {
+    position: fixed;
+    inset: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    height: -webkit-fill-available;
+    align-items: stretch;
+    justify-content: stretch;
+    box-sizing: border-box;
   }
 
   .app {
@@ -239,6 +267,7 @@ body.force-landscape .prize-panel-wrap {
     width: 100%;
     height: 100%;
     height: 100dvh;
+    height: -webkit-fill-available;
     align-items: stretch;
     justify-content: stretch;
   }
@@ -248,6 +277,7 @@ body.force-landscape .prize-panel-wrap {
     width: 100%;
     height: 100%;
     height: 100dvh;
+    height: -webkit-fill-available;
     aspect-ratio: auto;
     max-width: none;
     max-height: none;
@@ -270,8 +300,20 @@ body.force-landscape .prize-panel-wrap {
 
   .iphone-screen {
     border-radius: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
     padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
       env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    box-sizing: border-box;
+  }
+
+  .iphone-screen-inner,
+  .stage {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    flex: 1;
   }
 
   .iphone-island,
@@ -281,15 +323,16 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .stage {
-    --edge-x: max(7%, 22px);
-    --ui-top: 8px;
+    --edge-x: max(4.5%, 14px);
+    --ui-top: max(8px, env(safe-area-inset-top, 0px));
     --header-w: min(75.9cqw, 80.5%);
-    --prize-panel-w: 113px;
-    --prize-panel-gap: 0px;
+    --prize-panel-w: min(86cqw, 600px);
+    --prize-panel-gap: 1px;
     --prize-panel-item-overlap: 2px;
     --prize-panel-items-shift: -50%;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
     --panel-bottom: 0.75%;
+    --prize-panel-rise-offset: min(88px, 20cqh);
     --petard-size: min(24cqh, 118px);
     --info-panel-scale: 0.85;
     --info-meter-gap: 4px;
@@ -338,14 +381,14 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .prize-panel-wrap {
-    width: min(var(--prize-panel-w), calc(100% - 28px));
-    max-width: 113px;
+    width: min(var(--prize-panel-w), calc(100% - 20px));
+    max-width: none;
   }
 
   .prize-panel-items {
-    padding: 0;
-    gap: 0;
-    column-gap: 0;
+    padding: 0 var(--prize-panel-items-pad-x, 2.2%);
+    gap: var(--prize-panel-gap, 1px);
+    column-gap: var(--prize-panel-gap, 1px);
   }
 
   .prize-panel-items .panel-prize {
@@ -353,23 +396,33 @@ body.force-landscape .prize-panel-wrap {
   }
 
   .prize-panel-items .panel-prize-img {
-    height: min(var(--prize-icon-h), 26px);
+    height: var(--prize-icon-h);
   }
 
+  .top-left-controls {
+    flex-wrap: nowrap;
+    max-width: calc(100% - 88px);
+  }
+
+  .info-panel-wrap {
+    flex-shrink: 1;
+    min-width: 0;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
   .stage {
     --header-w: min(73.6cqw, 78.2%);
-    --prize-panel-w: 108px;
-    --prize-panel-gap: 0px;
+    --prize-panel-w: min(88cqw, 620px);
+    --prize-panel-gap: 1px;
     --prize-panel-item-overlap: 2px;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
+    --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
     --petard-size: min(26cqh, 128px);
+    --prize-panel-rise-offset: min(88px, 18cqh);
   }
 
   .prize-panel-wrap {
-    max-width: 108px;
+    max-width: none;
   }
 
   .header-img {
@@ -735,9 +788,9 @@ body.force-landscape .prize-panel-wrap {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  height: 48%;
+  height: 58%;
   width: auto;
-  max-width: 78%;
+  max-width: 92%;
   object-fit: contain;
   opacity: 0;
   pointer-events: none;

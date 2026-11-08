@@ -110,7 +110,7 @@
     { x: 11, y: 50, rotate: 12 },
     { x: 23, y: 58, rotate: 11 },
     { x: 35, y: 62, rotate: 10 },
-    { x: 48, y: 37, rotate: 8 },
+    { x: 44, y: 37, rotate: 8 },
     { x: 55, y: 64, rotate: 5 },
     { x: 64, y: 38, rotate: 8 },
     { x: 74, y: 59, rotate: -11 },
@@ -1376,13 +1376,21 @@
 
     const touchUi = window.matchMedia("(hover: none) and (pointer: coarse)");
 
+    function viewportSize() {
+      const vv = window.visualViewport;
+      const w = vv ? vv.width : window.innerWidth;
+      const h = vv ? vv.height : window.innerHeight;
+      return { w, h };
+    }
+
     function update() {
-      const portrait = window.innerHeight > window.innerWidth;
+      const { w, h } = viewportSize();
+      const portrait = h > w;
       const force = touchUi.matches && portrait;
       document.body.classList.toggle("force-landscape", force);
       if (force) {
-        app.style.width = `${window.innerHeight}px`;
-        app.style.height = `${window.innerWidth}px`;
+        app.style.width = `${Math.round(h)}px`;
+        app.style.height = `${Math.round(w)}px`;
       } else {
         app.style.width = "";
         app.style.height = "";
