@@ -187,6 +187,7 @@ body.force-landscape {
 
 body.force-landscape #app {
   position: fixed;
+  inset: auto;
   left: 50%;
   top: 50%;
   padding: 0;
