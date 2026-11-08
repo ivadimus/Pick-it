@@ -199,7 +199,13 @@
       img.src = p.src;
       img.alt = "";
 
+      const done = document.createElement("img");
+      done.className = "panel-prize-done";
+      done.src = "Assets/Done.png";
+      done.alt = "";
+
       el.appendChild(img);
+      el.appendChild(done);
       prizePanelItems.appendChild(el);
     });
   }
@@ -247,15 +253,8 @@
         (2.35 + Math.random() * 1.35).toFixed(2) + "s"
       );
 
-      const doneImg = document.createElement("img");
-      doneImg.className = "done";
-      doneImg.src = "Assets/Done.png";
-      doneImg.alt = "";
-      doneImg.style.opacity = "0";
-
       inner.appendChild(prizeImg);
       inner.appendChild(cubeImg);
-      inner.appendChild(doneImg);
       slot.appendChild(inner);
       field.appendChild(slot);
 
@@ -266,7 +265,7 @@
         inner,
         prizeImg,
         cubeImg,
-        doneImg,
+        doneImg: null,
         prizeId,
         layoutX: pos.x,
         layoutY: pos.y,
@@ -1144,6 +1143,43 @@
     });
   }
 
+  const REWARD_CLASS_BY_FILE = {
+    "Sam.png": "reward-sam",
+    "Mia.png": "reward-mia",
+    "Hoppy.png": "reward-hoppy",
+    "Oscar.png": "reward-oscar",
+    "Peggy.png": "reward-peggy",
+    "Carrie.png": "reward-carrie",
+    "Mole.png": "reward-mole",
+    "Sanny.png": "reward-sanny",
+  };
+
+  async function revealSlotCharacter(slot, specialReward) {
+    if (!specialReward || !slot?.inner) return;
+
+    const img = document.createElement("img");
+    img.className = "done";
+    img.alt = "";
+    img.src = specialReward;
+    slot.inner.appendChild(img);
+    slot.doneImg = img;
+
+    try {
+      if (img.decode) await img.decode();
+    } catch (_) {
+      /* decode optional */
+    }
+
+    slot.el.classList.add("show-special-reward");
+    const file = specialReward.split("/").pop() || "";
+    const rewardClass = REWARD_CLASS_BY_FILE[file];
+    if (rewardClass) slot.el.classList.add(rewardClass);
+
+    const charCenter = slotCenterOnStage(slot.el);
+    playCharacterRevealSparkles(charCenter.x, charCenter.y);
+    attachCharacterAmbientSparkles(slot);
+  }
+
   async function onCubeClick(index) {
     if (!canPick || picking || energy <= 0) return;
     if (isHandHintActive() && index !== handTargetSlot) return;
@@ -1185,38 +1221,7 @@
     fly.remove();
 
     const specialReward = specialRewardForPetard(slot.cubeImg);
-    if (specialReward) {
-      slot.doneImg.src = specialReward;
-      slot.doneImg.style.opacity = "1";
-      slot.el.classList.add("show-special-reward");
-      if (specialReward.includes("Sam.png")) {
-        slot.el.classList.add("reward-sam");
-      }
-      if (specialReward.includes("Mia.png")) {
-        slot.el.classList.add("reward-mia");
-      }
-      if (specialReward.includes("Hoppy.png")) {
-        slot.el.classList.add("reward-hoppy");
-      }
-      if (specialReward.includes("Oscar.png")) {
-        slot.el.classList.add("reward-oscar");
-      }
-      if (specialReward.includes("Peggy.png")) {
-        slot.el.classList.add("reward-peggy");
-      }
-      if (specialReward.includes("Carrie.png")) {
-        slot.el.classList.add("reward-carrie");
-      }
-      if (specialReward.includes("Mole.png")) {
-        slot.el.classList.add("reward-mole");
-      }
-      if (specialReward.includes("Sanny.png")) {
-        slot.el.classList.add("reward-sanny");
-      }
-      const charCenter = slotCenterOnStage(slot.el);
-      playCharacterRevealSparkles(charCenter.x, charCenter.y);
-      attachCharacterAmbientSparkles(slot);
-    }
+    await revealSlotCharacter(slot, specialReward);
 
     slot.opened = true;
     slot.el.classList.remove("pickable");
