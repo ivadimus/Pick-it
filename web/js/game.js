@@ -1402,6 +1402,7 @@
       document.body.classList.toggle("portrait-blocked", portrait);
       document.body.classList.remove("force-landscape");
       document.documentElement.classList.toggle("is-touch", touchUi.matches);
+      document.documentElement.classList.toggle("game-landscape", !portrait);
 
       app.style.width = "";
       app.style.height = "";
