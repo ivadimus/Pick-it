@@ -491,16 +491,24 @@
     return new Promise((resolve) => {
       const t0 = performance.now();
       let finished = false;
+      let rafId = null;
 
       function completeLanding() {
         if (finished) return;
         finished = true;
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
         finalizePetardLanding();
         resolve();
       }
 
       function frame(now) {
-        const raw = Math.min(1, (now - t0) / PETARD_FLY_IN_MS);
+        if (finished) return;
+
+        const elapsed = now - t0;
+        const raw = Math.min(1, elapsed / PETARD_FLY_IN_MS);
         const u = easeOutCubic(raw);
 
         tracks.forEach(({ slot, S, T }) => {
@@ -509,13 +517,13 @@
         });
 
         if (raw < 1) {
-          requestAnimationFrame(frame);
+          rafId = requestAnimationFrame(frame);
         } else {
           completeLanding();
         }
       }
 
-      requestAnimationFrame(frame);
+      rafId = requestAnimationFrame(frame);
       setTimeout(completeLanding, PETARD_FLY_IN_MS + 200);
     });
   }
@@ -1203,18 +1211,13 @@
 
     await waitForStageLayout();
 
-    const flyMaxMs = PETARD_FLY_IN_MS + 300;
-    const flyWatchdog = wait(flyMaxMs).then(() => {
-      finalizePetardLanding();
-    });
-
     try {
-      await Promise.race([flyPetardsFromPanel(), flyWatchdog]);
+      await flyPetardsFromPanel();
     } catch (err) {
       console.error("runIntro flyPetards failed", err);
-    } finally {
-      await finishIntroUi();
     }
+
+    await finishIntroUi();
   }
 
   function reflowStageUi() {
