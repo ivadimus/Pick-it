@@ -367,10 +367,28 @@
   function showIntroStep(name) {
     document.querySelectorAll(`[data-intro="${name}"]`).forEach((el) => {
       el.classList.remove("intro-hidden");
-      if (name === "panel") el.classList.add("visible");
-      if (name === "info") el.classList.add("dropped");
+      if (name === "panel") {
+        el.classList.add("visible");
+        void el.offsetWidth;
+      }
+      if (name === "info") {
+        el.classList.remove("info-intro-swing-done", "dropped");
+        el.style.top = "";
+        const swing = el.querySelector(".info-swing");
+        if (swing) {
+          swing.classList.remove("info-user-swing");
+          swing.style.animation = "";
+        }
+        void el.offsetWidth;
+        el.classList.add("dropped");
+      }
       if (name === "meter") el.classList.add("visible");
     });
+  }
+
+  function showPrizeAndInfoPanels() {
+    showIntroStep("panel");
+    showIntroStep("info");
   }
 
   /** Bottom fan spawn X (stage %); see PETARD_FAN_SPAWN_T — straight flight to each slot. */
@@ -1110,8 +1128,6 @@
       const charCenter = slotCenterOnStage(slot.el);
       playCharacterRevealSparkles(charCenter.x, charCenter.y);
       attachCharacterAmbientSparkles(slot);
-    } else {
-      slot.doneImg.style.opacity = "1";
     }
 
     slot.opened = true;
@@ -1139,13 +1155,10 @@
     const prizeOrder = shuffleArray(PRIZES.map((p) => p.id));
     buildField(prizeOrder);
 
-    showIntroStep("panel");
-    await wait(320);
-
     await flyPetardsFromPanel();
 
+    showPrizeAndInfoPanels();
     showIntroStep("header");
-    showIntroStep("info");
 
     await wait(600);
     enablePicking();
@@ -1166,17 +1179,52 @@
     const swingEl = wrap.querySelector(".info-swing");
     if (!swingEl) return;
 
+    const INTRO_SWING_TOTAL_MS = 850 + 2200 * 2;
+    let introSwingTimer = null;
+
+    function scheduleIntroSwingEnd() {
+      if (introSwingTimer !== null) clearTimeout(introSwingTimer);
+      wrap.classList.remove("info-intro-swing-done");
+      introSwingTimer = setTimeout(() => {
+        introSwingTimer = null;
+        if (!wrap.classList.contains("dropped")) return;
+        wrap.classList.add("info-intro-swing-done");
+        if (!swingEl.classList.contains("info-user-swing")) {
+          swingEl.style.animation = "none";
+        }
+      }, INTRO_SWING_TOTAL_MS);
+    }
+
+    const dropObserver = new MutationObserver(() => {
+      if (wrap.classList.contains("dropped")) scheduleIntroSwingEnd();
+    });
+    dropObserver.observe(wrap, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    if (wrap.classList.contains("dropped")) scheduleIntroSwingEnd();
+
+    function playUserSwing() {
+      if (!wrap.classList.contains("dropped")) return;
+      swingEl.classList.remove("info-user-swing");
+      swingEl.style.animation = "none";
+      void swingEl.offsetWidth;
+      swingEl.style.animation = "";
+      swingEl.classList.add("info-user-swing");
+    }
+
     swingEl.addEventListener("animationend", (e) => {
-      if (e.animationName === "infoSwing") {
+      if (e.target !== swingEl || e.animationName !== "infoSwing") return;
+      if (swingEl.classList.contains("info-user-swing")) {
         swingEl.classList.remove("info-user-swing");
+        swingEl.style.animation = "";
       }
     });
 
-    wrap.addEventListener("click", () => {
-      if (!wrap.classList.contains("dropped")) return;
-      swingEl.classList.remove("info-user-swing");
-      void swingEl.offsetWidth;
-      swingEl.classList.add("info-user-swing");
+    wrap.addEventListener("click", playUserSwing);
+    swingEl.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      playUserSwing();
     });
   }
 
