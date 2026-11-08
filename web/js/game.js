@@ -14,8 +14,8 @@
   const PETARD_SPECIAL_REWARD = {
     1: "Assets/Sam.png",
     2: "Assets/Mia.png",
-    3: "Assets/Oscar.png",
-    4: "Assets/Sanny.png",
+    3: "Assets/Sanny.png",
+    4: "Assets/Oscar.png",
     5: "Assets/Peggy.png",
     6: "Assets/Hoppy.png",
     7: "Assets/Carrie.png",
@@ -107,11 +107,11 @@
 
   /** 1→8 left to right, arc heights; x compressed toward center */
   const SLOT_LAYOUT = [
-    { x: 16, y: 63, rotate: 12 },
-    { x: 28, y: 33, rotate: 11 },
-    { x: 32, y: 62, rotate: 10 },
-    { x: 44, y: 40, rotate: 8 },
-    { x: 51, y: 64, rotate: 5 },
+    { x: 11, y: 50, rotate: 12 },
+    { x: 23, y: 58, rotate: 11 },
+    { x: 35, y: 62, rotate: 10 },
+    { x: 48, y: 37, rotate: 8 },
+    { x: 55, y: 64, rotate: 5 },
     { x: 64, y: 38, rotate: 8 },
     { x: 74, y: 59, rotate: -11 },
     { x: 88, y: 42, rotate: -14 },
@@ -121,7 +121,7 @@
    * Bottom fan spawn positions (0 = left off-screen … 1 = right off-screen), petard 1→8.
    * Matches sketch: #1 diagonal from left, #2–#3 clustered, #4–#5 center V, edges fan outward.
    */
-  const PETARD_FAN_SPAWN_T = [0.18, 0.26, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
+  const PETARD_FAN_SPAWN_T = [0.18, 0.22, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
 
   const field = document.getElementById("field");
   const prizePanelItems = document.getElementById("prizePanelItems");
@@ -253,15 +253,8 @@
         (2.35 + Math.random() * 1.35).toFixed(2) + "s"
       );
 
-      const doneImg = document.createElement("img");
-      doneImg.className = "done";
-      doneImg.src = "Assets/Done.png";
-      doneImg.alt = "";
-      doneImg.style.opacity = "0";
-
       inner.appendChild(prizeImg);
       inner.appendChild(cubeImg);
-      inner.appendChild(doneImg);
       slot.appendChild(inner);
       field.appendChild(slot);
 
@@ -272,7 +265,7 @@
         inner,
         prizeImg,
         cubeImg,
-        doneImg,
+        doneImg: null,
         prizeId,
         layoutX: pos.x,
         layoutY: pos.y,
@@ -1150,6 +1143,43 @@
     });
   }
 
+  const REWARD_CLASS_BY_FILE = {
+    "Sam.png": "reward-sam",
+    "Mia.png": "reward-mia",
+    "Hoppy.png": "reward-hoppy",
+    "Oscar.png": "reward-oscar",
+    "Peggy.png": "reward-peggy",
+    "Carrie.png": "reward-carrie",
+    "Mole.png": "reward-mole",
+    "Sanny.png": "reward-sanny",
+  };
+
+  async function revealSlotCharacter(slot, specialReward) {
+    if (!specialReward || !slot?.inner) return;
+
+    const img = document.createElement("img");
+    img.className = "done";
+    img.alt = "";
+    img.src = specialReward;
+    slot.inner.appendChild(img);
+    slot.doneImg = img;
+
+    try {
+      if (img.decode) await img.decode();
+    } catch (_) {
+      /* decode optional */
+    }
+
+    slot.el.classList.add("show-special-reward");
+    const file = specialReward.split("/").pop() || "";
+    const rewardClass = REWARD_CLASS_BY_FILE[file];
+    if (rewardClass) slot.el.classList.add(rewardClass);
+
+    const charCenter = slotCenterOnStage(slot.el);
+    playCharacterRevealSparkles(charCenter.x, charCenter.y);
+    attachCharacterAmbientSparkles(slot);
+  }
+
   async function onCubeClick(index) {
     if (!canPick || picking || energy <= 0) return;
     if (isHandHintActive() && index !== handTargetSlot) return;
@@ -1191,38 +1221,7 @@
     fly.remove();
 
     const specialReward = specialRewardForPetard(slot.cubeImg);
-    if (specialReward) {
-      slot.doneImg.src = specialReward;
-      slot.doneImg.style.opacity = "1";
-      slot.el.classList.add("show-special-reward");
-      if (specialReward.includes("Sam.png")) {
-        slot.el.classList.add("reward-sam");
-      }
-      if (specialReward.includes("Mia.png")) {
-        slot.el.classList.add("reward-mia");
-      }
-      if (specialReward.includes("Hoppy.png")) {
-        slot.el.classList.add("reward-hoppy");
-      }
-      if (specialReward.includes("Oscar.png")) {
-        slot.el.classList.add("reward-oscar");
-      }
-      if (specialReward.includes("Peggy.png")) {
-        slot.el.classList.add("reward-peggy");
-      }
-      if (specialReward.includes("Carrie.png")) {
-        slot.el.classList.add("reward-carrie");
-      }
-      if (specialReward.includes("Mole.png")) {
-        slot.el.classList.add("reward-mole");
-      }
-      if (specialReward.includes("Sanny.png")) {
-        slot.el.classList.add("reward-sanny");
-      }
-      const charCenter = slotCenterOnStage(slot.el);
-      playCharacterRevealSparkles(charCenter.x, charCenter.y);
-      attachCharacterAmbientSparkles(slot);
-    }
+    await revealSlotCharacter(slot, specialReward);
 
     slot.opened = true;
     slot.el.classList.remove("pickable");

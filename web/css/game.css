@@ -291,18 +291,22 @@ body.force-landscape .prize-panel-wrap {
     --prize-icon-h: calc(var(--prize-panel-h) * 0.58);
     --panel-bottom: 0.75%;
     --petard-size: min(24cqh, 118px);
-    --info-ui-shift-x: 32px;
-    --info-panel-inset-x: 4px;
+    --info-panel-scale: 0.85;
+    --info-meter-gap: 4px;
+    --info-panel-shift-x: -8px;
+    --info-panel-shift-y: -18px;
+    --top-left-nudge-x: -12px;
+    --close-nudge-x: 10px;
   }
 
   .top-left-controls {
-    left: var(--edge-x);
+    left: calc(var(--edge-x) + var(--top-left-nudge-x, 0px));
     top: var(--ui-top);
     gap: 8px;
   }
 
   .btn-close {
-    right: var(--edge-x);
+    right: calc(var(--edge-x) - var(--close-nudge-x, 0px));
     top: var(--ui-top);
   }
 
@@ -352,11 +356,6 @@ body.force-landscape .prize-panel-wrap {
     height: min(var(--prize-icon-h), 26px);
   }
 
-  .left-ui {
-    min-width: 72px;
-    max-width: 108px;
-    width: 14%;
-  }
 }
 
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
@@ -525,22 +524,24 @@ body.force-landscape .prize-panel-wrap {
 .stage {
   --edge-x: max(3.85%, 10px);
   --ui-top: 12px;
-  --info-top: 11.8%;
-  --info-panel-lift: 15px;
-  --info-ui-shift-x: 44px;
-  --info-panel-inset-x: 6px;
+  --info-panel-scale: 0.85;
+  --info-meter-gap: 6px;
+  --info-panel-shift-x: -10px;
+  --info-panel-shift-y: -24px;
+  --top-left-nudge-x: -16px;
+  --close-nudge-x: 14px;
   --panel-bottom: 3.2%;
   --header-w: 42.32%;
   --prize-panel-rise-offset: 96px;
   --prize-panel-rise-duration: 1.15s;
   --prize-panel-items-drop: 0px;
-  --prize-panel-w: 569px;
-  --prize-panel-h: calc(var(--prize-panel-w) * 152 / 1024);
-  --prize-icon-h: calc(var(--prize-panel-h) * 1.28);
-  --prize-panel-gap: 2px;
-  --prize-panel-item-overlap: 3px;
-  --prize-panel-items-shift: -58%;
-  --prize-panel-items-pad-x: 1.4%;
+  --prize-panel-w: 648px;
+  --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
+  --prize-panel-gap: 1px;
+  --prize-panel-item-overlap: 2px;
+  --prize-panel-items-shift: -50%;
+  --prize-panel-items-pad-x: 2.2%;
   --petard-size: min(27.3cqh, 157px);
 
   position: relative;
@@ -560,14 +561,15 @@ body.force-landscape .prize-panel-wrap {
   min-height: 72px;
   z-index: 30;
   pointer-events: none;
+  overflow: visible;
 }
 
 .top-left-controls {
   position: absolute;
-  left: var(--edge-x);
+  left: calc(var(--edge-x) + var(--top-left-nudge-x, 0px));
   top: max(var(--ui-top), 10px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   z-index: 210;
   pointer-events: auto;
@@ -589,7 +591,7 @@ body.force-landscape .prize-panel-wrap {
 
 .btn-close {
   position: absolute;
-  right: var(--edge-x);
+  right: calc(var(--edge-x) - var(--close-nudge-x, 0px));
   top: max(var(--ui-top), 10px);
   width: 52px;
   height: 52px;
@@ -627,7 +629,7 @@ body.force-landscape .prize-panel-wrap {
   transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 96px));
   transform-origin: 50% 100%;
   width: min(var(--prize-panel-w), calc(100% - 16px));
-  aspect-ratio: 1024 / 152;
+  aspect-ratio: 1024 / 170;
   z-index: 25;
   opacity: 0;
   pointer-events: none;
@@ -764,18 +766,6 @@ body.force-landscape .prize-panel-wrap {
   }
 }
 
-.left-ui {
-  position: absolute;
-  left: calc(var(--edge-x) + var(--info-ui-shift-x, 0px));
-  top: 0;
-  bottom: 0;
-  width: 11%;
-  min-width: 96px;
-  max-width: 140px;
-  z-index: 28;
-  pointer-events: none;
-}
-
 .meter-wrap {
   position: relative;
   display: inline-block;
@@ -810,15 +800,19 @@ body.force-landscape .prize-panel-wrap {
 }
 
 .info-panel-wrap {
-  position: absolute;
-  left: var(--info-panel-inset-x, 0px);
-  top: -120%;
-  width: 100%;
-  max-width: 124px;
+  position: relative;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-left: calc(var(--info-meter-gap, 6px) + var(--info-panel-shift-x, 0px));
+  margin-top: var(--info-panel-shift-y, 0px);
+  width: auto;
+  max-width: calc(124px * var(--info-panel-scale, 1));
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .info-panel-wrap.dropped {
-  top: calc(var(--info-top) - var(--info-panel-lift));
   pointer-events: auto;
   cursor: pointer;
   animation: infoDrop 0.85s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
@@ -849,10 +843,12 @@ body.force-landscape .prize-panel-wrap {
 
 @keyframes infoDrop {
   from {
-    top: -120%;
+    opacity: 0;
+    transform: translateY(-130%);
   }
   to {
-    top: calc(var(--info-top) - var(--info-panel-lift));
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1639,14 +1635,16 @@ body.force-landscape .prize-panel-wrap {
 }
 
 .slot.reward-sam.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.28);
-  height: calc(var(--petard-size) * 1.28);
-  bottom: -2%;
+  width: calc(var(--petard-size) * 1.1);
+  height: calc(var(--petard-size) * 1.1);
+  margin-left: -14px;
+  bottom: 5%;
 }
 
 .slot.reward-sanny.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.26);
-  height: calc(var(--petard-size) * 1.26);
+  width: calc(var(--petard-size) * 1.12);
+  height: calc(var(--petard-size) * 1.12);
+  margin-left: 14px;
   bottom: 5%;
 }
 
@@ -1660,44 +1658,45 @@ body.force-landscape .prize-panel-wrap {
 }
 
 .slot.reward-sam img.done {
-  width: calc(var(--petard-size) * 1.2);
-  height: calc(var(--petard-size) * 1.2);
-  bottom: -2%;
+  width: calc(var(--petard-size) * 1.04);
+  height: calc(var(--petard-size) * 1.04);
+  margin-left: -14px;
+  bottom: 6%;
 }
 
 .slot.reward-mia img.done {
-  width: calc(var(--petard-size) * 1.48);
-  height: calc(var(--petard-size) * 1.48);
+  width: calc(var(--petard-size) * 1.22);
+  height: calc(var(--petard-size) * 1.22);
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.58);
-  height: calc(var(--petard-size) * 1.58);
+  width: calc(var(--petard-size) * 1.3);
+  height: calc(var(--petard-size) * 1.3);
 }
 
 .slot.reward-hoppy img.done {
-  width: calc(var(--petard-size) * 0.92);
-  height: calc(var(--petard-size) * 0.92);
+  width: calc(var(--petard-size) * 0.82);
+  height: calc(var(--petard-size) * 0.82);
   margin-left: -16px;
   bottom: 10%;
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.02);
-  height: calc(var(--petard-size) * 1.02);
+  width: calc(var(--petard-size) * 0.9);
+  height: calc(var(--petard-size) * 0.9);
   margin-left: -16px;
   bottom: 16%;
 }
 
 .slot.reward-oscar img.done {
-  width: calc(var(--petard-size) * 1.19);
-  height: calc(var(--petard-size) * 1.19);
+  width: calc(var(--petard-size) * 1.05);
+  height: calc(var(--petard-size) * 1.05);
   bottom: -4%;
 }
 
 .slot.reward-oscar.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.32);
-  height: calc(var(--petard-size) * 1.32);
+  width: calc(var(--petard-size) * 1.16);
+  height: calc(var(--petard-size) * 1.16);
 }
 
 .slot.reward-peggy img.done {
@@ -1711,28 +1710,29 @@ body.force-landscape .prize-panel-wrap {
 }
 
 .slot.reward-carrie img.done {
-  width: calc(var(--petard-size) * 1.08);
-  height: calc(var(--petard-size) * 1.08);
+  width: calc(var(--petard-size) * 1.14);
+  height: calc(var(--petard-size) * 1.14);
 }
 
 .slot.reward-carrie.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.18);
-  height: calc(var(--petard-size) * 1.18);
+  width: calc(var(--petard-size) * 1.24);
+  height: calc(var(--petard-size) * 1.24);
 }
 
 .slot.reward-mole img.done {
-  width: calc(var(--petard-size) * 1.19);
-  height: calc(var(--petard-size) * 1.19);
+  width: calc(var(--petard-size) * 1.05);
+  height: calc(var(--petard-size) * 1.05);
 }
 
 .slot.reward-mole.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.32);
-  height: calc(var(--petard-size) * 1.32);
+  width: calc(var(--petard-size) * 1.16);
+  height: calc(var(--petard-size) * 1.16);
 }
 
 .slot.reward-sanny img.done {
-  width: calc(var(--petard-size) * 1.24);
-  height: calc(var(--petard-size) * 1.24);
+  width: calc(var(--petard-size) * 1.1);
+  height: calc(var(--petard-size) * 1.1);
+  margin-left: 14px;
   bottom: 4%;
 }
 
