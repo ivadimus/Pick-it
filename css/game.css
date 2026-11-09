@@ -533,13 +533,16 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
-  width: min(var(--prize-panel-w), calc(100% - 16px));
-  max-width: 454px;
+  width: min(var(--prize-panel-w), calc(100vw - 12px));
+  max-width: 580px;
 }
 
 html.is-touch.game-landscape .info-panel-wrap {
   flex: 0 0 auto;
   flex-shrink: 0;
+  margin-left: calc(
+    var(--info-meter-gap, 2px) + var(--info-panel-shift-x, -4px)
+  );
   max-width: calc(124px * var(--info-panel-scale, 0.85));
 }
 
