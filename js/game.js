@@ -428,6 +428,9 @@
 
     function fallbackFan(n) {
       return Array.from({ length: n }, (_, i) => {
+        const petardNum = i + 1;
+        const fixedX = PETARD_SPAWN_X_PCT[petardNum];
+        if (fixedX != null) return { x: fixedX, y: 92 };
         const t = PETARD_FAN_SPAWN_T[i] ?? (n <= 1 ? 0 : i / (n - 1));
         return { x: -22 + t * 144, y: 92 };
       });
@@ -458,6 +461,11 @@
     const xEnd = panelRightPct + offPct;
 
     return Array.from({ length: count }, (_, i) => {
+      const petardNum = i + 1;
+      const fixedX = PETARD_SPAWN_X_PCT[petardNum];
+      if (fixedX != null) {
+        return { x: fixedX, y: spawnYPct };
+      }
       const t = PETARD_FAN_SPAWN_T[i] ?? (count <= 1 ? 0 : i / (count - 1));
       return {
         x: xStart + t * (xEnd - xStart),
