@@ -462,9 +462,9 @@ html.is-touch.game-landscape .stage {
 html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
   --info-panel-scale: 0.8309;
-  --info-meter-gap: 4px;
-  --info-panel-shift-x: 0px;
-  --info-panel-shift-y: 8px;
+  --info-meter-gap: 0px;
+  --info-panel-shift-x: -42px;
+  --info-panel-shift-y: -28px;
   --top-left-nudge-x: -18px;
 }
 
@@ -481,23 +481,6 @@ html:not(.is-touch) .iphone .info-panel-wrap {
 html:not(.is-touch) .iphone .top-left-controls {
   gap: 6px;
   align-items: flex-start;
-}
-
-/* Mobile top bar: info (i) → info panel → energy meter */
-html.is-touch.game-landscape .top-left-controls .btn-info,
-html:not(.is-touch) .iphone .top-left-controls .btn-info {
-  order: 0;
-}
-
-html.is-touch.game-landscape .top-left-controls .info-panel-wrap,
-html:not(.is-touch) .iphone .top-left-controls .info-panel-wrap {
-  order: 1;
-}
-
-html.is-touch.game-landscape .top-left-controls .meter-wrap,
-html:not(.is-touch) .iphone .top-left-controls .meter-wrap {
-  order: 2;
-  margin-left: 2px;
 }
 
 /* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
