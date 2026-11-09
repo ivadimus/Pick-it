@@ -412,96 +412,14 @@ body.force-landscape .prize-panel-wrap {
     display: none !important;
   }
 
-  .stage {
-    --edge-x: max(3.2%, 10px);
-    --ui-top: max(8px, env(safe-area-inset-top, 0px));
-    --header-w: min(76cqw, 82%);
-    --prize-panel-w: min(70cqw, 480px);
-    --prize-panel-gap: 1px;
-    --prize-panel-item-overlap: 2px;
-    --prize-panel-items-shift: -50%;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.68);
-    --panel-bottom: 0.75%;
-    --prize-panel-rise-offset: min(72px, 16cqh);
-    --petard-size: min(24cqh, 118px);
-    --info-panel-scale: 0.9;
-    --info-meter-gap: 5px;
-    --info-panel-shift-x: 2px;
-    --info-panel-shift-y: -16px;
-    --top-left-nudge-x: 0px;
-    --close-nudge-x: 0px;
-  }
-
-  .top-left-controls {
-    left: calc(
-      var(--edge-x) + var(--top-left-nudge-x, 0px) + env(safe-area-inset-left, 0px)
-    );
-    top: calc(var(--ui-top) + env(safe-area-inset-top, 0px));
-    gap: 10px;
-  }
-
-  .btn-close {
-    right: calc(
-      var(--edge-x) + var(--close-nudge-x, 0px) + env(safe-area-inset-right, 0px)
-    );
-    top: calc(var(--ui-top) + env(safe-area-inset-top, 0px));
-  }
-
-  .btn-info,
-  .btn-close {
-    width: 52px;
-    height: 52px;
-  }
-
-  .meter-wrap {
-    height: 48px;
-  }
-
-  .meter-value {
-    font-size: 17px;
-  }
-
-  .header-wrap {
-    top: calc(var(--ui-top) + 2px);
-    width: var(--header-w);
-    max-width: calc(100% - 126px);
-  }
-
-  .header-img {
-    width: 100%;
-    height: auto;
-    min-height: min(58px, 14.5cqh);
-    max-height: 17cqh;
-    object-fit: contain;
-  }
-
-  .prize-panel-wrap {
-    width: min(var(--prize-panel-w), calc(100% - 20px));
-    max-width: none;
-  }
-
   .prize-panel-items {
     padding: 0 var(--prize-panel-items-pad-x, 2.2%);
     gap: var(--prize-panel-gap, 1px);
     column-gap: var(--prize-panel-gap, 1px);
   }
 
-  .prize-panel-items .panel-prize {
-    margin: 0 calc(var(--prize-panel-item-overlap, 2px) * -1);
-  }
-
-  .prize-panel-items .panel-prize-img {
-    height: var(--prize-icon-h);
-  }
-
   .top-left-controls {
     flex-wrap: nowrap;
-    max-width: calc(100% - 112px);
-  }
-
-  .info-panel-wrap {
-    flex-shrink: 0;
-    min-width: 0;
   }
 }
 
@@ -519,49 +437,90 @@ body.force-landscape .prize-panel-wrap {
     min-height: 100svh;
     max-height: 100svh;
   }
+}
 
-  .stage {
-    --edge-x: max(2.8%, 10px);
-    --ui-top: 10px;
-    --header-w: min(50cqw, 54%);
-    --prize-panel-w: min(58cqw, 400px);
-    --prize-panel-gap: 1px;
-    --prize-panel-item-overlap: 2px;
-    --prize-icon-h: calc(var(--prize-panel-h) * 0.66);
-    --petard-size: min(26cqh, 128px);
-    --prize-panel-rise-offset: min(64px, 15cqh);
-    --panel-bottom: 1.2%;
-    --info-panel-scale: 0.95;
-    --info-panel-shift-y: -18px;
-    --info-meter-gap: 6px;
-    --top-left-nudge-x: 0px;
-    --close-nudge-x: 0px;
-  }
+/* Touch + landscape: same UI tokens as desktop; vw/vh — cqw on iOS often doubles size */
+html.is-touch.game-landscape .stage {
+  --edge-x: max(3.85%, 10px);
+  --ui-top: 12px;
+  --header-w: 42.32%;
+  --info-panel-scale: 0.85;
+  --info-meter-gap: 6px;
+  --info-panel-shift-x: -10px;
+  --info-panel-shift-y: -24px;
+  --top-left-nudge-x: -16px;
+  --close-nudge-x: 14px;
+  --panel-bottom: 3.2%;
+  --prize-panel-gap: 1px;
+  --prize-panel-item-overlap: 2px;
+  --prize-panel-items-shift: -50%;
+  --prize-panel-items-pad-x: 2.2%;
+  --prize-panel-w: min(36vw, 324px);
+  --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
+  --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
+  --prize-panel-rise-offset: min(80px, 18vh);
+  --petard-size: min(24vh, 130px);
+}
 
-  .header-wrap {
-    top: calc(var(--ui-top) + env(safe-area-inset-top, 0px));
-    max-width: calc(100% - 140px);
-  }
+html.is-touch.game-landscape .top-left-controls {
+  left: calc(
+    var(--edge-x) + var(--top-left-nudge-x, 0px) +
+      env(safe-area-inset-left, 0px)
+  );
+  top: max(var(--ui-top), 10px);
+  gap: 12px;
+  max-width: none;
+  align-items: flex-start;
+}
 
-  .header-img {
-    min-height: min(64px, 16cqh);
-    max-height: 18.5cqh;
-  }
+html.is-touch.game-landscape .btn-close {
+  right: calc(
+    var(--edge-x) - var(--close-nudge-x, 0px) + env(safe-area-inset-right, 0px)
+  );
+  top: max(var(--ui-top), 10px);
+}
 
-  .prize-panel-wrap {
-    width: min(var(--prize-panel-w), calc(100% - 24px));
-    max-width: none;
-  }
+html.is-touch.game-landscape .btn-info,
+html.is-touch.game-landscape .btn-close {
+  width: 52px;
+  height: 52px;
+}
 
-  .info-panel-wrap {
-    max-width: calc(140px * var(--info-panel-scale, 1));
-  }
+html.is-touch.game-landscape .meter-wrap {
+  height: 56px;
+}
 
-  .info-swing img {
-    width: 100%;
-    height: auto;
-    max-height: none;
-  }
+html.is-touch.game-landscape .header-wrap {
+  left: 50%;
+  top: calc(0.8% + 10px);
+  transform: translateX(-50%);
+  width: var(--header-w);
+  max-width: calc(100% - 128px);
+}
+
+html.is-touch.game-landscape .header-img {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  object-fit: contain;
+}
+
+html.is-touch.game-landscape .prize-panel-wrap {
+  width: min(var(--prize-panel-w), calc(100% - 16px));
+  max-width: 324px;
+}
+
+html.is-touch.game-landscape .info-panel-wrap {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  max-width: calc(124px * var(--info-panel-scale, 0.85));
+}
+
+html.is-touch.game-landscape .info-swing img {
+  width: 100%;
+  height: auto;
+  max-height: none;
 }
 
 .stars-layer {
