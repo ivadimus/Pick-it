@@ -467,8 +467,8 @@ html.is-touch.game-landscape .stage {
   --info-meter-gap: 0px;
   --info-panel-shift-x: -18px;
   --info-panel-shift-y: -22px;
-  --top-left-nudge-x: -6px;
-  --close-nudge-x: 22px;
+  --top-left-nudge-x: -18px;
+  --close-nudge-x: 32px;
   --panel-bottom: 3.2%;
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
@@ -483,7 +483,7 @@ html.is-touch.game-landscape .stage {
 
 html.is-touch.game-landscape .top-left-controls {
   left: max(
-    2px,
+    0px,
     calc(
       var(--edge-x) + var(--top-left-nudge-x, 0px) +
         env(safe-area-inset-left, 0px)
@@ -541,7 +541,7 @@ html.is-touch.game-landscape .info-panel-wrap {
   flex: 0 0 auto;
   flex-shrink: 0;
   margin-left: calc(
-    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -14px)
+    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -18px)
   );
   max-width: calc(124px * var(--info-panel-scale, 0.7225));
 }
@@ -1397,7 +1397,7 @@ html.is-touch.game-landscape .game-complete-overlay {
 }
 
 html.is-touch.game-landscape .game-complete-restart {
-  max-width: min(62vw, 290px);
+  max-width: min(82vw, 420px);
 }
 
 html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-restart {
