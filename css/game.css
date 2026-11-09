@@ -534,7 +534,7 @@ html.is-touch.game-landscape .header-img {
 
 html.is-touch.game-landscape .prize-panel-wrap {
   width: min(var(--prize-panel-w), calc(100vw - 12px));
-  max-width: 580px;
+  max-width: 493px;
 }
 
 html.is-touch.game-landscape .info-panel-wrap {
