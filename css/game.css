@@ -518,8 +518,9 @@ html.is-touch.game-landscape .stage {
   --panel-bottom: 0;
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
-  --prize-panel-items-shift: -50%;
+  --prize-panel-items-shift: 0%;
   --prize-panel-items-pad-x: 2.2%;
+  --prize-panel-items-drop: 0px;
   --prize-panel-w: min(49.13vw, 419px);
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
@@ -585,10 +586,35 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
-  --prize-panel-bottom: max(0px, env(safe-area-inset-bottom, 0px));
-  bottom: var(--prize-panel-bottom);
+  --prize-panel-bottom: 0;
+  bottom: 0;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
   max-width: 419px;
+  transform: translateX(-50%) translateY(0);
+}
+
+html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
+  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 80px));
+}
+
+html.is-touch.game-landscape .prize-panel-wrap.visible {
+  animation: prizePanelRiseFadeTouch var(--prize-panel-rise-duration, 1.15s)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes prizePanelRiseFadeTouch {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%)
+      translateY(calc(var(--prize-panel-rise-offset, 80px) + 28px));
+  }
+  28% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 html.is-touch.game-landscape .info-swing img {
