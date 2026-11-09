@@ -152,6 +152,7 @@
   const STAGE_BORDER_FIREWORK_INTERVAL_MS = Math.round(520 / FW_SPEED_MUL);
   const STAGE_BORDER_FIREWORK_SPREAD = 0.72;
   const FW_MAX_PARTICLES = 220;
+  const FW_SPREAD_MUL = 0.72;
   const FW_PETARD_BURST_SCALE = 1.52;
   const PETARD_FLY_IN_MS = 1000;
 
@@ -755,6 +756,8 @@
     if (!ctx) return;
 
     const scale = opts && opts.scale != null ? opts.scale : 1;
+    const spreadMul =
+      opts && opts.spreadMul != null ? opts.spreadMul : FW_SPREAD_MUL;
     const style = (opts && opts.style) || "peony";
     const c0 = fwHexRgb(palette[0]);
     const c1 = fwHexRgb(palette[1]);
@@ -768,7 +771,7 @@
       r: c0.r,
       g: c0.g,
       b: c0.b,
-      radius: 118 * scale,
+      radius: 118 * scale * spreadMul,
       alpha: 0.98,
     });
     fwPushHaze({
@@ -779,7 +782,7 @@
       r: c1.r,
       g: c1.g,
       b: c1.b,
-      radius: 188 * scale,
+      radius: 188 * scale * spreadMul,
       alpha: 0.58,
     });
     fwPushHaze({
@@ -790,7 +793,7 @@
       r: c2.r,
       g: c2.g,
       b: c2.b,
-      radius: 248 * scale,
+      radius: 248 * scale * spreadMul,
       alpha: 0.34,
     });
 
@@ -809,9 +812,10 @@
 
     for (let i = 0; i < streaks; i++) {
       const angle = (Math.PI * 2 * i) / streaks + (Math.random() - 0.5) * 0.11;
-      const speed = (4.2 + Math.random() * 6.2) * scale * FW_SPEED_MUL;
+      const speed =
+        (4.2 + Math.random() * 6.2) * scale * FW_SPEED_MUL * spreadMul;
       let vx = Math.cos(angle) * speed;
-      let vy = Math.sin(angle) * speed - 0.65 * scale * FW_SPEED_MUL;
+      let vy = Math.sin(angle) * speed - 0.65 * scale * FW_SPEED_MUL * spreadMul;
       if (style === "willow" && vy < 0) vy *= 0.35;
       const col = i % 3 === 0 ? c0 : i % 3 === 1 ? c1 : c2;
       fwPushParticle({
@@ -837,7 +841,8 @@
 
     for (let i = 0; i < dots; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = (2.4 + Math.random() * 4.2) * scale * FW_SPEED_MUL;
+      const speed =
+        (2.4 + Math.random() * 4.2) * scale * FW_SPEED_MUL * spreadMul;
       const pick = Math.random();
       const col = pick < 0.34 ? c0 : pick < 0.67 ? c1 : c2;
       fwPushParticle({
@@ -846,7 +851,7 @@
         px: x,
         py: y,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 0.4 * scale,
+        vy: Math.sin(angle) * speed - 0.4 * scale * spreadMul,
         life: 38 + Math.floor(Math.random() * 26),
         maxLife: 60,
         r: col.r,
@@ -868,8 +873,11 @@
       (opts && opts.scale != null ? opts.scale : 1) *
       (opts && opts.bloomScale != null ? opts.bloomScale : 1) *
       spreadScale;
+    const spreadMul =
+      opts && opts.spreadMul != null ? opts.spreadMul : FW_SPREAD_MUL;
     fwEmitBurst(x, y, palette, {
       scale,
+      spreadMul,
       style: (opts && opts.style) || "peony",
     });
   }
