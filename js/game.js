@@ -325,22 +325,9 @@
     const h = stage.offsetHeight;
     const padX = w * 0.055;
     const padY = h * 0.07;
-    const r = Math.random();
-    let x;
-    let y;
-    if (r < 0.25) {
-      x = padX + Math.random() * Math.max(0, w - 2 * padX);
-      y = padY;
-    } else if (r < 0.5) {
-      x = padX + Math.random() * Math.max(0, w - 2 * padX);
-      y = h - padY;
-    } else if (r < 0.75) {
-      x = padX;
-      y = padY + Math.random() * Math.max(0, h - 2 * padY);
-    } else {
-      x = w - padX;
-      y = padY + Math.random() * Math.max(0, h - 2 * padY);
-    }
+    const leftSide = Math.random() < 0.5;
+    const x = leftSide ? padX : w - padX;
+    const y = padY + Math.random() * Math.max(0, h - 2 * padY);
 
     const fakeCube = document.createElement("img");
     fakeCube.src = PETARDS[Math.floor(Math.random() * PETARDS.length)];
