@@ -458,16 +458,36 @@ html.is-touch.game-landscape .stage {
   border-radius: 0;
 }
 
+/* Info panel layout: phone landscape + local iPhone mockup (no .is-touch on desktop) */
+html.is-touch.game-landscape .stage,
+html:not(.is-touch) .iphone .stage {
+  --info-panel-scale: 0.7225;
+  --info-meter-gap: 0px;
+  --info-panel-shift-x: -76px;
+  --info-panel-shift-y: -58px;
+  --top-left-nudge-x: -18px;
+}
+
+html.is-touch.game-landscape .info-panel-wrap,
+html:not(.is-touch) .iphone .info-panel-wrap {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  margin-left: calc(
+    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -18px)
+  );
+  max-width: calc(124px * var(--info-panel-scale, 0.7225));
+}
+
+html:not(.is-touch) .iphone .top-left-controls {
+  gap: 6px;
+  align-items: flex-start;
+}
+
 /* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
 html.is-touch.game-landscape .stage {
   --edge-x: 2px;
   --ui-top: 8px;
   --header-w: 42.32%;
-  --info-panel-scale: 0.7225;
-  --info-meter-gap: 0px;
-  --info-panel-shift-x: -64px;
-  --info-panel-shift-y: -50px;
-  --top-left-nudge-x: -18px;
   --close-nudge-x: 32px;
   --panel-bottom: 0;
   --prize-panel-gap: 1px;
@@ -537,15 +557,6 @@ html.is-touch.game-landscape .prize-panel-wrap {
   bottom: var(--prize-panel-bottom);
   width: min(var(--prize-panel-w), calc(100vw - 12px));
   max-width: 493px;
-}
-
-html.is-touch.game-landscape .info-panel-wrap {
-  flex: 0 0 auto;
-  flex-shrink: 0;
-  margin-left: calc(
-    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -18px)
-  );
-  max-width: calc(124px * var(--info-panel-scale, 0.7225));
 }
 
 html.is-touch.game-landscape .info-swing img {
