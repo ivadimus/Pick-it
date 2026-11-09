@@ -469,7 +469,7 @@ html.is-touch.game-landscape .stage {
   --info-panel-shift-y: -22px;
   --top-left-nudge-x: -18px;
   --close-nudge-x: 32px;
-  --panel-bottom: 3.2%;
+  --panel-bottom: 0;
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
