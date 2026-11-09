@@ -462,9 +462,9 @@ html.is-touch.game-landscape .stage {
 html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
   --info-panel-scale: 0.8309;
-  --info-meter-gap: 0px;
-  --info-panel-shift-x: -50px;
-  --info-panel-shift-y: -14px;
+  --info-meter-gap: 4px;
+  --info-panel-shift-x: 0px;
+  --info-panel-shift-y: 8px;
   --top-left-nudge-x: -18px;
 }
 
