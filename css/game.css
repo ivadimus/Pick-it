@@ -463,19 +463,28 @@ html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
   --info-panel-scale: 0.8309;
   --info-meter-gap: 0px;
-  --info-panel-shift-x: -42px;
   --info-panel-shift-y: -28px;
   --top-left-nudge-x: -18px;
+  --info-ui-gap: 6px;
+  --info-btn-w: 52px;
+  /* Rope (transform-origin 50% 0) — midpoint between info btn and meter */
+  --info-rope-x: calc(var(--info-btn-w) + var(--info-ui-gap) * 0.5);
 }
 
 html.is-touch.game-landscape .info-panel-wrap,
 html:not(.is-touch) .iphone .info-panel-wrap {
-  flex: 0 0 auto;
-  flex-shrink: 0;
-  margin-left: calc(
-    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -18px)
-  );
-  max-width: calc(124px * var(--info-panel-scale, 0.7225));
+  position: absolute;
+  left: var(--info-rope-x, 55px);
+  top: var(--info-panel-shift-y, -28px);
+  margin-left: 0;
+  margin-top: 0;
+  max-width: calc(124px * var(--info-panel-scale, 0.8309));
+  transform: translate(-50%, -130%);
+}
+
+html.is-touch.game-landscape .info-panel-wrap.dropped,
+html:not(.is-touch) .iphone .info-panel-wrap.dropped {
+  animation: infoDropAnchored 0.85s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
 }
 
 html:not(.is-touch) .iphone .top-left-controls {
@@ -1037,6 +1046,17 @@ html.is-touch.game-landscape .info-swing img {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes infoDropAnchored {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -130%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
 
