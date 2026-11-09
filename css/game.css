@@ -1651,7 +1651,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 42px color-mix(in srgb, var(--fw-secondary, #f5a) 50%, transparent),
     0 0 68px color-mix(in srgb, var(--fw-primary, #5cf) 28%, transparent);
   opacity: 0.95;
-  animation: fwBloomPop 0.58s ease-out forwards;
+  animation: fwBloomPop 0.46s ease-out forwards;
 }
 
 @keyframes fwBloomPop {
@@ -1690,7 +1690,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 6px #fff,
     0 0 14px var(--c, #fff),
     0 0 32px color-mix(in srgb, var(--c, #fff) 72%, transparent);
-  animation: fwRayLine 0.68s cubic-bezier(0.12, 0.75, 0.22, 1) forwards;
+  animation: fwRayLine 0.54s cubic-bezier(0.12, 0.75, 0.22, 1) forwards;
   pointer-events: none;
 }
 
@@ -1742,7 +1742,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 4px #fff,
     0 0 12px var(--c, #fff),
     0 0 26px color-mix(in srgb, var(--c, #fff) 70%, transparent);
-  animation: fwGlintFly var(--dur, 620ms) ease-out forwards;
+  animation: fwGlintFly var(--dur, 496ms) ease-out forwards;
   pointer-events: none;
 }
 

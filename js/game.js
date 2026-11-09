@@ -148,7 +148,8 @@
   const IDLE_WAIT_MS = 2000;
   const IDLE_ANIM_MS = 1000;
   const GAME_COMPLETE_OVERLAY_DELAY_MS = 2000;
-  const STAGE_BORDER_FIREWORK_INTERVAL_MS = 520;
+  const FW_SPEED_MUL = 1.2;
+  const STAGE_BORDER_FIREWORK_INTERVAL_MS = Math.round(520 / FW_SPEED_MUL);
   const STAGE_BORDER_FIREWORK_SPREAD = 0.72;
   const FW_MAX_PARTICLES = 220;
   const FW_PETARD_BURST_SCALE = 1.52;
@@ -648,7 +649,7 @@
     ctx.clearRect(0, 0, w, h);
 
     fwHazes = fwHazes.filter((hz) => {
-      hz.life -= 1;
+      hz.life -= FW_SPEED_MUL;
       if (hz.life <= 0) return false;
       const t = hz.life / hz.maxLife;
       const alpha = hz.alpha * t;
@@ -675,7 +676,7 @@
       p.vy += p.gravity;
       p.x += p.vx;
       p.y += p.vy;
-      p.life -= 1;
+      p.life -= FW_SPEED_MUL;
       if (p.life <= 0) return false;
 
       const lifeT = 1 - p.life / p.maxLife;
@@ -808,9 +809,9 @@
 
     for (let i = 0; i < streaks; i++) {
       const angle = (Math.PI * 2 * i) / streaks + (Math.random() - 0.5) * 0.11;
-      const speed = (4.2 + Math.random() * 6.2) * scale;
+      const speed = (4.2 + Math.random() * 6.2) * scale * FW_SPEED_MUL;
       let vx = Math.cos(angle) * speed;
-      let vy = Math.sin(angle) * speed - 0.65 * scale;
+      let vy = Math.sin(angle) * speed - 0.65 * scale * FW_SPEED_MUL;
       if (style === "willow" && vy < 0) vy *= 0.35;
       const col = i % 3 === 0 ? c0 : i % 3 === 1 ? c1 : c2;
       fwPushParticle({
@@ -836,7 +837,7 @@
 
     for (let i = 0; i < dots; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = (2.4 + Math.random() * 4.2) * scale;
+      const speed = (2.4 + Math.random() * 4.2) * scale * FW_SPEED_MUL;
       const pick = Math.random();
       const col = pick < 0.34 ? c0 : pick < 0.67 ? c1 : c2;
       fwPushParticle({
