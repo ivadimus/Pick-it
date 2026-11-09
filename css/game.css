@@ -466,27 +466,32 @@ html:not(.is-touch) .iphone .stage {
   --top-left-nudge-x: -18px;
   --info-ui-gap: 6px;
   --info-btn-w: 52px;
-  /* Rope X: midpoint between info btn and meter (viewport coords) */
-  --info-rope-left: calc(
-    max(
-        0px,
-        calc(
-          var(--edge-x) + var(--top-left-nudge-x, 0px) +
-            env(safe-area-inset-left, 0px)
-        )
-      ) + var(--info-btn-w) + var(--info-ui-gap) * 0.5
+  /* Rope Y: top of stage / inner screen (undo top-left-controls offset) */
+  --info-rope-top: calc(
+    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px))
   );
+  /* Rope X: center of gap between info btn and meter */
+  --info-rope-x: calc(var(--info-btn-w) + var(--info-ui-gap) * 0.5);
+}
+
+html:not(.is-touch) .iphone .stage {
+  --info-rope-top: calc(-1 * max(var(--ui-top), 10px));
+}
+
+html.is-touch.game-landscape .top-left-controls,
+html:not(.is-touch) .iphone .top-left-controls {
+  position: absolute;
 }
 
 html.is-touch.game-landscape .info-panel-wrap,
 html:not(.is-touch) .iphone .info-panel-wrap {
-  position: fixed;
-  left: var(--info-rope-left, 55px);
-  top: env(safe-area-inset-top, 0px);
+  position: absolute;
+  left: var(--info-rope-x, 55px);
+  top: var(--info-rope-top, -8px);
   margin-left: 0;
   margin-top: 0;
   max-width: calc(124px * var(--info-panel-scale, 0.9555));
-  z-index: 220;
+  z-index: 2;
   transform: translate(-50%, -130%);
 }
 
