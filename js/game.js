@@ -1004,6 +1004,28 @@
     spawnSparkles(x, y, 28, 55, 480, colors);
   }
 
+  function playFlashGlitters(x, y) {
+    const white = ["#ffffff", "#fffffe", "#f8f9ff", "#fffef5"];
+    spawnSparkles(x, y, 20, 46, 520, white);
+    spawnSparkles(x, y, 14, 30, 440, white);
+
+    for (let i = 0; i < 18; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 8 + Math.random() * 36;
+      const sp = document.createElement("div");
+      sp.className = "vfx-spark vfx-spark-glitter";
+      sp.style.left = x + Math.cos(angle) * dist + "px";
+      sp.style.top = y + Math.sin(angle) * dist + "px";
+      sp.style.setProperty("--tx", Math.cos(angle) * (14 + Math.random() * 22) + "px");
+      sp.style.setProperty("--ty", Math.sin(angle) * (14 + Math.random() * 22) + "px");
+      sp.style.setProperty("--dur", 360 + Math.floor(Math.random() * 220) + "ms");
+      sp.style.setProperty("--sz", 4 + Math.random() * 7 + "px");
+      sp.style.setProperty("--c", "#ffffff");
+      vfxLayer.appendChild(sp);
+      setTimeout(() => sp.remove(), 620);
+    }
+  }
+
   function playSlotFlash(x, y) {
     if (!vfxLayer) return;
     const flash = document.createElement("div");
@@ -1012,7 +1034,8 @@
     flash.style.left = x + "px";
     flash.style.top = y + "px";
     vfxLayer.appendChild(flash);
-    setTimeout(() => flash.remove(), 400);
+    playFlashGlitters(x, y);
+    setTimeout(() => flash.remove(), 540);
   }
 
   function positionHandOnSlot(slot) {
@@ -1238,7 +1261,7 @@
     playSlotFlash(center.x, center.y);
     fly.remove();
 
-    await wait(100);
+    await wait(140);
 
     const specialReward = specialRewardForPetard(slot.cubeImg);
     await revealSlotCharacter(slot, specialReward);
