@@ -1923,13 +1923,13 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .slot.reward-peggy img.done {
-  width: calc(var(--petard-size) * 1.24);
-  height: calc(var(--petard-size) * 1.24);
+  width: calc(var(--petard-size) * 1.116);
+  height: calc(var(--petard-size) * 1.116);
 }
 
 .slot.reward-peggy.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.36);
-  height: calc(var(--petard-size) * 1.36);
+  width: calc(var(--petard-size) * 1.224);
+  height: calc(var(--petard-size) * 1.224);
 }
 
 .slot.reward-carrie img.done {
