@@ -465,8 +465,8 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --info-panel-scale: 0.7225;
   --info-meter-gap: 0px;
-  --info-panel-shift-x: -32px;
-  --info-panel-shift-y: -22px;
+  --info-panel-shift-x: -48px;
+  --info-panel-shift-y: -36px;
   --top-left-nudge-x: -18px;
   --close-nudge-x: 32px;
   --panel-bottom: 0;
