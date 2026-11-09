@@ -483,6 +483,23 @@ html:not(.is-touch) .iphone .top-left-controls {
   align-items: flex-start;
 }
 
+/* Mobile top bar: info (i) → info panel → energy meter */
+html.is-touch.game-landscape .top-left-controls .btn-info,
+html:not(.is-touch) .iphone .top-left-controls .btn-info {
+  order: 0;
+}
+
+html.is-touch.game-landscape .top-left-controls .info-panel-wrap,
+html:not(.is-touch) .iphone .top-left-controls .info-panel-wrap {
+  order: 1;
+}
+
+html.is-touch.game-landscape .top-left-controls .meter-wrap,
+html:not(.is-touch) .iphone .top-left-controls .meter-wrap {
+  order: 2;
+  margin-left: 2px;
+}
+
 /* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
 html.is-touch.game-landscape .stage {
   --edge-x: 2px;
