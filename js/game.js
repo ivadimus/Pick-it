@@ -109,7 +109,7 @@
   const SLOT_LAYOUT = [
     { x: 17, y: 55, rotate: 12 },
     { x: 29, y: 58, rotate: 11 },
-    { x: 38, y: 62, rotate: 10 },
+    { x: 41, y: 66, rotate: 10 },
     { x: 47, y: 37, rotate: 8 },
     { x: 55, y: 64, rotate: 5 },
     { x: 64, y: 38, rotate: 8 },
