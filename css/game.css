@@ -463,7 +463,7 @@ html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
   --info-panel-scale: 0.9555;
   --info-meter-gap: 0px;
-  --top-left-nudge-x: -18px;
+  --top-left-nudge-x: 0px;
   --info-ui-gap: 6px;
   --info-btn-w: 52px;
   /* Rope Y: top of stage / inner screen (undo top-left-controls offset) */
