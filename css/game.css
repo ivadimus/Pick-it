@@ -1307,9 +1307,17 @@ html.is-touch.game-landscape .info-swing img {
   width: 72px;
   height: auto;
   pointer-events: none;
-  transform: translate(-42%, -28%);
+  transform: translate(
+    calc(-42% + var(--hand-nudge-x, 0px)),
+    calc(-28% + var(--hand-nudge-y, 0px))
+  );
   opacity: 0;
   transition: opacity 0.25s ease;
+}
+
+html.is-touch.game-landscape .hand-pointer,
+html:not(.is-touch) .iphone .hand-pointer {
+  --hand-nudge-x: 14px;
 }
 
 .hand-pointer.visible {
