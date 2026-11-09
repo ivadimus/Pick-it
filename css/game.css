@@ -592,8 +592,9 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
-  --prize-panel-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-  bottom: var(--prize-panel-bottom);
+  /* 10px from stage bottom; do not add safe-area (duplicates gap on iPhone landscape) */
+  --prize-panel-bottom: 10px;
+  bottom: 10px;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
   max-width: calc(419px * var(--prize-panel-scale, 1.1));
   transform: translateX(-50%) translateY(0);
