@@ -113,8 +113,8 @@
     { x: 47, y: 37, rotate: 8 },
     { x: 55, y: 64, rotate: 5 },
     { x: 64, y: 38, rotate: 8 },
-    { x: 74, y: 59, rotate: -11 },
-    { x: 85, y: 36, rotate: -14 },
+    { x: 74, y: 63, rotate: -11 },
+    { x: 82, y: 36, rotate: -14 },
   ];
 
   /**
