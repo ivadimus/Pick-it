@@ -1928,8 +1928,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .slot.reward-sam.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 0.935);
-  height: calc(var(--petard-size) * 0.935);
+  width: calc(var(--petard-size) * 1.075);
+  height: calc(var(--petard-size) * 1.075);
   margin-left: -14px;
   bottom: 5%;
 }
@@ -1951,8 +1951,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .slot.reward-sam img.done {
-  width: calc(var(--petard-size) * 0.884);
-  height: calc(var(--petard-size) * 0.884);
+  width: calc(var(--petard-size) * 1.017);
+  height: calc(var(--petard-size) * 1.017);
   margin-left: -14px;
   bottom: 6%;
 }
