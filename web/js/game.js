@@ -1468,7 +1468,6 @@
   }
 
   initLandscapeOnly();
-  initCloseButton();
   initGameCompleteOverlay();
   initInfoPanelSwing();
   initStars();
