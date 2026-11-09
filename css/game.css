@@ -1452,33 +1452,46 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   height: 140px;
 }
 
-/* Prize → character: full-frame camera strobe on stage */
+/* Prize → character: camera strobe at burst point, face-sized */
 .vfx-camera-flash {
   position: absolute;
-  inset: 0;
-  z-index: 55;
+  left: 0;
+  top: 0;
+  width: calc(var(--petard-size, 120px) * 1.12);
+  height: calc(var(--petard-size, 120px) * 1.12);
+  transform: translate(-50%, -52%);
+  border-radius: 50%;
+  z-index: 56;
   pointer-events: none;
-  background: #fff;
-  opacity: 0;
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #ffffff 32%,
+    rgba(255, 255, 255, 0.94) 52%,
+    rgba(255, 255, 255, 0.45) 72%,
+    transparent 100%
+  );
   mix-blend-mode: normal;
-  animation: vfxCameraFlash 0.34s cubic-bezier(0.22, 0.9, 0.28, 1) forwards;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+  animation: vfxCameraFlashLocal 0.32s cubic-bezier(0.12, 0.82, 0.22, 1) forwards;
 }
 
-@keyframes vfxCameraFlash {
+@keyframes vfxCameraFlashLocal {
   0% {
     opacity: 0;
+    transform: translate(-50%, -52%) scale(0.55);
   }
-  5% {
+  6% {
     opacity: 1;
+    transform: translate(-50%, -52%) scale(1.04);
   }
-  12% {
-    opacity: 0.94;
-  }
-  28% {
-    opacity: 0.38;
+  16% {
+    opacity: 0.9;
+    transform: translate(-50%, -52%) scale(1);
   }
   100% {
     opacity: 0;
+    transform: translate(-50%, -52%) scale(1.06);
   }
 }
 

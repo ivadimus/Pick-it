@@ -1004,13 +1004,15 @@
     spawnSparkles(x, y, 28, 55, 480, colors);
   }
 
-  function playSlotFlash() {
+  function playSlotFlash(x, y) {
     if (!vfxLayer) return;
     const flash = document.createElement("div");
     flash.className = "vfx-camera-flash";
     flash.setAttribute("aria-hidden", "true");
+    flash.style.left = x + "px";
+    flash.style.top = y + "px";
     vfxLayer.appendChild(flash);
-    setTimeout(() => flash.remove(), 420);
+    setTimeout(() => flash.remove(), 400);
   }
 
   function positionHandOnSlot(slot) {
