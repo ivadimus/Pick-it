@@ -688,13 +688,17 @@
 
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
-      const glow = (p.glow || 1) * (p.kind === "streak" ? 24 : 18);
+      const glow =
+        (p.glow || 1) * (p.kind === "streak" ? 28 : 22) * FW_PARTICLE_SIZE_MUL;
       ctx.shadowBlur = glow;
       ctx.shadowColor = `rgba(${tint.r},${tint.g},${tint.b},${Math.min(1, alpha * 1.15)})`;
 
       if (p.kind === "streak") {
         ctx.strokeStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
-        ctx.lineWidth = Math.max(0.75, p.size * (0.42 + alpha * 0.85));
+        ctx.lineWidth = Math.max(
+          1.05,
+          p.size * (0.55 + alpha * 0.95) * FW_PARTICLE_SIZE_MUL
+        );
         ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(p.px, p.py);
@@ -703,7 +707,13 @@
       } else {
         ctx.fillStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(0.5, p.size * (0.55 + alpha * 0.5)), 0, Math.PI * 2);
+        ctx.arc(
+          p.x,
+          p.y,
+          Math.max(0.65, p.size * (0.62 + alpha * 0.55) * FW_PARTICLE_SIZE_MUL),
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
       }
       ctx.restore();
@@ -741,7 +751,7 @@
           r: col.r,
           g: col.g,
           b: col.b,
-          size: 1.1 + Math.random() * 0.8,
+          size: (1.1 + Math.random() * 0.8) * FW_PARTICLE_SIZE_MUL,
           drag: 0.98,
           gravity: 0.02,
           peak: 0.95,
@@ -831,8 +841,11 @@
         r: col.r,
         g: col.g,
         b: col.b,
-        size: (1.55 + Math.random() * 1.25) * Math.min(1.35, 0.85 + scale * 0.22),
-        glow: 1.15,
+        size:
+          (1.55 + Math.random() * 1.25) *
+          Math.min(1.35, 0.85 + scale * 0.22) *
+          FW_PARTICLE_SIZE_MUL,
+        glow: 1.22,
         drag: style === "willow" ? 0.965 : 0.972,
         gravity: style === "willow" ? 0.11 : 0.085,
         peak: 1,
@@ -858,11 +871,14 @@
         r: col.r,
         g: col.g,
         b: col.b,
-        size: (1 + Math.random() * 1.55) * Math.min(1.3, 0.88 + scale * 0.2),
+        size:
+          (1 + Math.random() * 1.55) *
+          Math.min(1.3, 0.88 + scale * 0.2) *
+          FW_PARTICLE_SIZE_MUL,
         drag: 0.976,
         gravity: 0.075,
         peak: 0.95,
-        glow: 1.12,
+        glow: 1.18,
         kind: "dot",
       });
     }
