@@ -562,6 +562,7 @@ html.is-touch.game-landscape .btn-close {
 html.is-touch.game-landscape .meter-wrap,
 html:not(.is-touch) .iphone .meter-wrap {
   height: calc(56px * 1.15);
+  transform: translateY(-5%);
 }
 
 html.is-touch.game-landscape .meter-value,
