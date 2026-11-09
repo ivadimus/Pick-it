@@ -107,7 +107,7 @@
 
   /** 1→8 left to right, arc heights; x compressed toward center */
   const SLOT_LAYOUT = [
-    { x: 17, y: 59, rotate: 12 },
+    { x: 20, y: 63, rotate: 12 },
     { x: 31, y: 49, rotate: 11 },
     { x: 41, y: 66, rotate: 10 },
     { x: 47, y: 37, rotate: 8 },
