@@ -1004,17 +1004,13 @@
     spawnSparkles(x, y, 28, 55, 480, colors);
   }
 
-  function playSlotFlash(x, y) {
+  function playSlotFlash() {
     if (!vfxLayer) return;
-    const burst = document.createElement("div");
-    burst.className = "vfx-burst vfx-burst-swap";
-    burst.style.left = x + "px";
-    burst.style.top = y + "px";
     const flash = document.createElement("div");
-    flash.className = "vfx-flash vfx-flash-swap";
-    burst.appendChild(flash);
-    vfxLayer.appendChild(burst);
-    setTimeout(() => burst.remove(), 480);
+    flash.className = "vfx-camera-flash";
+    flash.setAttribute("aria-hidden", "true");
+    vfxLayer.appendChild(flash);
+    setTimeout(() => flash.remove(), 420);
   }
 
   function positionHandOnSlot(slot) {
@@ -1237,7 +1233,7 @@
 
     await wait(420);
 
-    playSlotFlash(center.x, center.y);
+    playSlotFlash();
     fly.remove();
 
     await wait(100);

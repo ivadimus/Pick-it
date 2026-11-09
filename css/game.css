@@ -1452,45 +1452,33 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   height: 140px;
 }
 
-.vfx-burst-swap {
-  width: 172px;
-  height: 172px;
-  z-index: 48;
+/* Prize → character: full-frame camera strobe on stage */
+.vfx-camera-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
   pointer-events: none;
+  background: #fff;
+  opacity: 0;
+  mix-blend-mode: normal;
+  animation: vfxCameraFlash 0.34s cubic-bezier(0.22, 0.9, 0.28, 1) forwards;
 }
 
-.vfx-flash-swap {
-  inset: -24%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 252, 248, 0.95) 20%,
-    rgba(255, 238, 190, 0.55) 42%,
-    rgba(255, 210, 130, 0.2) 62%,
-    transparent 82%
-  );
-  box-shadow:
-    0 0 36px rgba(255, 255, 255, 0.95),
-    0 0 72px rgba(255, 235, 180, 0.65);
-  animation: vfxFlashSwap 0.4s ease-out forwards;
-}
-
-@keyframes vfxFlashSwap {
+@keyframes vfxCameraFlash {
   0% {
     opacity: 0;
-    transform: scale(0.22);
   }
-  10% {
+  5% {
     opacity: 1;
-    transform: scale(1.08);
   }
-  26% {
-    opacity: 1;
-    transform: scale(1.18);
+  12% {
+    opacity: 0.94;
+  }
+  28% {
+    opacity: 0.38;
   }
   100% {
     opacity: 0;
-    transform: scale(1.28);
   }
 }
 
@@ -1918,8 +1906,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.4);
   height: calc(var(--petard-size) * 1.4);
   animation:
-    specialRewardFlashIn 0.2s ease-out forwards,
-    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.2s infinite;
+    specialRewardFlashIn 0.16s ease-out forwards,
+    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.16s infinite;
 }
 
 .slot.reward-sam img.done {
@@ -2005,9 +1993,9 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 
 @keyframes specialRewardFlashIn {
   from {
-    opacity: 0;
+    opacity: 0.85;
     transform: translateX(-50%);
-    filter: brightness(3.2);
+    filter: brightness(1.35);
   }
   to {
     opacity: 1;
