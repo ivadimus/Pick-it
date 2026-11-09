@@ -1235,7 +1235,7 @@
 
     await wait(420);
 
-    playSlotFlash();
+    playSlotFlash(center.x, center.y);
     fly.remove();
 
     await wait(100);
