@@ -1806,7 +1806,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .reveal-prize.vanish {
-  animation: revealVanish 0.65s ease-in forwards;
+  animation: revealVanish 0.45s ease-in forwards;
 }
 
 @keyframes revealVanish {
@@ -1876,8 +1876,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.4);
   height: calc(var(--petard-size) * 1.4);
   animation:
-    specialRewardReveal 0.55s cubic-bezier(0.34, 1.45, 0.64, 1) forwards,
-    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.55s infinite;
+    specialRewardReveal 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards,
+    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.38s infinite;
 }
 
 .slot.reward-sam img.done {

@@ -1211,12 +1211,12 @@
     fly.style.top = center.y + "px";
     vfxLayer.appendChild(fly);
 
-    await wait(650);
+    await wait(480);
 
     playVanishSparkles(center.x, center.y - 20);
     fly.classList.add("vanish");
 
-    await wait(520);
+    await wait(300);
 
     fly.remove();
 
