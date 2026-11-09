@@ -478,7 +478,7 @@ html.is-touch.game-landscape .stage {
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-rise-offset: min(80px, 18vh);
-  --petard-size: min(24vh, 130px);
+  --petard-size: min(28.8vh, 156px);
 }
 
 html.is-touch.game-landscape .top-left-controls {
@@ -541,9 +541,9 @@ html.is-touch.game-landscape .info-panel-wrap {
   flex: 0 0 auto;
   flex-shrink: 0;
   margin-left: calc(
-    var(--info-meter-gap, 2px) + var(--info-panel-shift-x, -4px)
+    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -14px)
   );
-  max-width: calc(124px * var(--info-panel-scale, 0.85));
+  max-width: calc(124px * var(--info-panel-scale, 0.7225));
 }
 
 html.is-touch.game-landscape .info-swing img {
