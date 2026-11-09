@@ -439,23 +439,42 @@ body.force-landscape .prize-panel-wrap {
   }
 }
 
-/* Touch + landscape: same UI tokens as desktop; vw/vh — cqw on iOS often doubles size */
+html.is-touch.game-landscape,
+html.is-touch.game-landscape body {
+  background: #0a1020;
+}
+
+html.is-touch.game-landscape #app,
+html.is-touch.game-landscape .iphone,
+html.is-touch.game-landscape .iphone-shell,
+html.is-touch.game-landscape .iphone-bezel,
+html.is-touch.game-landscape .iphone-screen,
+html.is-touch.game-landscape .iphone-screen-inner,
 html.is-touch.game-landscape .stage {
-  --edge-x: max(3.85%, 10px);
-  --ui-top: 12px;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
+html.is-touch.game-landscape .stage {
+  --edge-x: 6px;
+  --ui-top: 8px;
   --header-w: 42.32%;
   --info-panel-scale: 0.85;
-  --info-meter-gap: 6px;
-  --info-panel-shift-x: -10px;
-  --info-panel-shift-y: -24px;
-  --top-left-nudge-x: -16px;
-  --close-nudge-x: 14px;
+  --info-meter-gap: 2px;
+  --info-panel-shift-x: -4px;
+  --info-panel-shift-y: -22px;
+  --top-left-nudge-x: -6px;
+  --close-nudge-x: 22px;
   --panel-bottom: 3.2%;
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
-  --prize-panel-w: min(50.4vw, 454px);
+  --prize-panel-w: min(68vw, 580px);
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-rise-offset: min(80px, 18vh);
@@ -463,21 +482,28 @@ html.is-touch.game-landscape .stage {
 }
 
 html.is-touch.game-landscape .top-left-controls {
-  left: calc(
-    var(--edge-x) + var(--top-left-nudge-x, 0px) +
-      env(safe-area-inset-left, 0px)
+  left: max(
+    2px,
+    calc(
+      var(--edge-x) + var(--top-left-nudge-x, 0px) +
+        env(safe-area-inset-left, 0px)
+    )
   );
-  top: max(var(--ui-top), 10px);
-  gap: 12px;
+  top: max(var(--ui-top), env(safe-area-inset-top, 8px));
+  gap: 6px;
   max-width: none;
   align-items: flex-start;
 }
 
 html.is-touch.game-landscape .btn-close {
-  right: calc(
-    var(--edge-x) - var(--close-nudge-x, 0px) + env(safe-area-inset-right, 0px)
+  right: max(
+    2px,
+    calc(
+      var(--edge-x) - var(--close-nudge-x, 0px) +
+        env(safe-area-inset-right, 0px)
+    )
   );
-  top: max(var(--ui-top), 10px);
+  top: max(var(--ui-top), env(safe-area-inset-top, 8px));
 }
 
 html.is-touch.game-landscape .btn-info,
@@ -508,7 +534,7 @@ html.is-touch.game-landscape .header-img {
 
 html.is-touch.game-landscape .prize-panel-wrap {
   width: min(var(--prize-panel-w), calc(100% - 16px));
-  max-width: 324px;
+  max-width: 454px;
 }
 
 html.is-touch.game-landscape .info-panel-wrap {
