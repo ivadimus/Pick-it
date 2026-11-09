@@ -518,14 +518,13 @@ html.is-touch.game-landscape .stage {
   --panel-bottom: 0;
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
-  --prize-panel-items-shift: 0%;
+  --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
   --prize-panel-items-drop: 0px;
   --prize-panel-w: min(49.13vw, 419px);
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-rise-offset: min(80px, 18vh);
-  --prize-panel-touch-drop: min(16px, 3.5vh);
   --petard-size: min(28.8vh, 156px);
 }
 
@@ -588,11 +587,11 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
-  --prize-panel-bottom: 0;
-  bottom: 0;
+  --prize-panel-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  bottom: var(--prize-panel-bottom);
   width: min(var(--prize-panel-w), calc(100vw - 12px));
   max-width: 419px;
-  transform: translateX(-50%) translateY(var(--prize-panel-touch-drop, 0px));
+  transform: translateX(-50%) translateY(0);
 }
 
 html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
@@ -615,8 +614,17 @@ html.is-touch.game-landscape .prize-panel-wrap.visible {
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(var(--prize-panel-touch-drop, 0px));
+    transform: translateX(-50%) translateY(0);
   }
+}
+
+html.is-touch.game-landscape .prize-panel-items {
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  align-items: center;
+  justify-content: center;
 }
 
 html.is-touch.game-landscape .info-swing img {
