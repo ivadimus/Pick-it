@@ -121,7 +121,7 @@
    * Bottom fan spawn positions (0 = left off-screen … 1 = right off-screen), petard 1→8.
    * Matches sketch: #1 diagonal from left, #2–#3 clustered, #4–#5 center V, edges fan outward.
    */
-  const PETARD_FAN_SPAWN_T = [0.18, 0.22, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
+  const PETARD_FAN_SPAWN_T = [0.28, 0.33, 0.4, 0.47, 0.48, 0.55, 0.66, 0.68];
 
   const field = document.getElementById("field");
   const prizePanelItems = document.getElementById("prizePanelItems");
