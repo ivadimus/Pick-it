@@ -525,6 +525,7 @@ html.is-touch.game-landscape .stage {
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-rise-offset: min(80px, 18vh);
+  --prize-panel-touch-drop: min(16px, 3.5vh);
   --petard-size: min(28.8vh, 156px);
 }
 
@@ -591,7 +592,7 @@ html.is-touch.game-landscape .prize-panel-wrap {
   bottom: 0;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
   max-width: 419px;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(var(--prize-panel-touch-drop, 0px));
 }
 
 html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
@@ -614,7 +615,7 @@ html.is-touch.game-landscape .prize-panel-wrap.visible {
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(var(--prize-panel-touch-drop, 0px));
   }
 }
 
