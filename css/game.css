@@ -461,7 +461,7 @@ html.is-touch.game-landscape .stage {
 /* Info panel layout: phone landscape + local iPhone mockup (no .is-touch on desktop) */
 html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
-  --info-panel-scale: 0.7225;
+  --info-panel-scale: 0.8309;
   --info-meter-gap: 0px;
   --info-panel-shift-x: -50px;
   --info-panel-shift-y: -32px;
