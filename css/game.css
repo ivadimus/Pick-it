@@ -1392,6 +1392,41 @@ html.is-touch.game-landscape .info-swing img {
   filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55));
 }
 
+html.is-touch.game-landscape .game-complete-overlay {
+  padding: 10px;
+}
+
+html.is-touch.game-landscape .game-complete-restart {
+  max-width: min(62vw, 290px);
+}
+
+html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-restart {
+  animation: gameCompletePopBounceMobile 0.72s cubic-bezier(0.34, 1.45, 0.64, 1) 0.12s
+    forwards;
+}
+
+html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-restart:hover {
+  transform: scale(1.02);
+}
+
+@keyframes gameCompletePopBounceMobile {
+  0% {
+    opacity: 0;
+    transform: scale(0.78);
+  }
+  52% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  72% {
+    transform: scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.96);
+  }
+}
+
 .vfx-burst {
   position: absolute;
   transform: translate(-50%, -50%);

@@ -1370,6 +1370,35 @@
     });
   }
 
+  function closeGame() {
+    try {
+      window.parent.postMessage({ type: "pick-it-close", source: "pick-it" }, "*");
+    } catch (_) {
+      /* postMessage optional */
+    }
+    try {
+      window.close();
+    } catch (_) {
+      /* close often blocked in tabs */
+    }
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    const app = document.getElementById("app");
+    const overlay = document.getElementById("rotateOverlay");
+    if (app) app.hidden = true;
+    if (overlay) overlay.hidden = true;
+    document.body.classList.add("game-closed");
+    document.body.style.background = "#000";
+  }
+
+  function initCloseButton() {
+    const btn = document.querySelector(".btn-close");
+    if (!btn) return;
+    btn.addEventListener("click", closeGame);
+  }
+
   function initLandscapeOnly() {
     const app = document.getElementById("app");
     if (!app) return;
