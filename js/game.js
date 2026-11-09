@@ -1014,7 +1014,7 @@
     flash.className = "vfx-flash vfx-flash-swap";
     burst.appendChild(flash);
     vfxLayer.appendChild(burst);
-    setTimeout(() => burst.remove(), 380);
+    setTimeout(() => burst.remove(), 480);
   }
 
   function positionHandOnSlot(slot) {

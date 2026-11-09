@@ -1453,28 +1453,44 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .vfx-burst-swap {
-  width: 120px;
-  height: 120px;
+  width: 172px;
+  height: 172px;
   z-index: 48;
   pointer-events: none;
 }
 
 .vfx-flash-swap {
-  animation: vfxFlashSwap 0.32s ease-out forwards;
+  inset: -24%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 252, 248, 0.95) 20%,
+    rgba(255, 238, 190, 0.55) 42%,
+    rgba(255, 210, 130, 0.2) 62%,
+    transparent 82%
+  );
+  box-shadow:
+    0 0 36px rgba(255, 255, 255, 0.95),
+    0 0 72px rgba(255, 235, 180, 0.65);
+  animation: vfxFlashSwap 0.4s ease-out forwards;
 }
 
 @keyframes vfxFlashSwap {
   0% {
     opacity: 0;
-    transform: scale(0.35);
+    transform: scale(0.22);
   }
-  18% {
+  10% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1.08);
+  }
+  26% {
+    opacity: 1;
+    transform: scale(1.18);
   }
   100% {
     opacity: 0;
-    transform: scale(1.08);
+    transform: scale(1.28);
   }
 }
 
@@ -1991,7 +2007,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   from {
     opacity: 0;
     transform: translateX(-50%);
-    filter: brightness(2.4);
+    filter: brightness(3.2);
   }
   to {
     opacity: 1;
