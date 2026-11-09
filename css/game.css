@@ -554,8 +554,14 @@ html.is-touch.game-landscape .btn-close {
   height: 52px;
 }
 
-html.is-touch.game-landscape .meter-wrap {
-  height: 56px;
+html.is-touch.game-landscape .meter-wrap,
+html:not(.is-touch) .iphone .meter-wrap {
+  height: calc(56px * 1.15);
+}
+
+html.is-touch.game-landscape .meter-value,
+html:not(.is-touch) .iphone .meter-value {
+  font-size: calc(19px * 1.15);
 }
 
 html.is-touch.game-landscape .header-wrap {
