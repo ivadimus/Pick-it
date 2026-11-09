@@ -460,12 +460,12 @@ html.is-touch.game-landscape .stage {
 
 /* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
 html.is-touch.game-landscape .stage {
-  --edge-x: 6px;
+  --edge-x: 2px;
   --ui-top: 8px;
   --header-w: 42.32%;
   --info-panel-scale: 0.7225;
   --info-meter-gap: 0px;
-  --info-panel-shift-x: -14px;
+  --info-panel-shift-x: -18px;
   --info-panel-shift-y: -22px;
   --top-left-nudge-x: -6px;
   --close-nudge-x: 22px;
