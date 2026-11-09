@@ -463,9 +463,9 @@ html.is-touch.game-landscape .stage {
   --edge-x: 6px;
   --ui-top: 8px;
   --header-w: 42.32%;
-  --info-panel-scale: 0.85;
-  --info-meter-gap: 2px;
-  --info-panel-shift-x: -4px;
+  --info-panel-scale: 0.7225;
+  --info-meter-gap: 0px;
+  --info-panel-shift-x: -14px;
   --info-panel-shift-y: -22px;
   --top-left-nudge-x: -6px;
   --close-nudge-x: 22px;
@@ -533,13 +533,16 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
-  width: min(var(--prize-panel-w), calc(100% - 16px));
-  max-width: 454px;
+  width: min(var(--prize-panel-w), calc(100vw - 12px));
+  max-width: 580px;
 }
 
 html.is-touch.game-landscape .info-panel-wrap {
   flex: 0 0 auto;
   flex-shrink: 0;
+  margin-left: calc(
+    var(--info-meter-gap, 2px) + var(--info-panel-shift-x, -4px)
+  );
   max-width: calc(124px * var(--info-panel-scale, 0.85));
 }
 
