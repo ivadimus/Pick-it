@@ -494,7 +494,7 @@ html.is-touch.game-landscape .stage {
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
-  --prize-panel-w: min(57.8vw, 493px);
+  --prize-panel-w: min(49.13vw, 419px);
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-rise-offset: min(80px, 18vh);
@@ -556,7 +556,7 @@ html.is-touch.game-landscape .prize-panel-wrap {
   --prize-panel-bottom: max(0px, env(safe-area-inset-bottom, 0px));
   bottom: var(--prize-panel-bottom);
   width: min(var(--prize-panel-w), calc(100vw - 12px));
-  max-width: 493px;
+  max-width: 419px;
 }
 
 html.is-touch.game-landscape .info-swing img {
@@ -723,7 +723,7 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-rise-offset: 96px;
   --prize-panel-rise-duration: 1.15s;
   --prize-panel-items-drop: 0px;
-  --prize-panel-w: 648px;
+  --prize-panel-w: 551px;
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-gap: 1px;
