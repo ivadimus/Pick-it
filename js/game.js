@@ -1017,6 +1017,19 @@
     spawnSparkles(x, y, 28, 55, 480, colors);
   }
 
+  function playSlotFlash(x, y) {
+    if (!vfxLayer) return;
+    const burst = document.createElement("div");
+    burst.className = "vfx-burst vfx-burst-swap";
+    burst.style.left = x + "px";
+    burst.style.top = y + "px";
+    const flash = document.createElement("div");
+    flash.className = "vfx-flash vfx-flash-swap";
+    burst.appendChild(flash);
+    vfxLayer.appendChild(burst);
+    setTimeout(() => burst.remove(), 380);
+  }
+
   function positionHandOnSlot(slot) {
     const c = slotCenterOnStage(slot.el);
     handPointer.style.left = c.x + "px";
@@ -1201,8 +1214,6 @@
     const rewardClass = REWARD_CLASS_BY_FILE[file];
     if (rewardClass) slot.el.classList.add(rewardClass);
 
-    const charCenter = slotCenterOnStage(slot.el);
-    playCharacterRevealSparkles(charCenter.x, charCenter.y);
     attachCharacterAmbientSparkles(slot);
   }
 
@@ -1237,14 +1248,12 @@
     fly.style.top = center.y + "px";
     vfxLayer.appendChild(fly);
 
-    await wait(480);
+    await wait(420);
 
-    playVanishSparkles(center.x, center.y - 20);
-    fly.classList.add("vanish");
-
-    await wait(300);
-
+    playSlotFlash(center.x, center.y);
     fly.remove();
+
+    await wait(100);
 
     const specialReward = specialRewardForPetard(slot.cubeImg);
     await revealSlotCharacter(slot, specialReward);

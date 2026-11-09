@@ -1452,6 +1452,32 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   height: 140px;
 }
 
+.vfx-burst-swap {
+  width: 120px;
+  height: 120px;
+  z-index: 48;
+  pointer-events: none;
+}
+
+.vfx-flash-swap {
+  animation: vfxFlashSwap 0.32s ease-out forwards;
+}
+
+@keyframes vfxFlashSwap {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
 .vfx-flash {
   position: absolute;
   inset: -8%;
@@ -1876,8 +1902,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.4);
   height: calc(var(--petard-size) * 1.4);
   animation:
-    specialRewardReveal 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards,
-    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.38s infinite;
+    specialRewardFlashIn 0.2s ease-out forwards,
+    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.2s infinite;
 }
 
 .slot.reward-sam img.done {
@@ -1961,15 +1987,15 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   bottom: 4%;
 }
 
-@keyframes specialRewardReveal {
+@keyframes specialRewardFlashIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) scale(0.35);
-    filter: brightness(0.8);
+    transform: translateX(-50%);
+    filter: brightness(2.4);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%);
     filter: brightness(1);
   }
 }
