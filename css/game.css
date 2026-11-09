@@ -461,7 +461,6 @@ html.is-touch.game-landscape .stage {
 /* Info panel layout: phone landscape + local iPhone mockup (no .is-touch on desktop) */
 html.is-touch.game-landscape .stage,
 html:not(.is-touch) .iphone .stage {
-  --info-panel-scale: 0.9555;
   --info-meter-gap: 0px;
   --top-left-nudge-x: 0px;
   --info-ui-gap: 6px;
@@ -474,7 +473,12 @@ html:not(.is-touch) .iphone .stage {
   --info-rope-x: calc(var(--info-btn-w) + var(--info-ui-gap) * 0.5);
 }
 
+html.is-touch.game-landscape .stage {
+  --info-panel-scale: calc(0.9555 * 0.85);
+}
+
 html:not(.is-touch) .iphone .stage {
+  --info-panel-scale: 0.9555;
   --info-rope-top: calc(-1 * max(var(--ui-top), 10px));
 }
 
