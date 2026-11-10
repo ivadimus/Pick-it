@@ -29,7 +29,7 @@
   }
 
   /** Bump when character PNGs change (GitHub Pages / browser cache). */
-  const REWARD_ASSET_V = "web-chars1";
+  const REWARD_ASSET_V = "web-chars2";
 
   function assetWithCacheBust(path) {
     if (!path) return path;
