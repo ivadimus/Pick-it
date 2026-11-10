@@ -119,7 +119,7 @@
     { x: 25, y: 68, rotate: 12 },
     { x: 29, y: 27, rotate: 11 },
     { x: 40, y: 67, rotate: 10 },
-    { x: 45, y: 24, rotate: 8 },
+    { x: 49, y: 24, rotate: 8 },
     { x: 53, y: 65, rotate: 5 },
     { x: 62, y: 23, rotate: 8 },
     { x: 69, y: 64, rotate: -11 },
