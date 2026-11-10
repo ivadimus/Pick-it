@@ -12,14 +12,14 @@
 
   /** Petard file number (1.png … 8.png) → image after prize vanishes */
   const PETARD_SPECIAL_REWARD = {
-    1: "Assets/Sam.png",
-    2: "Assets/Mia.png",
-    3: "Assets/Sanny.png",
-    4: "Assets/Oscar.png",
-    5: "Assets/Peggy.png",
-    6: "Assets/Hoppy.png",
-    7: "Assets/Carrie.png",
-    8: "Assets/Mole.png",
+    1: "Assets/web-characters/Sam.png",
+    2: "Assets/web-characters/Mia.png",
+    3: "Assets/web-characters/Sanny.png",
+    4: "Assets/web-characters/Oscar.png",
+    5: "Assets/web-characters/Peggy.png",
+    6: "Assets/web-characters/Hoppy.png",
+    7: "Assets/web-characters/Carrie.png",
+    8: "Assets/web-characters/Mole.png",
   };
 
   function petardNumberFromImg(cubeImg) {
@@ -29,7 +29,7 @@
   }
 
   /** Bump when character PNGs change (GitHub Pages / browser cache). */
-  const REWARD_ASSET_V = "sam3";
+  const REWARD_ASSET_V = "web-chars1";
 
   function assetWithCacheBust(path) {
     if (!path) return path;
@@ -1226,7 +1226,7 @@
     const img = document.createElement("img");
     img.className = "done";
     img.alt = "";
-    img.src = specialReward;
+    img.src = assetWithCacheBust(specialReward);
     slot.inner.appendChild(img);
     slot.doneImg = img;
 
@@ -1237,7 +1237,7 @@
     }
 
     slot.el.classList.add("show-special-reward");
-    const file = specialReward.split("/").pop() || "";
+    const file = (specialReward.split("/").pop() || "").split("?")[0];
     const rewardClass = REWARD_CLASS_BY_FILE[file];
     if (rewardClass) slot.el.classList.add(rewardClass);
 
