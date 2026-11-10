@@ -28,6 +28,15 @@
     return Number.isFinite(num) ? num : null;
   }
 
+  /** Bump when character PNGs change (GitHub Pages / browser cache). */
+  const REWARD_ASSET_V = "sam3";
+
+  function assetWithCacheBust(path) {
+    if (!path) return path;
+    const sep = path.includes("?") ? "&" : "?";
+    return `${path}${sep}v=${REWARD_ASSET_V}`;
+  }
+
   function specialRewardForPetard(cubeImg) {
     const num = petardNumberFromImg(cubeImg);
     return num ? PETARD_SPECIAL_REWARD[num] || null : null;
