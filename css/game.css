@@ -517,8 +517,11 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --close-nudge-x: 32px;
   --header-est-h: min(12.5vw, 54px);
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 24px);
-  --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 8px);
+  --prize-panel-frame-mul: 0.85;
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 12px);
+  --field-top: calc(
+    var(--prize-panel-top) + var(--prize-panel-h) * var(--prize-panel-frame-mul) + 8px
+  );
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
