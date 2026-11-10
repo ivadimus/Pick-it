@@ -2053,6 +2053,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mia img.done {
   width: calc(var(--petard-size) * 1.22);
   height: calc(var(--petard-size) * 1.22);
+  bottom: 8%;
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
