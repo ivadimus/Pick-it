@@ -2086,7 +2086,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
-  margin-left: -16px;
+  margin-left: -4px;
   bottom: 14%;
 }
 
