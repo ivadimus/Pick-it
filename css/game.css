@@ -94,7 +94,7 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 48px;
-  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  background: #0a1020 url("../Assets/bg.jpg?v=sky1") center center / cover no-repeat;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -193,7 +193,7 @@ body {
   padding: 28px;
   text-align: center;
   color: #fff;
-  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  background: #0a1020 url("../Assets/bg.jpg?v=sky1") center center / cover no-repeat;
   pointer-events: auto;
 }
 
@@ -517,7 +517,7 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --close-nudge-x: 32px;
   --header-est-h: min(12.5vw, 54px);
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 4px);
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 14px);
   --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 8px);
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
@@ -603,34 +603,18 @@ html.is-touch.game-landscape .prize-panel-wrap {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
-  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 80px));
+  transform: translateX(-50%);
 }
 
 html.is-touch.game-landscape .prize-panel-wrap.visible {
-  animation: prizePanelRiseFadeTouch var(--prize-panel-rise-duration, 1.15s)
-    cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes prizePanelRiseFadeTouch {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%)
-      translateY(calc(var(--prize-panel-rise-offset, -68px) - 22px));
-  }
-  28% {
-    opacity: 0.45;
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  animation: prizePanelFadeIn var(--prize-panel-rise-duration, 0.85s) ease both;
 }
 
 html.is-touch.game-landscape .prize-panel-items {
   top: 50%;
   left: 0;
   right: 0;
-  transform: translateY(calc(-50% - 10px));
+  transform: translateY(calc(-50% - 15px));
   align-items: center;
   justify-content: center;
 }
@@ -840,7 +824,7 @@ html.is-touch.game-landscape .info-swing img {
   --top-left-nudge-x: -16px;
   --close-nudge-x: 14px;
   --header-est-h: min(14cqw, 62px);
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 8px);
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 18px);
   --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 10px);
   --header-w: 42.32%;
   --prize-panel-rise-offset: -min(88px, 16vh);
@@ -936,7 +920,7 @@ html.is-touch.game-landscape .info-swing img {
   left: 50%;
   top: var(--prize-panel-top);
   bottom: auto;
-  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, -88px));
+  transform: translateX(-50%);
   transform-origin: 50% 0%;
   width: min(var(--prize-panel-w), calc(100% - 16px));
   aspect-ratio: 1024 / 170;
@@ -948,7 +932,7 @@ html.is-touch.game-landscape .info-swing img {
 .prize-panel-wrap.intro-hidden[data-intro="panel"] {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 96px));
+  transform: translateX(-50%);
 }
 
 /* Recompletion: tuck prize panel off-screen above. */
@@ -962,23 +946,16 @@ html.is-touch.game-landscape .info-swing img {
 }
 
 .prize-panel-wrap.visible {
-  animation: prizePanelRiseFade var(--prize-panel-rise-duration, 1.15s)
-    cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: prizePanelFadeIn var(--prize-panel-rise-duration, 0.85s) ease both;
   pointer-events: auto;
 }
 
-@keyframes prizePanelRiseFade {
-  0% {
+@keyframes prizePanelFadeIn {
+  from {
     opacity: 0;
-    transform: translateX(-50%)
-      translateY(calc(var(--prize-panel-rise-offset, -88px) - 24px));
   }
-  28% {
-    opacity: 0.45;
-  }
-  100% {
+  to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -1003,7 +980,7 @@ html.is-touch.game-landscape .info-swing img {
   right: 0;
   top: 50%;
   transform: translateY(var(--prize-panel-items-shift))
-    translateY(var(--prize-panel-items-drop, 10px));
+    translateY(var(--prize-panel-items-drop, -5px));
   box-sizing: border-box;
   width: 100%;
   height: var(--prize-icon-h);
