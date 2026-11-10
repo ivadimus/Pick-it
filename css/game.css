@@ -527,7 +527,8 @@ html.is-touch.game-landscape .stage {
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
-  --prize-panel-items-drop: 0px;
+  --prize-panel-items-drop: -34px;
+  --prize-panel-items-top: 46%;
   --prize-panel-scale: 1.21;
   --prize-panel-w: min(
     calc(49.13vw * var(--prize-panel-scale, 1.21)),
@@ -630,11 +631,12 @@ html.is-touch.game-landscape .prize-panel-wrap.visible {
 }
 
 html.is-touch.game-landscape .prize-panel-items {
-  top: 50%;
+  top: var(--prize-panel-items-top, 46%);
   left: 0;
   right: 0;
   height: var(--prize-icon-h);
-  transform: translateY(calc(-50% - 22px))
+  transform: translateY(var(--prize-panel-items-shift, -50%))
+    translateY(var(--prize-panel-items-drop, -34px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   align-items: center;
   justify-content: center;
@@ -868,7 +870,8 @@ html.is-touch.game-landscape .info-swing img {
   --header-w: 42.32%;
   --prize-panel-rise-offset: -min(88px, 16vh);
   --prize-panel-rise-duration: 1.15s;
-  --prize-panel-items-drop: 0px;
+  --prize-panel-items-drop: -24px;
+  --prize-panel-items-top: 48%;
   --prize-panel-w: 551px;
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
@@ -1018,9 +1021,9 @@ html.is-touch.game-landscape .info-swing img {
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(var(--prize-panel-items-shift))
-    translateY(var(--prize-panel-items-drop, -12px))
+  top: var(--prize-panel-items-top, 48%);
+  transform: translateY(var(--prize-panel-items-shift, -50%))
+    translateY(var(--prize-panel-items-drop, -24px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   box-sizing: border-box;
   width: 100%;
