@@ -473,7 +473,7 @@ html.is-touch.game-landscape .stage {
   --top-left-nudge-x: -10px;
   /* Rope Y: top of stage + lift info panel slightly */
   --info-rope-top: calc(
-    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px)) - 8px
+    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px)) - 14px
   );
 }
 
@@ -522,10 +522,10 @@ html.is-touch.game-landscape .stage {
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
   --prize-panel-items-drop: 0px;
-  --prize-panel-scale: 1.1;
+  --prize-panel-scale: 1.21;
   --prize-panel-w: min(
-    calc(49.13vw * var(--prize-panel-scale, 1.1)),
-    calc(419px * var(--prize-panel-scale, 1.1))
+    calc(49.13vw * var(--prize-panel-scale, 1.21)),
+    calc(419px * var(--prize-panel-scale, 1.21))
   );
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
@@ -596,7 +596,7 @@ html.is-touch.game-landscape .prize-panel-wrap {
   --prize-panel-bottom: 10px;
   bottom: 10px;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
-  max-width: calc(419px * var(--prize-panel-scale, 1.1));
+  max-width: calc(419px * var(--prize-panel-scale, 1.21));
   transform: translateX(-50%) translateY(0);
 }
 
