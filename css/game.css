@@ -517,8 +517,9 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --close-nudge-x: 32px;
   --header-est-h: min(12.5vw, 54px);
-  --prize-panel-frame-mul: 0.85;
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 12px);
+  --prize-panel-frame-mul: 1.02;
+  --prize-panel-items-mul: 0.85;
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 5px);
   --field-top: calc(
     var(--prize-panel-top) + var(--prize-panel-h) * var(--prize-panel-frame-mul) + 8px
   );
@@ -533,7 +534,9 @@ html.is-touch.game-landscape .stage {
     calc(419px * var(--prize-panel-scale, 1.21))
   );
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
+  --prize-icon-h: calc(
+    var(--prize-panel-h) * 0.72 * var(--prize-panel-items-mul, 0.85)
+  );
   --prize-panel-rise-offset: min(-68px, -14vh);
   --petard-size: min(28.8vh, 156px);
 }
@@ -630,10 +633,17 @@ html.is-touch.game-landscape .prize-panel-items {
   top: 50%;
   left: 0;
   right: 0;
+  height: var(--prize-icon-h);
   transform: translateY(calc(-50% - 15px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   align-items: center;
   justify-content: center;
+}
+
+html.is-touch.game-landscape .prize-panel-items .panel-prize,
+html.is-touch.game-landscape .prize-panel-items .panel-prize-img {
+  height: var(--prize-icon-h);
+  max-height: var(--prize-icon-h);
 }
 
 /* Touch landscape: upper petard row slightly higher */
