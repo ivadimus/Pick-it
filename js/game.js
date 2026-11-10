@@ -945,17 +945,17 @@
     ring.className = "character-sparkle-ring";
     ring.setAttribute("aria-hidden", "true");
 
-    const count = 18;
+    const count = 14;
     for (let i = 0; i < count; i++) {
       const sp = document.createElement("span");
       sp.className = "char-ambient-spark";
-      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.35;
       const radiusX = 28 + Math.random() * 38;
       const radiusY = 18 + Math.random() * 32;
       sp.style.setProperty("--orbit-x", Math.cos(angle) * radiusX + "px");
       sp.style.setProperty("--orbit-y", Math.sin(angle) * radiusY + "px");
-      sp.style.setProperty("--tw-dur", 3.6 + Math.random() * 2.6 + "s");
-      sp.style.setProperty("--tw-delay", Math.random() * -8 + "s");
+      sp.style.setProperty("--tw-dur", 4.8 + Math.random() * 3.4 + "s");
+      sp.style.setProperty("--tw-delay", Math.random() * -10 + "s");
       sp.style.setProperty(
         "--tw-c",
         ["#fff", "#ffe566", "#ffd700", "#fff8dc"][i % 4]
