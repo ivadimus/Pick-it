@@ -473,7 +473,7 @@ html.is-touch.game-landscape .stage {
   --top-left-nudge-x: -10px;
   /* Rope Y: top of stage + lift info panel slightly */
   --info-rope-top: calc(
-    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px)) - 14px
+    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px)) - 20px
   );
 }
 
@@ -628,7 +628,7 @@ html.is-touch.game-landscape .prize-panel-items {
   top: 50%;
   left: 0;
   right: 0;
-  transform: translateY(-50%);
+  transform: translateY(calc(-50% - 10px));
   align-items: center;
   justify-content: center;
 }
@@ -2058,8 +2058,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   pointer-events: none;
   background: radial-gradient(
     circle,
-    rgba(255, 248, 210, 0.26) 0%,
-    rgba(255, 220, 120, 0.1) 48%,
+    rgba(255, 248, 210, 0.42) 0%,
+    rgba(255, 220, 120, 0.18) 48%,
     transparent 76%
   );
   animation: characterHalo 8.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
@@ -2187,28 +2187,32 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 @keyframes characterShine {
   0%,
   100% {
-    filter: drop-shadow(0 0 5px rgba(255, 228, 150, 0.22)) brightness(1);
+    filter: drop-shadow(0 0 8px rgba(255, 228, 150, 0.38))
+      drop-shadow(0 0 16px rgba(255, 210, 100, 0.22)) brightness(1.02);
   }
   35% {
-    filter: drop-shadow(0 0 8px rgba(255, 234, 180, 0.28)) brightness(1.015);
+    filter: drop-shadow(0 0 12px rgba(255, 234, 180, 0.48))
+      drop-shadow(0 0 22px rgba(255, 200, 90, 0.28)) brightness(1.04);
   }
   50% {
-    filter: drop-shadow(0 0 9px rgba(255, 238, 200, 0.32)) brightness(1.02);
+    filter: drop-shadow(0 0 14px rgba(255, 238, 200, 0.55))
+      drop-shadow(0 0 28px rgba(255, 215, 110, 0.35)) brightness(1.06);
   }
   65% {
-    filter: drop-shadow(0 0 8px rgba(255, 234, 180, 0.28)) brightness(1.015);
+    filter: drop-shadow(0 0 12px rgba(255, 234, 180, 0.48))
+      drop-shadow(0 0 22px rgba(255, 200, 90, 0.28)) brightness(1.04);
   }
 }
 
 @keyframes characterHalo {
   0%,
   100% {
-    opacity: 0.28;
+    opacity: 0.4;
     transform: translateX(-50%) scale(0.992);
   }
   50% {
-    opacity: 0.38;
-    transform: translateX(-50%) scale(1.008);
+    opacity: 0.58;
+    transform: translateX(-50%) scale(1.012);
   }
 }
 
@@ -2235,9 +2239,9 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     var(--tw-c, #ffe566) 55%,
     var(--tw-c, #ffe566) 100%
   );
-  box-shadow: 0 0 6px var(--tw-c, #ffe566);
+  box-shadow: 0 0 10px var(--tw-c, #ffe566);
   transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px));
-  opacity: 0.3;
+  opacity: 0.45;
   animation: charSparkTwinkle var(--tw-dur, 5s)
     cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: var(--tw-delay, 0s);
@@ -2246,14 +2250,14 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 @keyframes charSparkTwinkle {
   0%,
   100% {
-    opacity: 0.14;
+    opacity: 0.22;
     transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px))
-      scale(0.7);
+      scale(0.72);
   }
   50% {
-    opacity: 0.42;
+    opacity: 0.72;
     transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px))
-      scale(0.88);
+      scale(0.95);
   }
 }
 
