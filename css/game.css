@@ -527,8 +527,8 @@ html.is-touch.game-landscape .stage {
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
-  --prize-panel-items-drop: -34px;
-  --prize-panel-items-top: 46%;
+  --prize-panel-items-drop: -16px;
+  --prize-panel-items-top: 51%;
   --prize-panel-scale: 1.21;
   --prize-panel-w: min(
     calc(49.13vw * var(--prize-panel-scale, 1.21)),
