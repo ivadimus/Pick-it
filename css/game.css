@@ -2101,6 +2101,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-oscar img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
+  margin-left: -6px;
   bottom: 0%;
 }
 
