@@ -1020,7 +1020,7 @@ html.is-touch.game-landscape .info-swing img {
   right: 0;
   top: 50%;
   transform: translateY(var(--prize-panel-items-shift))
-    translateY(var(--prize-panel-items-drop, -5px))
+    translateY(var(--prize-panel-items-drop, -12px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   box-sizing: border-box;
   width: 100%;
