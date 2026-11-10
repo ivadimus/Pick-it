@@ -1043,76 +1043,11 @@ html.is-touch.game-landscape .info-swing img {
   justify-content: center;
   gap: var(--prize-panel-gap);
   padding: 0 var(--prize-panel-items-pad-x, 1.4%);
-  overflow: visible;
-  isolation: isolate;
-}
-
-.prize-row-shine {
-  position: absolute;
-  top: -28%;
-  bottom: -28%;
-  left: 0;
-  width: 42%;
-  z-index: 30;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 248, 210, 0.45) 38%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 248, 210, 0.45) 62%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  opacity: 0;
-  transform: translateX(-130%);
-  animation: prizePanelRowShine 5s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes prizePanelRowShine {
-  0%,
-  76% {
-    transform: translateX(-130%);
-    opacity: 0;
-  }
-  78% {
-    opacity: 0.95;
-  }
-  90% {
-    transform: translateX(240%);
-    opacity: 0.95;
-  }
-  92%,
-  100% {
-    transform: translateX(240%);
-    opacity: 0;
-  }
-}
-
-@keyframes prizeSkuShineGlint {
-  0%,
-  75% {
-    filter: brightness(1);
-  }
-  80% {
-    filter: brightness(1.28);
-  }
-  85% {
-    filter: brightness(1.52);
-  }
-  90% {
-    filter: brightness(1.22);
-  }
-  95%,
-  100% {
-    filter: brightness(1);
-  }
+  overflow: hidden;
 }
 
 .prize-panel-items .panel-prize {
   position: relative;
-  z-index: 2;
   flex: 1 1 0;
   min-width: 0;
   max-width: calc(
@@ -1134,7 +1069,6 @@ html.is-touch.game-landscape .info-swing img {
   object-fit: contain;
   object-position: center center;
   transition: opacity 0.35s ease;
-  animation: prizeSkuShineGlint 5s linear infinite;
 }
 
 .prize-panel-items .panel-prize-done {
@@ -1156,7 +1090,6 @@ html.is-touch.game-landscape .info-swing img {
 
 .prize-panel-items .panel-prize.claimed .panel-prize-img {
   opacity: 0.5;
-  animation: none;
 }
 
 .prize-panel-items .panel-prize.claimed .panel-prize-done {

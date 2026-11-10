@@ -222,11 +222,6 @@
       el.appendChild(done);
       prizePanelItems.appendChild(el);
     });
-
-    const shine = document.createElement("div");
-    shine.className = "prize-row-shine";
-    shine.setAttribute("aria-hidden", "true");
-    prizePanelItems.appendChild(shine);
   }
 
   function markPanelPrizeClaimed(prize) {
