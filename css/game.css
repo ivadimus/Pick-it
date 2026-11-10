@@ -2143,7 +2143,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-sanny img.done {
   width: calc(var(--petard-size) * 1.1);
   height: calc(var(--petard-size) * 1.1);
-  margin-left: 10px;
+  margin-left: -4px;
   bottom: 4%;
 }
 
