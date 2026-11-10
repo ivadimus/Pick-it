@@ -517,7 +517,7 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --close-nudge-x: 32px;
   --header-est-h: min(12.5vw, 54px);
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 14px);
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 24px);
   --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 8px);
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
@@ -824,7 +824,7 @@ html.is-touch.game-landscape .info-swing img {
   --top-left-nudge-x: -16px;
   --close-nudge-x: 14px;
   --header-est-h: min(14cqw, 62px);
-  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 18px);
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 28px);
   --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 10px);
   --header-w: 42.32%;
   --prize-panel-rise-offset: -min(88px, 16vh);
