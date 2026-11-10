@@ -636,6 +636,14 @@ html.is-touch.game-landscape .prize-panel-items {
   justify-content: center;
 }
 
+/* Touch landscape: upper petard row slightly higher */
+html.is-touch.game-landscape .slot[data-index="1"],
+html.is-touch.game-landscape .slot[data-index="3"],
+html.is-touch.game-landscape .slot[data-index="5"],
+html.is-touch.game-landscape .slot[data-index="7"] {
+  transform: translate(-50%, calc(-50% - 4.5vh));
+}
+
 /* Touch landscape: reward character faces −15% */
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
