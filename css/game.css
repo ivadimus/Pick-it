@@ -1014,7 +1014,7 @@ html.is-touch.game-landscape .info-swing img {
   height: 100%;
   overflow: visible;
   --prize-panel-items-top: 44%;
-  --prize-panel-items-drop: 6px;
+  --prize-panel-items-drop: -4px;
 }
 
 .prize-panel-bg {
