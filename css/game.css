@@ -645,6 +645,7 @@ html.is-touch.game-landscape .slot.reward-sanny img.done {
 html.is-touch.game-landscape .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
   height: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
+  margin-left: -4px;
 }
 
 html.is-touch.game-landscape .slot.reward-oscar img.done {
