@@ -614,7 +614,8 @@ html.is-touch.game-landscape .prize-panel-items {
   top: 50%;
   left: 0;
   right: 0;
-  transform: translateY(calc(-50% - 15px));
+  transform: translateY(calc(-50% - 15px))
+    translateX(var(--prize-panel-items-nudge-x, 5px));
   align-items: center;
   justify-content: center;
 }
@@ -837,6 +838,7 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
+  --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
 
   position: relative;
@@ -980,7 +982,8 @@ html.is-touch.game-landscape .info-swing img {
   right: 0;
   top: 50%;
   transform: translateY(var(--prize-panel-items-shift))
-    translateY(var(--prize-panel-items-drop, -5px));
+    translateY(var(--prize-panel-items-drop, -5px))
+    translateX(var(--prize-panel-items-nudge-x, 5px));
   box-sizing: border-box;
   width: 100%;
   height: var(--prize-icon-h);
