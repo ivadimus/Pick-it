@@ -2098,7 +2098,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mia img.done {
   width: calc(var(--petard-size) * 1.22);
   height: calc(var(--petard-size) * 1.22);
-  bottom: 8%;
+  bottom: 12%;
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
@@ -2110,7 +2110,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
   margin-left: -16px;
-  bottom: 10%;
+  bottom: 14%;
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
@@ -2123,7 +2123,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-oscar img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
-  bottom: -4%;
+  bottom: 0%;
 }
 
 .slot.reward-oscar.show-special-reward .slot-inner::before {
@@ -2156,6 +2156,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mole img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
+  bottom: 4%;
 }
 
 .slot.reward-mole.show-special-reward .slot-inner::before {
