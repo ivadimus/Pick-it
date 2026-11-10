@@ -116,14 +116,14 @@
 
   /** 1→8 left to right, arc heights; x compressed toward center */
   const SLOT_LAYOUT = [
-    { x: 28, y: 67, rotate: 12 },
-    { x: 31, y: 40, rotate: 11 },
-    { x: 41, y: 66, rotate: 10 },
-    { x: 47, y: 37, rotate: 8 },
-    { x: 55, y: 64, rotate: 5 },
-    { x: 64, y: 38, rotate: 8 },
-    { x: 71, y: 63, rotate: -11 },
-    { x: 79, y: 36, rotate: -14 },
+    { x: 28, y: 76, rotate: 12 },
+    { x: 31, y: 49, rotate: 11 },
+    { x: 41, y: 75, rotate: 10 },
+    { x: 47, y: 46, rotate: 8 },
+    { x: 55, y: 73, rotate: 5 },
+    { x: 64, y: 45, rotate: 8 },
+    { x: 71, y: 72, rotate: -11 },
+    { x: 79, y: 44, rotate: -14 },
   ];
 
   /**
@@ -454,14 +454,16 @@
     let panelRightPct = 88;
     let spawnYPct = 92;
 
-    if (panel && !panel.classList.contains("intro-hidden")) {
+    if (panel) {
       const pr = panel.getBoundingClientRect();
-      panelLeftPct = ((pr.left - stageRect.left) / stageRect.width) * 100;
-      panelRightPct = ((pr.right - stageRect.left) / stageRect.width) * 100;
-      spawnYPct = Math.min(
-        98,
-        ((pr.bottom - stageRect.top + pr.height * 0.06) / stageRect.height) * 100
-      );
+      if (pr.width > 1 && pr.height > 1) {
+        panelLeftPct = ((pr.left - stageRect.left) / stageRect.width) * 100;
+        panelRightPct = ((pr.right - stageRect.left) / stageRect.width) * 100;
+        spawnYPct = Math.min(
+          96,
+          ((pr.bottom - stageRect.top + pr.height * 0.12) / stageRect.height) * 100
+        );
+      }
     }
 
     const panelSpan = Math.max(panelRightPct - panelLeftPct, 20);
