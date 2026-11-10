@@ -1230,16 +1230,16 @@
     slot.inner.appendChild(img);
     slot.doneImg = img;
 
+    const file = (specialReward.split("/").pop() || "").split("?")[0];
+    const rewardClass = REWARD_CLASS_BY_FILE[file];
+    slot.el.classList.add("show-special-reward");
+    if (rewardClass) slot.el.classList.add(rewardClass);
+
     try {
       if (img.decode) await img.decode();
     } catch (_) {
       /* decode optional */
     }
-
-    slot.el.classList.add("show-special-reward");
-    const file = (specialReward.split("/").pop() || "").split("?")[0];
-    const rewardClass = REWARD_CLASS_BY_FILE[file];
-    if (rewardClass) slot.el.classList.add(rewardClass);
 
     attachCharacterAmbientSparkles(slot);
   }
