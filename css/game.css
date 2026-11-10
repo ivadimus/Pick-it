@@ -634,7 +634,7 @@ html.is-touch.game-landscape .prize-panel-items {
   left: 0;
   right: 0;
   height: var(--prize-icon-h);
-  transform: translateY(calc(-50% - 15px))
+  transform: translateY(calc(-50% - 22px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   align-items: center;
   justify-content: center;
