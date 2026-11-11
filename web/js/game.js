@@ -12,20 +12,29 @@
 
   /** Petard file number (1.png … 8.png) → image after prize vanishes */
   const PETARD_SPECIAL_REWARD = {
-    1: "Assets/Sam.png",
-    2: "Assets/Mia.png",
-    3: "Assets/Sanny.png",
-    4: "Assets/Oscar.png",
-    5: "Assets/Peggy.png",
-    6: "Assets/Hoppy.png",
-    7: "Assets/Carrie.png",
-    8: "Assets/Mole.png",
+    1: "Assets/web-characters/Sam.png",
+    2: "Assets/web-characters/Mia.png",
+    3: "Assets/web-characters/Sanny.png",
+    4: "Assets/web-characters/Oscar.png",
+    5: "Assets/web-characters/Peggy.png",
+    6: "Assets/web-characters/Hoppy.png",
+    7: "Assets/web-characters/Carrie.png",
+    8: "Assets/web-characters/Mole.png",
   };
 
   function petardNumberFromImg(cubeImg) {
     const file = (cubeImg.src.split("/").pop() || "").split("?")[0];
     const num = parseInt(file, 10);
     return Number.isFinite(num) ? num : null;
+  }
+
+  /** Bump when character PNGs change (GitHub Pages / browser cache). */
+  const REWARD_ASSET_V = "web-chars5";
+
+  function assetWithCacheBust(path) {
+    if (!path) return path;
+    const sep = path.includes("?") ? "&" : "?";
+    return `${path}${sep}v=${REWARD_ASSET_V}`;
   }
 
   function specialRewardForPetard(cubeImg) {
@@ -107,21 +116,23 @@
 
   /** 1→8 left to right, arc heights; x compressed toward center */
   const SLOT_LAYOUT = [
-    { x: 11, y: 50, rotate: 12 },
-    { x: 23, y: 58, rotate: 11 },
-    { x: 35, y: 62, rotate: 10 },
-    { x: 44, y: 37, rotate: 8 },
-    { x: 55, y: 64, rotate: 5 },
-    { x: 64, y: 38, rotate: 8 },
-    { x: 74, y: 59, rotate: -11 },
-    { x: 88, y: 42, rotate: -14 },
+    { x: 25, y: 74, rotate: 12 },
+    { x: 33, y: 27, rotate: 11 },
+    { x: 40, y: 73, rotate: 10 },
+    { x: 49, y: 24, rotate: 8 },
+    { x: 53, y: 71, rotate: 5 },
+    { x: 62, y: 23, rotate: 8 },
+    { x: 69, y: 70, rotate: -11 },
+    { x: 77, y: 22, rotate: -14 },
   ];
 
   /**
    * Bottom fan spawn positions (0 = left off-screen … 1 = right off-screen), petard 1→8.
    * Matches sketch: #1 diagonal from left, #2–#3 clustered, #4–#5 center V, edges fan outward.
    */
-  const PETARD_FAN_SPAWN_T = [0.18, 0.22, 0.3, 0.46, 0.48, 0.55, 0.66, 0.77];
+  const PETARD_FAN_SPAWN_T = [0.22, 0.33, 0.41, 0.47, 0.5, 0.55, 0.61, 0.68];
+  /** Petard file index (1-based) → fixed spawn X (% of stage); 5 = screen center */
+  const PETARD_SPAWN_X_PCT = { 5: 50 };
 
   const field = document.getElementById("field");
   const prizePanelItems = document.getElementById("prizePanelItems");
@@ -148,9 +159,12 @@
   const IDLE_WAIT_MS = 2000;
   const IDLE_ANIM_MS = 1000;
   const GAME_COMPLETE_OVERLAY_DELAY_MS = 2000;
-  const STAGE_BORDER_FIREWORK_INTERVAL_MS = 520;
+  const FW_SPEED_MUL = 1.55;
+  const STAGE_BORDER_FIREWORK_INTERVAL_MS = Math.round(520 / FW_SPEED_MUL);
   const STAGE_BORDER_FIREWORK_SPREAD = 0.72;
   const FW_MAX_PARTICLES = 220;
+  const FW_SPREAD_MUL = 0.72;
+  const FW_PARTICLE_SIZE_MUL = 1.38;
   const FW_PETARD_BURST_SCALE = 1.52;
   const PETARD_FLY_IN_MS = 1000;
 
@@ -322,22 +336,9 @@
     const h = stage.offsetHeight;
     const padX = w * 0.055;
     const padY = h * 0.07;
-    const r = Math.random();
-    let x;
-    let y;
-    if (r < 0.25) {
-      x = padX + Math.random() * Math.max(0, w - 2 * padX);
-      y = padY;
-    } else if (r < 0.5) {
-      x = padX + Math.random() * Math.max(0, w - 2 * padX);
-      y = h - padY;
-    } else if (r < 0.75) {
-      x = padX;
-      y = padY + Math.random() * Math.max(0, h - 2 * padY);
-    } else {
-      x = w - padX;
-      y = padY + Math.random() * Math.max(0, h - 2 * padY);
-    }
+    const leftSide = Math.random() < 0.5;
+    const x = leftSide ? padX : w - padX;
+    const y = padY + Math.random() * Math.max(0, h - 2 * padY);
 
     const fakeCube = document.createElement("img");
     fakeCube.src = PETARDS[Math.floor(Math.random() * PETARDS.length)];
@@ -436,6 +437,9 @@
 
     function fallbackFan(n) {
       return Array.from({ length: n }, (_, i) => {
+        const petardNum = i + 1;
+        const fixedX = PETARD_SPAWN_X_PCT[petardNum];
+        if (fixedX != null) return { x: fixedX, y: 92 };
         const t = PETARD_FAN_SPAWN_T[i] ?? (n <= 1 ? 0 : i / (n - 1));
         return { x: -22 + t * 144, y: 92 };
       });
@@ -450,14 +454,12 @@
     let panelRightPct = 88;
     let spawnYPct = 92;
 
-    if (panel && !panel.classList.contains("intro-hidden")) {
+    if (panel) {
       const pr = panel.getBoundingClientRect();
-      panelLeftPct = ((pr.left - stageRect.left) / stageRect.width) * 100;
-      panelRightPct = ((pr.right - stageRect.left) / stageRect.width) * 100;
-      spawnYPct = Math.min(
-        98,
-        ((pr.bottom - stageRect.top + pr.height * 0.06) / stageRect.height) * 100
-      );
+      if (pr.width > 1 && pr.height > 1) {
+        panelLeftPct = ((pr.left - stageRect.left) / stageRect.width) * 100;
+        panelRightPct = ((pr.right - stageRect.left) / stageRect.width) * 100;
+      }
     }
 
     const panelSpan = Math.max(panelRightPct - panelLeftPct, 20);
@@ -466,6 +468,11 @@
     const xEnd = panelRightPct + offPct;
 
     return Array.from({ length: count }, (_, i) => {
+      const petardNum = i + 1;
+      const fixedX = PETARD_SPAWN_X_PCT[petardNum];
+      if (fixedX != null) {
+        return { x: fixedX, y: spawnYPct };
+      }
       const t = PETARD_FAN_SPAWN_T[i] ?? (count <= 1 ? 0 : i / (count - 1));
       return {
         x: xStart + t * (xEnd - xStart),
@@ -648,7 +655,7 @@
     ctx.clearRect(0, 0, w, h);
 
     fwHazes = fwHazes.filter((hz) => {
-      hz.life -= 1;
+      hz.life -= FW_SPEED_MUL;
       if (hz.life <= 0) return false;
       const t = hz.life / hz.maxLife;
       const alpha = hz.alpha * t;
@@ -675,7 +682,7 @@
       p.vy += p.gravity;
       p.x += p.vx;
       p.y += p.vy;
-      p.life -= 1;
+      p.life -= FW_SPEED_MUL;
       if (p.life <= 0) return false;
 
       const lifeT = 1 - p.life / p.maxLife;
@@ -685,13 +692,17 @@
 
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
-      const glow = (p.glow || 1) * (p.kind === "streak" ? 24 : 18);
+      const glow =
+        (p.glow || 1) * (p.kind === "streak" ? 28 : 22) * FW_PARTICLE_SIZE_MUL;
       ctx.shadowBlur = glow;
       ctx.shadowColor = `rgba(${tint.r},${tint.g},${tint.b},${Math.min(1, alpha * 1.15)})`;
 
       if (p.kind === "streak") {
         ctx.strokeStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
-        ctx.lineWidth = Math.max(0.75, p.size * (0.42 + alpha * 0.85));
+        ctx.lineWidth = Math.max(
+          1.05,
+          p.size * (0.55 + alpha * 0.95) * FW_PARTICLE_SIZE_MUL
+        );
         ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(p.px, p.py);
@@ -700,7 +711,13 @@
       } else {
         ctx.fillStyle = `rgba(${tint.r},${tint.g},${tint.b},${alpha})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(0.5, p.size * (0.55 + alpha * 0.5)), 0, Math.PI * 2);
+        ctx.arc(
+          p.x,
+          p.y,
+          Math.max(0.65, p.size * (0.62 + alpha * 0.55) * FW_PARTICLE_SIZE_MUL),
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
       }
       ctx.restore();
@@ -738,7 +755,7 @@
           r: col.r,
           g: col.g,
           b: col.b,
-          size: 1.1 + Math.random() * 0.8,
+          size: (1.1 + Math.random() * 0.8) * FW_PARTICLE_SIZE_MUL,
           drag: 0.98,
           gravity: 0.02,
           peak: 0.95,
@@ -754,6 +771,8 @@
     if (!ctx) return;
 
     const scale = opts && opts.scale != null ? opts.scale : 1;
+    const spreadMul =
+      opts && opts.spreadMul != null ? opts.spreadMul : FW_SPREAD_MUL;
     const style = (opts && opts.style) || "peony";
     const c0 = fwHexRgb(palette[0]);
     const c1 = fwHexRgb(palette[1]);
@@ -767,7 +786,7 @@
       r: c0.r,
       g: c0.g,
       b: c0.b,
-      radius: 118 * scale,
+      radius: 118 * scale * spreadMul,
       alpha: 0.98,
     });
     fwPushHaze({
@@ -778,7 +797,7 @@
       r: c1.r,
       g: c1.g,
       b: c1.b,
-      radius: 188 * scale,
+      radius: 188 * scale * spreadMul,
       alpha: 0.58,
     });
     fwPushHaze({
@@ -789,7 +808,7 @@
       r: c2.r,
       g: c2.g,
       b: c2.b,
-      radius: 248 * scale,
+      radius: 248 * scale * spreadMul,
       alpha: 0.34,
     });
 
@@ -808,9 +827,10 @@
 
     for (let i = 0; i < streaks; i++) {
       const angle = (Math.PI * 2 * i) / streaks + (Math.random() - 0.5) * 0.11;
-      const speed = (4.2 + Math.random() * 6.2) * scale;
+      const speed =
+        (4.2 + Math.random() * 6.2) * scale * FW_SPEED_MUL * spreadMul;
       let vx = Math.cos(angle) * speed;
-      let vy = Math.sin(angle) * speed - 0.65 * scale;
+      let vy = Math.sin(angle) * speed - 0.65 * scale * FW_SPEED_MUL * spreadMul;
       if (style === "willow" && vy < 0) vy *= 0.35;
       const col = i % 3 === 0 ? c0 : i % 3 === 1 ? c1 : c2;
       fwPushParticle({
@@ -825,8 +845,11 @@
         r: col.r,
         g: col.g,
         b: col.b,
-        size: (1.55 + Math.random() * 1.25) * Math.min(1.35, 0.85 + scale * 0.22),
-        glow: 1.15,
+        size:
+          (1.55 + Math.random() * 1.25) *
+          Math.min(1.35, 0.85 + scale * 0.22) *
+          FW_PARTICLE_SIZE_MUL,
+        glow: 1.22,
         drag: style === "willow" ? 0.965 : 0.972,
         gravity: style === "willow" ? 0.11 : 0.085,
         peak: 1,
@@ -836,7 +859,8 @@
 
     for (let i = 0; i < dots; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = (2.4 + Math.random() * 4.2) * scale;
+      const speed =
+        (2.4 + Math.random() * 4.2) * scale * FW_SPEED_MUL * spreadMul;
       const pick = Math.random();
       const col = pick < 0.34 ? c0 : pick < 0.67 ? c1 : c2;
       fwPushParticle({
@@ -845,17 +869,20 @@
         px: x,
         py: y,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 0.4 * scale,
+        vy: Math.sin(angle) * speed - 0.4 * scale * spreadMul,
         life: 38 + Math.floor(Math.random() * 26),
         maxLife: 60,
         r: col.r,
         g: col.g,
         b: col.b,
-        size: (1 + Math.random() * 1.55) * Math.min(1.3, 0.88 + scale * 0.2),
+        size:
+          (1 + Math.random() * 1.55) *
+          Math.min(1.3, 0.88 + scale * 0.2) *
+          FW_PARTICLE_SIZE_MUL,
         drag: 0.976,
         gravity: 0.075,
         peak: 0.95,
-        glow: 1.12,
+        glow: 1.18,
         kind: "dot",
       });
     }
@@ -867,8 +894,11 @@
       (opts && opts.scale != null ? opts.scale : 1) *
       (opts && opts.bloomScale != null ? opts.bloomScale : 1) *
       spreadScale;
+    const spreadMul =
+      opts && opts.spreadMul != null ? opts.spreadMul : FW_SPREAD_MUL;
     fwEmitBurst(x, y, palette, {
       scale,
+      spreadMul,
       style: (opts && opts.style) || "peony",
     });
   }
@@ -913,17 +943,17 @@
     ring.className = "character-sparkle-ring";
     ring.setAttribute("aria-hidden", "true");
 
-    const count = 22;
+    const count = 14;
     for (let i = 0; i < count; i++) {
       const sp = document.createElement("span");
       sp.className = "char-ambient-spark";
-      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.55;
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.35;
       const radiusX = 28 + Math.random() * 38;
       const radiusY = 18 + Math.random() * 32;
       sp.style.setProperty("--orbit-x", Math.cos(angle) * radiusX + "px");
       sp.style.setProperty("--orbit-y", Math.sin(angle) * radiusY + "px");
-      sp.style.setProperty("--tw-dur", 2.2 + Math.random() * 2.8 + "s");
-      sp.style.setProperty("--tw-delay", Math.random() * -6 + "s");
+      sp.style.setProperty("--tw-dur", 4.8 + Math.random() * 3.4 + "s");
+      sp.style.setProperty("--tw-delay", Math.random() * -10 + "s");
       sp.style.setProperty(
         "--tw-c",
         ["#fff", "#ffe566", "#ffd700", "#fff8dc"][i % 4]
@@ -989,6 +1019,40 @@
     const colors = ["#fff", "#ffd700", "#ffec8b", "#ffffff"];
     spawnSparkles(x, y, 38, 95, 620, colors);
     spawnSparkles(x, y, 28, 55, 480, colors);
+  }
+
+  function playFlashGlitters(x, y) {
+    const white = ["#ffffff", "#fffffe", "#f8f9ff", "#fffef5"];
+    spawnSparkles(x, y, 20, 46, 520, white);
+    spawnSparkles(x, y, 14, 30, 440, white);
+
+    for (let i = 0; i < 18; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 8 + Math.random() * 36;
+      const sp = document.createElement("div");
+      sp.className = "vfx-spark vfx-spark-glitter";
+      sp.style.left = x + Math.cos(angle) * dist + "px";
+      sp.style.top = y + Math.sin(angle) * dist + "px";
+      sp.style.setProperty("--tx", Math.cos(angle) * (14 + Math.random() * 22) + "px");
+      sp.style.setProperty("--ty", Math.sin(angle) * (14 + Math.random() * 22) + "px");
+      sp.style.setProperty("--dur", 360 + Math.floor(Math.random() * 220) + "ms");
+      sp.style.setProperty("--sz", 4 + Math.random() * 7 + "px");
+      sp.style.setProperty("--c", "#ffffff");
+      vfxLayer.appendChild(sp);
+      setTimeout(() => sp.remove(), 620);
+    }
+  }
+
+  function playSlotFlash(x, y) {
+    if (!vfxLayer) return;
+    const flash = document.createElement("div");
+    flash.className = "vfx-camera-flash";
+    flash.setAttribute("aria-hidden", "true");
+    flash.style.left = x + "px";
+    flash.style.top = y + "px";
+    vfxLayer.appendChild(flash);
+    playFlashGlitters(x, y);
+    setTimeout(() => flash.remove(), 540);
   }
 
   function positionHandOnSlot(slot) {
@@ -1160,9 +1224,14 @@
     const img = document.createElement("img");
     img.className = "done";
     img.alt = "";
-    img.src = specialReward;
+    img.src = assetWithCacheBust(specialReward);
     slot.inner.appendChild(img);
     slot.doneImg = img;
+
+    const file = (specialReward.split("/").pop() || "").split("?")[0];
+    const rewardClass = REWARD_CLASS_BY_FILE[file];
+    slot.el.classList.add("show-special-reward");
+    if (rewardClass) slot.el.classList.add(rewardClass);
 
     try {
       if (img.decode) await img.decode();
@@ -1170,13 +1239,6 @@
       /* decode optional */
     }
 
-    slot.el.classList.add("show-special-reward");
-    const file = specialReward.split("/").pop() || "";
-    const rewardClass = REWARD_CLASS_BY_FILE[file];
-    if (rewardClass) slot.el.classList.add(rewardClass);
-
-    const charCenter = slotCenterOnStage(slot.el);
-    playCharacterRevealSparkles(charCenter.x, charCenter.y);
     attachCharacterAmbientSparkles(slot);
   }
 
@@ -1211,14 +1273,12 @@
     fly.style.top = center.y + "px";
     vfxLayer.appendChild(fly);
 
-    await wait(650);
+    await wait(420);
 
-    playVanishSparkles(center.x, center.y - 20);
-    fly.classList.add("vanish");
-
-    await wait(520);
-
+    playSlotFlash(center.x, center.y);
     fly.remove();
+
+    await wait(140);
 
     const specialReward = specialRewardForPetard(slot.cubeImg);
     await revealSlotCharacter(slot, specialReward);
@@ -1468,6 +1528,7 @@
   }
 
   initLandscapeOnly();
+  initCloseButton();
   initGameCompleteOverlay();
   initInfoPanelSwing();
   initStars();

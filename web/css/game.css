@@ -94,7 +94,7 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 48px;
-  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  background: #0a1020 url("../Assets/bg.jpg?v=sky1") center center / cover no-repeat;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -193,7 +193,7 @@ body {
   padding: 28px;
   text-align: center;
   color: #fff;
-  background: #0a1020 url("../Assets/bg.png") center center / cover no-repeat;
+  background: #0a1020 url("../Assets/bg.jpg?v=sky1") center center / cover no-repeat;
   pointer-events: auto;
 }
 
@@ -458,26 +458,90 @@ html.is-touch.game-landscape .stage {
   border-radius: 0;
 }
 
+/* Info panel layout: phone landscape + local iPhone mockup (no .is-touch on desktop) */
+html.is-touch.game-landscape .stage,
+html:not(.is-touch) .iphone .stage {
+  --info-meter-gap: 0px;
+  --info-ui-gap: 6px;
+  --info-btn-w: 52px;
+  /* Rope X: center of gap between info btn and meter */
+  --info-rope-x: calc(var(--info-btn-w) + var(--info-ui-gap) * 0.5);
+}
+
+html.is-touch.game-landscape .stage {
+  --info-panel-scale: calc(0.9555 * 0.85);
+  --top-left-nudge-x: -10px;
+  /* Rope Y: top of stage + lift info panel slightly */
+  --info-rope-top: calc(
+    -1 * max(var(--ui-top), env(safe-area-inset-top, 8px)) - 20px
+  );
+}
+
+html:not(.is-touch) .iphone .stage {
+  --info-panel-scale: 0.9555;
+  --top-left-nudge-x: 0px;
+  --info-rope-top: calc(-1 * max(var(--ui-top), 10px));
+}
+
+html.is-touch.game-landscape .top-left-controls,
+html:not(.is-touch) .iphone .top-left-controls {
+  position: absolute;
+}
+
+html.is-touch.game-landscape .info-panel-wrap,
+html:not(.is-touch) .iphone .info-panel-wrap {
+  position: absolute;
+  left: var(--info-rope-x, 55px);
+  top: var(--info-rope-top, -8px);
+  margin-left: 0;
+  margin-top: 0;
+  max-width: calc(124px * var(--info-panel-scale, 0.9555));
+  z-index: 2;
+  transform: translate(-50%, -130%);
+}
+
+html.is-touch.game-landscape .info-panel-wrap.dropped,
+html:not(.is-touch) .iphone .info-panel-wrap.dropped {
+  animation: infoDropAnchored 0.85s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+
+html:not(.is-touch) .iphone .top-left-controls {
+  gap: 6px;
+  align-items: flex-start;
+}
+
 /* Touch + landscape: desktop-like UI; prize width in vw (no cqw) */
 html.is-touch.game-landscape .stage {
   --edge-x: 2px;
   --ui-top: 8px;
   --header-w: 42.32%;
-  --info-panel-scale: 0.7225;
-  --info-meter-gap: 0px;
-  --info-panel-shift-x: -18px;
-  --info-panel-shift-y: -22px;
-  --top-left-nudge-x: -18px;
   --close-nudge-x: 32px;
-  --panel-bottom: 3.2%;
+  --header-est-h: min(12.5vw, 54px);
+  --prize-panel-items-mul: 0.85;
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 5px);
+  --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 8px);
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
-  --prize-panel-w: min(57.8vw, 493px);
+  --prize-panel-items-drop: -16px;
+  --prize-panel-items-top: 51%;
+  --prize-panel-mobile-size: 1.2;
+  --prize-panel-scale: calc(0.84 * var(--prize-panel-mobile-size, 1));
+  --prize-panel-items-ref-scale: calc(1.06 * var(--prize-panel-mobile-size, 1));
+  --prize-panel-w: min(
+    calc(49.13vw * var(--prize-panel-scale)),
+    calc(419px * var(--prize-panel-scale))
+  );
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
-  --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
-  --prize-panel-rise-offset: min(80px, 18vh);
+  --prize-icon-h: calc(
+    min(
+        calc(49.13vw * var(--prize-panel-items-ref-scale)),
+        calc(419px * var(--prize-panel-items-ref-scale))
+      ) *
+      170 / 1024 * 0.72 * var(--prize-panel-items-mul, 0.85)
+  );
+  --prize-panel-rise-offset: min(-68px, -14vh);
   --petard-size: min(28.8vh, 156px);
 }
 
@@ -512,8 +576,15 @@ html.is-touch.game-landscape .btn-close {
   height: 52px;
 }
 
-html.is-touch.game-landscape .meter-wrap {
-  height: 56px;
+html.is-touch.game-landscape .meter-wrap,
+html:not(.is-touch) .iphone .meter-wrap {
+  height: calc(56px * 1.15);
+  transform: translateY(-5%);
+}
+
+html.is-touch.game-landscape .meter-value,
+html:not(.is-touch) .iphone .meter-value {
+  font-size: calc(19px * 1.15);
 }
 
 html.is-touch.game-landscape .header-wrap {
@@ -533,17 +604,144 @@ html.is-touch.game-landscape .header-img {
 }
 
 html.is-touch.game-landscape .prize-panel-wrap {
+  top: var(--prize-panel-top);
+  bottom: auto;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
-  max-width: 493px;
+  max-width: calc(419px * var(--prize-panel-scale));
+  height: auto;
+  aspect-ratio: 1024 / 170;
+  transform: translateX(-50%) translateY(0);
+  transform-origin: 50% 0%;
 }
 
-html.is-touch.game-landscape .info-panel-wrap {
-  flex: 0 0 auto;
-  flex-shrink: 0;
-  margin-left: calc(
-    var(--info-meter-gap, 0px) + var(--info-panel-shift-x, -18px)
+html.is-touch.game-landscape .prize-panel-bg {
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1024 / 170;
+  transform: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
+  transform: translateX(-50%);
+}
+
+html.is-touch.game-landscape .prize-panel-wrap.visible {
+  animation: prizePanelFadeIn var(--prize-panel-rise-duration, 0.85s) ease both;
+}
+
+html.is-touch.game-landscape .prize-panel {
+  --prize-panel-items-top: 43%;
+  --prize-panel-items-drop: 0px;
+}
+
+html.is-touch.game-landscape .prize-panel-items,
+html.is-touch.game-landscape #prizePanelItems {
+  top: var(--prize-panel-items-top, 43%);
+  left: 0;
+  right: 0;
+  height: var(--prize-icon-h);
+  transform: translateY(-50%)
+    translateY(var(--prize-panel-items-drop, 0px))
+    translateX(var(--prize-panel-items-nudge-x, 5px));
+  align-items: center;
+  justify-content: center;
+}
+
+html.is-touch.game-landscape .prize-panel-items .panel-prize,
+html.is-touch.game-landscape .prize-panel-items .panel-prize-img {
+  height: var(--prize-icon-h);
+  max-height: var(--prize-icon-h);
+}
+
+/* Touch landscape: upper petard row nudge (negative = higher) */
+html.is-touch.game-landscape .slot[data-index="1"],
+html.is-touch.game-landscape .slot[data-index="3"],
+html.is-touch.game-landscape .slot[data-index="5"],
+html.is-touch.game-landscape .slot[data-index="7"] {
+  transform: translate(
+    -50%,
+    calc(-50% - 2.5vh + var(--petard-row-drop, 0px))
   );
-  max-width: calc(124px * var(--info-panel-scale, 0.7225));
+}
+
+/* Touch landscape: lower petard row (lift = higher) */
+html.is-touch.game-landscape .slot[data-index="0"],
+html.is-touch.game-landscape .slot[data-index="2"],
+html.is-touch.game-landscape .slot[data-index="4"],
+html.is-touch.game-landscape .slot[data-index="6"] {
+  transform: translate(
+    -50%,
+    calc(
+      -50% - 2.5vh + var(--petard-row-drop, 0px) -
+        var(--petard-lower-row-lift, 0px)
+    )
+  );
+}
+
+/* Touch landscape: reward character faces −15% */
+html.is-touch.game-landscape .stage {
+  --character-face-mul: 0.85;
+  --petard-row-drop: 12px;
+  --petard-lower-row-lift: 24px;
+}
+
+html.is-touch.game-landscape .slot.show-special-reward img.done {
+  bottom: var(--character-face-lift, 10px);
+}
+
+html.is-touch.game-landscape .slot.reward-sam img.done {
+  width: calc(var(--petard-size) * 1.017 * 1.15 * 0.9 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.017 * 1.15 * 0.9 * var(--character-face-mul));
+  margin-left: -8px;
+  bottom: calc(6% + var(--character-face-lift, 10px));
+}
+
+html.is-touch.game-landscape .slot.reward-mia img.done {
+  width: calc(var(--petard-size) * 1.22 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.22 * var(--character-face-mul));
+  bottom: calc(12% + var(--character-face-lift, 10px));
+}
+
+html.is-touch.game-landscape .slot.reward-sanny img.done {
+  width: calc(var(--petard-size) * 1.1 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.1 * var(--character-face-mul));
+  margin-left: -4px;
+  bottom: calc(4% + var(--character-face-lift, 10px));
+}
+
+html.is-touch.game-landscape .slot.reward-hoppy img.done {
+  width: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
+  margin-left: 10px;
+  bottom: calc(14% + var(--character-face-lift, 10px));
+}
+
+html.is-touch.game-landscape .slot.reward-oscar img.done {
+  width: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
+  margin-left: -6px;
+  bottom: calc(0% + var(--character-face-lift, 10px));
+}
+
+html.is-touch.game-landscape .slot.reward-peggy img.done {
+  width: calc(var(--petard-size) * 1.116 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.116 * var(--character-face-mul));
+  bottom: var(--character-face-lift, 10px);
+}
+
+html.is-touch.game-landscape .slot.reward-carrie img.done {
+  width: calc(var(--petard-size) * 1.14 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.14 * var(--character-face-mul));
+  bottom: var(--character-face-lift, 10px);
+}
+
+html.is-touch.game-landscape .slot.reward-mole img.done {
+  width: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
+  height: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
+  bottom: calc(4% + var(--character-face-lift, 10px));
 }
 
 html.is-touch.game-landscape .info-swing img {
@@ -705,19 +903,26 @@ html.is-touch.game-landscape .info-swing img {
   --info-panel-shift-y: -24px;
   --top-left-nudge-x: -16px;
   --close-nudge-x: 14px;
-  --panel-bottom: 3.2%;
+  --header-est-h: min(14cqw, 62px);
+  --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 28px);
+  --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 10px);
   --header-w: 42.32%;
-  --prize-panel-rise-offset: 96px;
+  --prize-panel-rise-offset: -min(88px, 16vh);
   --prize-panel-rise-duration: 1.15s;
-  --prize-panel-items-drop: 0px;
-  --prize-panel-w: 648px;
+  --prize-panel-items-drop: -8px;
+  --prize-panel-items-top: 52%;
+  --prize-panel-w: 551px;
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(var(--prize-panel-h) * 0.72);
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
+  --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
+  --petard-row-drop: 22px;
+  --petard-lower-row-lift: 20px;
+  --character-face-lift: 24px;
 
   position: relative;
   width: 100%;
@@ -798,11 +1003,10 @@ html.is-touch.game-landscape .info-swing img {
 .prize-panel-wrap {
   position: absolute;
   left: 50%;
-  top: auto;
-  --prize-panel-bottom: max(0px, calc(var(--panel-bottom) - 20px));
-  bottom: var(--prize-panel-bottom);
-  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 96px));
-  transform-origin: 50% 100%;
+  top: var(--prize-panel-top);
+  bottom: auto;
+  transform: translateX(-50%);
+  transform-origin: 50% 0%;
   width: min(var(--prize-panel-w), calc(100% - 16px));
   aspect-ratio: 1024 / 170;
   z-index: 25;
@@ -813,36 +1017,30 @@ html.is-touch.game-landscape .info-swing img {
 .prize-panel-wrap.intro-hidden[data-intro="panel"] {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-50%) translateY(var(--prize-panel-rise-offset, 96px));
+  transform: translateX(-50%);
 }
 
-/* Recompletion: tuck prize panel fully below the stage (off-screen down). */
+/* Recompletion: tuck prize panel off-screen above. */
 .stage--game-complete .prize-panel-wrap.visible {
   animation: none;
-  bottom: var(--prize-panel-bottom);
-  transform: translate(-50%, calc(100% + 28px));
+  top: var(--prize-panel-top);
+  bottom: auto;
+  transform: translate(-50%, calc(-100% - 28px));
   opacity: 0;
   pointer-events: none;
 }
 
 .prize-panel-wrap.visible {
-  animation: prizePanelRiseFade var(--prize-panel-rise-duration, 1.15s)
-    cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: prizePanelFadeIn var(--prize-panel-rise-duration, 0.85s) ease both;
   pointer-events: auto;
 }
 
-@keyframes prizePanelRiseFade {
-  0% {
+@keyframes prizePanelFadeIn {
+  from {
     opacity: 0;
-    transform: translateX(-50%)
-      translateY(calc(var(--prize-panel-rise-offset, 96px) + 28px));
   }
-  28% {
-    opacity: 0.45;
-  }
-  100% {
+  to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -851,6 +1049,8 @@ html.is-touch.game-landscape .info-swing img {
   width: 100%;
   height: 100%;
   overflow: visible;
+  --prize-panel-items-top: 44%;
+  --prize-panel-items-drop: -4px;
 }
 
 .prize-panel-bg {
@@ -861,13 +1061,15 @@ html.is-touch.game-landscape .info-swing img {
   object-position: center;
 }
 
+#prizePanelItems.prize-panel-items,
 .prize-panel-items {
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(var(--prize-panel-items-shift))
-    translateY(var(--prize-panel-items-drop, 10px));
+  top: var(--prize-panel-items-top, 44%);
+  transform: translateY(-50%)
+    translateY(var(--prize-panel-items-drop, -4px))
+    translateX(var(--prize-panel-items-nudge-x, 5px));
   box-sizing: border-box;
   width: 100%;
   height: var(--prize-icon-h);
@@ -1027,6 +1229,17 @@ html.is-touch.game-landscape .info-swing img {
   }
 }
 
+@keyframes infoDropAnchored {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -130%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 @keyframes infoSwing {
   0%,
   100% {
@@ -1042,7 +1255,10 @@ html.is-touch.game-landscape .info-swing img {
 
 .field {
   position: absolute;
-  inset: 0;
+  top: var(--field-top, 0);
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 10;
 }
 
@@ -1052,10 +1268,20 @@ html.is-touch.game-landscape .info-swing img {
   min-width: 52px;
   max-width: 136px;
   height: var(--petard-size);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + var(--petard-row-drop, 0px)));
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+
+.slot[data-index="0"],
+.slot[data-index="2"],
+.slot[data-index="4"],
+.slot[data-index="6"] {
+  transform: translate(
+    -50%,
+    calc(-50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px))
+  );
 }
 
 .slot img.petard {
@@ -1064,6 +1290,19 @@ html.is-touch.game-landscape .info-swing img {
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+/* Petard 8.png (slot index 7) */
+.slot[data-index="7"] {
+  height: calc(var(--petard-size) * 1.15);
+}
+
+.slot[data-index="7"] img.petard,
+.slot[data-index="7"] img.prize,
+.slot[data-index="7"] img.cube,
+.slot[data-index="7"] img.done {
+  width: calc(var(--petard-size) * 1.15);
+  height: calc(var(--petard-size) * 1.15);
 }
 
 .slot.opening img.cube {
@@ -1157,10 +1396,18 @@ html.is-touch.game-landscape .info-swing img {
 @keyframes slotIdlePulse {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(
+        -50%,
+        calc(-50% + var(--petard-row-drop, 0px))
+      )
+      scale(1);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.08);
+    transform: translate(
+        -50%,
+        calc(-50% + var(--petard-row-drop, 0px))
+      )
+      scale(1.08);
   }
 }
 
@@ -1255,9 +1502,17 @@ html.is-touch.game-landscape .info-swing img {
   width: 72px;
   height: auto;
   pointer-events: none;
-  transform: translate(-42%, -28%);
+  transform: translate(
+    calc(-42% + var(--hand-nudge-x, 0px)),
+    calc(-28% + var(--hand-nudge-y, 0px))
+  );
   opacity: 0;
   transition: opacity 0.25s ease;
+}
+
+html.is-touch.game-landscape .hand-pointer,
+html:not(.is-touch) .iphone .hand-pointer {
+  --hand-nudge-x: 14px;
 }
 
 .hand-pointer.visible {
@@ -1423,7 +1678,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   }
   100% {
     opacity: 1;
-    transform: scale(0.96);
+    transform: scale(1.06);
   }
 }
 
@@ -1437,6 +1692,50 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .vfx-burst-transform {
   width: 140px;
   height: 140px;
+}
+
+/* Prize → character: camera strobe at burst point, face-sized */
+.vfx-camera-flash {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--petard-size, 120px) * 1.12);
+  height: calc(var(--petard-size, 120px) * 1.12);
+  transform: translate(-50%, -52%);
+  border-radius: 50%;
+  z-index: 56;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.88) 28%,
+    rgba(255, 255, 255, 0.55) 48%,
+    rgba(255, 255, 255, 0.22) 68%,
+    rgba(255, 255, 255, 0.06) 82%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  filter: blur(14px);
+  animation: vfxCameraFlashLocal 0.46s cubic-bezier(0.12, 0.82, 0.22, 1) forwards;
+}
+
+@keyframes vfxCameraFlashLocal {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -52%) scale(0.55);
+  }
+  8% {
+    opacity: 1;
+    transform: translate(-50%, -52%) scale(1.04);
+  }
+  24% {
+    opacity: 0.9;
+    transform: translate(-50%, -52%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -52%) scale(1.06);
+  }
 }
 
 .vfx-flash {
@@ -1638,7 +1937,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 42px color-mix(in srgb, var(--fw-secondary, #f5a) 50%, transparent),
     0 0 68px color-mix(in srgb, var(--fw-primary, #5cf) 28%, transparent);
   opacity: 0.95;
-  animation: fwBloomPop 0.58s ease-out forwards;
+  animation: fwBloomPop 0.37s ease-out forwards;
 }
 
 @keyframes fwBloomPop {
@@ -1677,7 +1976,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 6px #fff,
     0 0 14px var(--c, #fff),
     0 0 32px color-mix(in srgb, var(--c, #fff) 72%, transparent);
-  animation: fwRayLine 0.68s cubic-bezier(0.12, 0.75, 0.22, 1) forwards;
+  animation: fwRayLine 0.43s cubic-bezier(0.12, 0.75, 0.22, 1) forwards;
   pointer-events: none;
 }
 
@@ -1729,7 +2028,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 4px #fff,
     0 0 12px var(--c, #fff),
     0 0 26px color-mix(in srgb, var(--c, #fff) 70%, transparent);
-  animation: fwGlintFly var(--dur, 620ms) ease-out forwards;
+  animation: fwGlintFly var(--dur, 396ms) ease-out forwards;
   pointer-events: none;
 }
 
@@ -1758,6 +2057,32 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     0 0 8px var(--c, #fff),
     0 0 16px color-mix(in srgb, var(--c, #fff) 65%, transparent);
   animation: sparkFly var(--dur, 0.6s) ease-out forwards;
+}
+
+.vfx-spark-glitter {
+  z-index: 57;
+  margin: calc(var(--sz, 6px) * -0.5) 0 0 calc(var(--sz, 6px) * -0.5);
+  background: radial-gradient(circle at 40% 35%, #fff 0%, #fff 35%, rgba(255, 255, 255, 0.5) 70%);
+  box-shadow:
+    0 0 6px #fff,
+    0 0 14px rgba(255, 255, 255, 0.95),
+    0 0 22px rgba(255, 255, 255, 0.45);
+  animation: sparkGlitterFly var(--dur, 0.45s) ease-out forwards;
+}
+
+@keyframes sparkGlitterFly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.35);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.15);
+  }
 }
 
 @keyframes sparkFly {
@@ -1793,7 +2118,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .reveal-prize.vanish {
-  animation: revealVanish 0.65s ease-in forwards;
+  animation: revealVanish 0.45s ease-in forwards;
 }
 
 @keyframes revealVanish {
@@ -1825,36 +2150,21 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .slot.show-special-reward .slot-inner::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 8%;
-  z-index: 1;
-  width: calc(var(--petard-size) * 1.55);
-  height: calc(var(--petard-size) * 1.55);
-  transform: translateX(-50%);
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgba(255, 248, 210, 0.32) 0%,
-    rgba(255, 220, 120, 0.12) 42%,
-    transparent 72%
-  );
-  animation: characterHalo 5.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  content: none;
+  display: none;
 }
 
 .slot.reward-sam.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.1);
-  height: calc(var(--petard-size) * 1.1);
-  margin-left: -14px;
+  width: calc(var(--petard-size) * 1.075 * 1.15 * 0.9);
+  height: calc(var(--petard-size) * 1.075 * 1.15 * 0.9);
+  margin-left: 0;
   bottom: 5%;
 }
 
 .slot.reward-sanny.show-special-reward .slot-inner::before {
   width: calc(var(--petard-size) * 1.12);
   height: calc(var(--petard-size) * 1.12);
-  margin-left: 14px;
+  margin-left: 0;
   bottom: 5%;
 }
 
@@ -1862,21 +2172,24 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   z-index: 4;
   width: calc(var(--petard-size) * 1.4);
   height: calc(var(--petard-size) * 1.4);
+  filter: brightness(1);
+  will-change: filter;
   animation:
-    specialRewardReveal 0.55s cubic-bezier(0.34, 1.45, 0.64, 1) forwards,
-    characterShine 5.5s cubic-bezier(0.42, 0, 0.58, 1) 0.55s infinite;
+    specialRewardFlashIn 0.35s cubic-bezier(0.33, 1, 0.68, 1) forwards,
+    characterBrightnessPulse 4s ease-in-out infinite;
 }
 
 .slot.reward-sam img.done {
-  width: calc(var(--petard-size) * 1.04);
-  height: calc(var(--petard-size) * 1.04);
-  margin-left: -14px;
-  bottom: 6%;
+  width: calc(var(--petard-size) * 1.017 * 1.15 * 0.9);
+  height: calc(var(--petard-size) * 1.017 * 1.15 * 0.9);
+  margin-left: -8px;
+  bottom: calc(6% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mia img.done {
   width: calc(var(--petard-size) * 1.22);
   height: calc(var(--petard-size) * 1.22);
+  bottom: calc(12% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
@@ -1887,8 +2200,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
-  margin-left: -16px;
-  bottom: 10%;
+  margin-left: -4px;
+  bottom: calc(14% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
@@ -1901,7 +2214,8 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-oscar img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
-  bottom: -4%;
+  margin-left: -6px;
+  bottom: calc(0% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-oscar.show-special-reward .slot-inner::before {
@@ -1910,18 +2224,22 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 }
 
 .slot.reward-peggy img.done {
-  width: calc(var(--petard-size) * 1.24);
-  height: calc(var(--petard-size) * 1.24);
+  width: calc(var(--petard-size) * 1.116);
+  height: calc(var(--petard-size) * 1.116);
+  margin-left: 14px;
+  bottom: var(--character-face-lift, 0px);
 }
 
 .slot.reward-peggy.show-special-reward .slot-inner::before {
-  width: calc(var(--petard-size) * 1.36);
-  height: calc(var(--petard-size) * 1.36);
+  width: calc(var(--petard-size) * 1.224);
+  height: calc(var(--petard-size) * 1.224);
+  margin-left: 14px;
 }
 
 .slot.reward-carrie img.done {
   width: calc(var(--petard-size) * 1.14);
   height: calc(var(--petard-size) * 1.14);
+  bottom: var(--character-face-lift, 0px);
 }
 
 .slot.reward-carrie.show-special-reward .slot-inner::before {
@@ -1932,6 +2250,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mole img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
+  bottom: calc(4% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mole.show-special-reward .slot-inner::before {
@@ -1942,57 +2261,28 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-sanny img.done {
   width: calc(var(--petard-size) * 1.1);
   height: calc(var(--petard-size) * 1.1);
-  margin-left: 14px;
-  bottom: 4%;
+  margin-left: -4px;
+  bottom: calc(4% + var(--character-face-lift, 0px));
 }
 
-@keyframes specialRewardReveal {
+@keyframes specialRewardFlashIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) scale(0.35);
-    filter: brightness(0.8);
+    transform: translateX(-50%) scale(0.97);
   }
   to {
     opacity: 1;
     transform: translateX(-50%) scale(1);
-    filter: brightness(1);
   }
 }
 
-@keyframes characterShine {
+@keyframes characterBrightnessPulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 5px rgba(255, 220, 130, 0.32)) brightness(1);
-  }
-  25% {
-    filter: drop-shadow(0 0 8px rgba(255, 235, 190, 0.42)) brightness(1.02);
+    filter: brightness(0.88);
   }
   50% {
-    filter: drop-shadow(0 0 12px rgba(255, 245, 210, 0.52))
-      drop-shadow(0 0 20px rgba(255, 200, 90, 0.2)) brightness(1.05);
-  }
-  75% {
-    filter: drop-shadow(0 0 8px rgba(255, 235, 190, 0.42)) brightness(1.02);
-  }
-}
-
-@keyframes characterHalo {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: translateX(-50%) scale(0.97);
-  }
-  25% {
-    opacity: 0.38;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateX(-50%) scale(1.03);
-  }
-  75% {
-    opacity: 0.38;
-    transform: translateX(-50%) scale(1);
+    filter: brightness(1.26);
   }
 }
 
@@ -2019,25 +2309,24 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
     var(--tw-c, #ffe566) 55%,
     var(--tw-c, #ffe566) 100%
   );
-  box-shadow: 0 0 6px var(--tw-c, #ffe566);
+  box-shadow: 0 0 4px var(--tw-c, #ffe566);
   transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px));
-  opacity: 0.25;
-  animation: charSparkTwinkle var(--tw-dur, 3s) cubic-bezier(0.42, 0, 0.58, 1)
-    infinite;
+  opacity: 0.32;
+  animation: charSparkTwinkle var(--tw-dur, 5s) ease-in-out infinite;
   animation-delay: var(--tw-delay, 0s);
 }
 
 @keyframes charSparkTwinkle {
   0%,
   100% {
-    opacity: 0.12;
+    opacity: 0.22;
     transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px))
-      scale(0.55);
+      scale(0.72);
   }
   50% {
-    opacity: 1;
+    opacity: 0.72;
     transform: translate(calc(-50% + var(--orbit-x, 0px)), var(--orbit-y, 0px))
-      scale(1.05);
+      scale(0.95);
   }
 }
 

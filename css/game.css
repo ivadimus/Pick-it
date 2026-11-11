@@ -526,8 +526,9 @@ html.is-touch.game-landscape .stage {
   --prize-panel-items-pad-x: 2.2%;
   --prize-panel-items-drop: -16px;
   --prize-panel-items-top: 51%;
-  --prize-panel-scale: 0.84;
-  --prize-panel-items-ref-scale: 1.06;
+  --prize-panel-mobile-size: 1.2;
+  --prize-panel-scale: calc(0.84 * var(--prize-panel-mobile-size, 1));
+  --prize-panel-items-ref-scale: calc(1.06 * var(--prize-panel-mobile-size, 1));
   --prize-panel-w: min(
     calc(49.13vw * var(--prize-panel-scale)),
     calc(419px * var(--prize-panel-scale))
@@ -666,22 +667,25 @@ html.is-touch.game-landscape .slot[data-index="7"] {
   );
 }
 
-/* Touch landscape: lower petard row nudge */
+/* Touch landscape: lower petard row (lift = higher) */
 html.is-touch.game-landscape .slot[data-index="0"],
 html.is-touch.game-landscape .slot[data-index="2"],
 html.is-touch.game-landscape .slot[data-index="4"],
 html.is-touch.game-landscape .slot[data-index="6"] {
   transform: translate(
     -50%,
-    calc(-50% - 2.5vh + var(--petard-row-drop, 0px))
+    calc(
+      -50% - 2.5vh + var(--petard-row-drop, 0px) -
+        var(--petard-lower-row-lift, 0px)
+    )
   );
 }
 
 /* Touch landscape: reward character faces −15% */
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
-  --character-face-lift: 10px;
   --petard-row-drop: 12px;
+  --petard-lower-row-lift: 24px;
 }
 
 html.is-touch.game-landscape .slot.show-special-reward img.done {
@@ -738,14 +742,6 @@ html.is-touch.game-landscape .slot.reward-mole img.done {
   width: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
   height: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
   bottom: calc(4% + var(--character-face-lift, 10px));
-}
-
-/* Lower row: character faces sit higher on the petard */
-html.is-touch.game-landscape .slot[data-index="0"],
-html.is-touch.game-landscape .slot[data-index="2"],
-html.is-touch.game-landscape .slot[data-index="4"],
-html.is-touch.game-landscape .slot[data-index="6"] {
-  --character-face-lift: 22px;
 }
 
 html.is-touch.game-landscape .info-swing img {
@@ -925,6 +921,8 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
   --petard-row-drop: 22px;
+  --petard-lower-row-lift: 20px;
+  --character-face-lift: 24px;
 
   position: relative;
   width: 100%;
@@ -1274,6 +1272,16 @@ html.is-touch.game-landscape .info-swing img {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+
+.slot[data-index="0"],
+.slot[data-index="2"],
+.slot[data-index="4"],
+.slot[data-index="6"] {
+  transform: translate(
+    -50%,
+    calc(-50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px))
+  );
 }
 
 .slot img.petard {
@@ -2175,13 +2183,13 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.017 * 1.15 * 0.9);
   height: calc(var(--petard-size) * 1.017 * 1.15 * 0.9);
   margin-left: -8px;
-  bottom: 6%;
+  bottom: calc(6% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mia img.done {
   width: calc(var(--petard-size) * 1.22);
   height: calc(var(--petard-size) * 1.22);
-  bottom: 12%;
+  bottom: calc(12% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
@@ -2193,7 +2201,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
   margin-left: -4px;
-  bottom: 14%;
+  bottom: calc(14% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
@@ -2207,7 +2215,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
   margin-left: -6px;
-  bottom: 0%;
+  bottom: calc(0% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-oscar.show-special-reward .slot-inner::before {
@@ -2219,6 +2227,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.116);
   height: calc(var(--petard-size) * 1.116);
   margin-left: 14px;
+  bottom: var(--character-face-lift, 0px);
 }
 
 .slot.reward-peggy.show-special-reward .slot-inner::before {
@@ -2230,6 +2239,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-carrie img.done {
   width: calc(var(--petard-size) * 1.14);
   height: calc(var(--petard-size) * 1.14);
+  bottom: var(--character-face-lift, 0px);
 }
 
 .slot.reward-carrie.show-special-reward .slot-inner::before {
@@ -2240,7 +2250,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mole img.done {
   width: calc(var(--petard-size) * 1.05);
   height: calc(var(--petard-size) * 1.05);
-  bottom: 4%;
+  bottom: calc(4% + var(--character-face-lift, 0px));
 }
 
 .slot.reward-mole.show-special-reward .slot-inner::before {
@@ -2252,7 +2262,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   width: calc(var(--petard-size) * 1.1);
   height: calc(var(--petard-size) * 1.1);
   margin-left: -4px;
-  bottom: 4%;
+  bottom: calc(4% + var(--character-face-lift, 0px));
 }
 
 @keyframes specialRewardFlashIn {
