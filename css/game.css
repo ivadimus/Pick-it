@@ -517,26 +517,28 @@ html.is-touch.game-landscape .stage {
   --header-w: 42.32%;
   --close-nudge-x: 32px;
   --header-est-h: min(12.5vw, 54px);
-  --prize-panel-frame-mul: 1.02;
   --prize-panel-items-mul: 0.85;
   --prize-panel-top: calc(0.8% + 10px + var(--header-est-h) + 5px);
-  --field-top: calc(
-    var(--prize-panel-top) + var(--prize-panel-h) * var(--prize-panel-frame-mul) + 8px
-  );
+  --field-top: calc(var(--prize-panel-top) + var(--prize-panel-h) + 8px);
   --prize-panel-gap: 1px;
   --prize-panel-item-overlap: 2px;
   --prize-panel-items-shift: -50%;
   --prize-panel-items-pad-x: 2.2%;
   --prize-panel-items-drop: -16px;
   --prize-panel-items-top: 51%;
-  --prize-panel-scale: 1.21;
+  --prize-panel-scale: 0.84;
+  --prize-panel-items-ref-scale: 1.06;
   --prize-panel-w: min(
-    calc(49.13vw * var(--prize-panel-scale, 1.21)),
-    calc(419px * var(--prize-panel-scale, 1.21))
+    calc(49.13vw * var(--prize-panel-scale)),
+    calc(419px * var(--prize-panel-scale))
   );
   --prize-panel-h: calc(var(--prize-panel-w) * 170 / 1024);
   --prize-icon-h: calc(
-    var(--prize-panel-h) * 0.72 * var(--prize-panel-items-mul, 0.85)
+    min(
+        calc(49.13vw * var(--prize-panel-items-ref-scale)),
+        calc(419px * var(--prize-panel-items-ref-scale))
+      ) *
+      170 / 1024 * 0.72 * var(--prize-panel-items-mul, 0.85)
   );
   --prize-panel-rise-offset: min(-68px, -14vh);
   --petard-size: min(28.8vh, 156px);
@@ -604,22 +606,21 @@ html.is-touch.game-landscape .prize-panel-wrap {
   top: var(--prize-panel-top);
   bottom: auto;
   width: min(var(--prize-panel-w), calc(100vw - 12px));
-  max-width: calc(419px * var(--prize-panel-scale, 1.21));
-  height: calc(var(--prize-panel-h) * var(--prize-panel-frame-mul, 1.02));
-  aspect-ratio: auto;
+  max-width: calc(419px * var(--prize-panel-scale));
+  height: auto;
+  aspect-ratio: 1024 / 170;
   transform: translateX(-50%) translateY(0);
   transform-origin: 50% 0%;
 }
 
 html.is-touch.game-landscape .prize-panel-bg {
-  position: absolute;
-  left: 50%;
-  top: 50%;
+  position: relative;
   width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%) scale(var(--prize-panel-frame-mul, 1.02));
-  transform-origin: center center;
+  height: auto;
+  aspect-ratio: 1024 / 170;
+  transform: none;
   object-fit: contain;
+  object-position: center;
 }
 
 html.is-touch.game-landscape .prize-panel-wrap.intro-hidden[data-intro="panel"] {
@@ -654,12 +655,15 @@ html.is-touch.game-landscape .prize-panel-items .panel-prize-img {
   max-height: var(--prize-icon-h);
 }
 
-/* Touch landscape: upper petard row slightly higher */
+/* Touch landscape: upper petard row nudge (negative = higher) */
 html.is-touch.game-landscape .slot[data-index="1"],
 html.is-touch.game-landscape .slot[data-index="3"],
 html.is-touch.game-landscape .slot[data-index="5"],
 html.is-touch.game-landscape .slot[data-index="7"] {
-  transform: translate(-50%, calc(-50% - 4.5vh));
+  transform: translate(
+    -50%,
+    calc(-50% - 2.5vh + var(--petard-row-drop, 0px))
+  );
 }
 
 /* Touch landscape: reward character faces −15% */
@@ -887,6 +891,7 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-pad-x: 2.2%;
   --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
+  --petard-row-drop: 22px;
 
   position: relative;
   width: 100%;
@@ -1232,7 +1237,7 @@ html.is-touch.game-landscape .info-swing img {
   min-width: 52px;
   max-width: 136px;
   height: var(--petard-size);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + var(--petard-row-drop, 0px)));
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -1244,6 +1249,19 @@ html.is-touch.game-landscape .info-swing img {
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+/* Petard 8.png (slot index 7) */
+.slot[data-index="7"] {
+  height: calc(var(--petard-size) * 1.15);
+}
+
+.slot[data-index="7"] img.petard,
+.slot[data-index="7"] img.prize,
+.slot[data-index="7"] img.cube,
+.slot[data-index="7"] img.done {
+  width: calc(var(--petard-size) * 1.15);
+  height: calc(var(--petard-size) * 1.15);
 }
 
 .slot.opening img.cube {
@@ -1337,10 +1355,18 @@ html.is-touch.game-landscape .info-swing img {
 @keyframes slotIdlePulse {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(
+        -50%,
+        calc(-50% + var(--petard-row-drop, 0px))
+      )
+      scale(1);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.08);
+    transform: translate(
+        -50%,
+        calc(-50% + var(--petard-row-drop, 0px))
+      )
+      scale(1.08);
   }
 }
 
