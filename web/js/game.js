@@ -102,6 +102,18 @@
     },
   };
 
+  /** Prize panel slot index 0–7 → same scale as field character (petard 1–8). */
+  const PANEL_REWARD_CLASS = [
+    "reward-sam",
+    "reward-mia",
+    "reward-sanny",
+    "reward-oscar",
+    "reward-peggy",
+    "reward-hoppy",
+    "reward-carrie",
+    "reward-mole",
+  ];
+
   /** Petards 1–8.png left → right (slot index = file number − 1) */
   const PETARDS = [
     "Assets/1.png",
@@ -207,7 +219,8 @@
     prizePanelItems.innerHTML = "";
     PRIZES.forEach((p) => {
       const el = document.createElement("div");
-      el.className = "panel-prize";
+      const rewardClass = PANEL_REWARD_CLASS[p.id];
+      el.className = rewardClass ? `panel-prize ${rewardClass}` : "panel-prize";
       el.dataset.prizeId = String(p.id);
       el.dataset.prizeSrc = p.src;
 

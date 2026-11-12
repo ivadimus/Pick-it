@@ -1056,6 +1056,7 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-art-h: 197;
   --prize-panel-items-top: 44%;
   --prize-panel-items-drop: -4px;
+  --panel-char-h-max: 1.22;
 }
 
 /* Layer stack: fill → frame (+ shine mask) → prize icons */
@@ -1151,7 +1152,7 @@ html.is-touch.game-landscape .info-swing img {
   height: var(--prize-icon-h);
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: var(--prize-panel-gap);
   padding: 0 var(--prize-panel-items-pad-x, 1.4%);
@@ -1168,19 +1169,53 @@ html.is-touch.game-landscape .info-swing img {
   margin: 0 calc(var(--prize-panel-item-overlap, 0px) * -1);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   height: var(--prize-icon-h);
   transition: opacity 0.35s ease, filter 0.35s ease;
 }
 
 .prize-panel-items .panel-prize-img {
   display: block;
-  height: var(--prize-icon-h);
+  height: calc(
+    var(--prize-icon-h) * var(--panel-prize-h-mul, 1) / var(--panel-char-h-max, 1.22)
+  );
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  object-position: center center;
+  object-position: center bottom;
   transition: opacity 0.35s ease;
+}
+
+.prize-panel-items .panel-prize.reward-sam {
+  --panel-prize-h-mul: 1.052575;
+}
+
+.prize-panel-items .panel-prize.reward-mia {
+  --panel-prize-h-mul: 1.22;
+}
+
+.prize-panel-items .panel-prize.reward-sanny {
+  --panel-prize-h-mul: 1.1;
+}
+
+.prize-panel-items .panel-prize.reward-oscar {
+  --panel-prize-h-mul: 1.05;
+}
+
+.prize-panel-items .panel-prize.reward-peggy {
+  --panel-prize-h-mul: 1.116;
+}
+
+.prize-panel-items .panel-prize.reward-hoppy {
+  --panel-prize-h-mul: 0.82;
+}
+
+.prize-panel-items .panel-prize.reward-carrie {
+  --panel-prize-h-mul: 1.14;
+}
+
+.prize-panel-items .panel-prize.reward-mole {
+  --panel-prize-h-mul: 1.05;
 }
 
 .prize-panel-items .panel-prize-done {
