@@ -635,18 +635,18 @@ html.is-touch.game-landscape .prize-panel-wrap.visible {
 
 html.is-touch.game-landscape .prize-panel {
   --prize-panel-items-top: 43%;
-  --prize-panel-items-drop: -10px;
+  --prize-panel-items-drop: -5px;
 }
 
 html.is-touch.game-landscape .prize-panel-items,
 html.is-touch.game-landscape #prizePanelItems {
-  --prize-panel-items-drop: -10px;
+  --prize-panel-items-drop: -5px;
   top: var(--prize-panel-items-top, 43%);
   left: 0;
   right: 0;
   height: var(--prize-icon-h);
   transform: translateY(-50%)
-    translateY(var(--prize-panel-items-drop, -10px))
+    translateY(var(--prize-panel-items-drop, -5px))
     translateX(var(--prize-panel-items-nudge-x, 5px));
   align-items: flex-end;
   justify-content: center;
