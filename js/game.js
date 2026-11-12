@@ -605,6 +605,26 @@
     };
   }
 
+  /** Bottom-center of SKU area in stage px (aligned with img.prize baseline). */
+  function slotSkuRevealPoint(slotEl) {
+    const stage = document.getElementById("stage");
+    if (!stage) return { x: 0, y: 0 };
+
+    const inner = slotEl.querySelector(".slot-inner");
+    const ref = inner || slotEl;
+    const stageRect = stage.getBoundingClientRect();
+    const refRect = ref.getBoundingClientRect();
+    const scaleX = stage.offsetWidth ? stageRect.width / stage.offsetWidth : 1;
+    const scaleY = stage.offsetHeight ? stageRect.height / stage.offsetHeight : 1;
+    const skuBottom =
+      parseFloat(getComputedStyle(slotEl).getPropertyValue("--slot-sku-bottom")) || 0;
+
+    return {
+      x: (refRect.left + refRect.width / 2 - stageRect.left) / scaleX,
+      y: (refRect.bottom - stageRect.top) / scaleY - skuBottom / scaleY,
+    };
+  }
+
   function resetFireworkCanvas() {
     fwParticles = [];
     fwHazes = [];
@@ -1306,6 +1326,7 @@
     updatePickableSlots();
 
     const center = slotCenterOnStage(slot.el);
+    const skuPoint = slotSkuRevealPoint(slot.el);
     const prize = PRIZES.find((p) => p.id === slot.prizeId);
 
     slot.el.classList.add("opening");
@@ -1320,8 +1341,8 @@
       fly.className = "reveal-prize";
       fly.src = prize.src;
       fly.alt = "";
-      fly.style.left = center.x + "px";
-      fly.style.top = center.y + "px";
+      fly.style.left = skuPoint.x + "px";
+      fly.style.top = skuPoint.y + "px";
       vfxLayer.appendChild(fly);
 
       await wait(420);
