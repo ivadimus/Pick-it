@@ -1236,7 +1236,7 @@
 
   function enablePicking() {
     canPick = true;
-    snapPetardsToLayout({ clearSettling: true });
+    snapPetardsToLayout();
     if (showHandOnFirstPick) {
       const hint = pickHintSlotIndex();
       if (hint !== null) {
@@ -1250,7 +1250,9 @@
     scheduleIdleHint();
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        beginPetardIdleMotion();
+        requestAnimationFrame(() => {
+          beginPetardIdleMotion();
+        });
       });
     });
   }
@@ -1373,7 +1375,8 @@
     showPrizeAndInfoPanels();
     showIntroStep("header");
     await waitForStageLayout();
-    await wait(400);
+    /* Prize panel intro (~850ms) — avoid layout shift when float starts */
+    await wait(920);
     enablePicking();
   }
 
