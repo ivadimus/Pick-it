@@ -614,8 +614,10 @@ html.is-touch.game-landscape .prize-panel-wrap {
   transform-origin: 50% 0%;
 }
 
-html.is-touch.game-landscape .prize-panel-bg {
-  position: relative;
+html.is-touch.game-landscape .prize-panel-frame,
+html.is-touch.game-landscape .prize-panel-fill {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: auto;
   aspect-ratio: 1024 / 170;
@@ -1050,40 +1052,71 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-drop: -4px;
 }
 
+/* Layer stack: fill → frame (+ shine mask) → prize icons */
 .prize-panel-art {
   position: relative;
   width: 100%;
   height: 100%;
-  isolation: isolate;
-  --prize-panel-shine-inset: 6px;
-  --prize-panel-shine-mask: url("../Assets/Prize%20Panel.png?v=prize4");
 }
 
-.prize-panel-bg {
+.prize-panel-stack {
+  position: absolute;
+  inset: 0;
+}
+
+.prize-panel-frame-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  isolation: isolate;
+}
+
+.prize-panel-frame,
+.prize-panel-fill {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
+  pointer-events: none;
+}
+
+.prize-panel-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.prize-panel-frame-layer {
+  z-index: 2;
 }
 
 .prize-panel-wrap.visible .prize-panel-shine {
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
   background: linear-gradient(
     100deg,
     transparent 0%,
     transparent 40%,
-    rgba(255, 248, 220, 0.25) 47%,
-    rgba(255, 255, 255, 0.95) 50%,
-    rgba(255, 240, 180, 0.3) 53%,
+    rgba(255, 248, 220, 0.4) 47%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 240, 180, 0.45) 53%,
     transparent 60%,
     transparent 100%
   );
   background-size: 260% 100%;
-  mix-blend-mode: plus-lighter;
-  opacity: 0.85;
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  -webkit-mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
+  mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
   animation: prizePanelGoldGlint 3.6s ease-in-out infinite;
 }
 
@@ -1099,7 +1132,7 @@ html.is-touch.game-landscape .info-swing img {
 #prizePanelItems.prize-panel-items,
 .prize-panel-items {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   left: 0;
   right: 0;
   top: var(--prize-panel-items-top, 44%);

@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Pick-it</title>
-  <link rel="stylesheet" href="css/game.css?v=mobile105" />
+  <link rel="stylesheet" href="css/game.css?v=mobile107" />
 </head>
 <body>
   <div id="rotateOverlay" class="rotate-overlay" aria-live="polite">
@@ -55,8 +55,21 @@
       <div class="prize-panel-wrap intro-hidden" data-intro="panel">
         <div class="prize-panel">
           <div class="prize-panel-art">
-            <img class="prize-panel-bg" src="Assets/Prize Panel.png?v=prize4" alt="" />
-            <span class="prize-panel-shine" aria-hidden="true"></span>
+            <div class="prize-panel-stack">
+              <img
+                class="prize-panel-fill"
+                src="Assets/Prize Panel fill.png?v=1"
+                alt=""
+              />
+              <div class="prize-panel-frame-layer">
+                <img
+                  class="prize-panel-frame"
+                  src="Assets/Prize Panel frame.png?v=1"
+                  alt=""
+                />
+                <span class="prize-panel-shine" aria-hidden="true"></span>
+              </div>
+            </div>
           </div>
           <div class="prize-panel-items" id="prizePanelItems"></div>
         </div>
