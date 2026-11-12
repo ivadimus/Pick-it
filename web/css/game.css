@@ -1468,19 +1468,18 @@ html.is-touch.game-landscape .info-swing img {
   visibility: hidden !important;
 }
 
-/* Idle hint: scale inner only so slot Y never jumps vs --petard-slot-y */
-.slot.idle-hint .slot-inner {
-  animation: slotInnerIdlePulse 1s ease-in-out;
-  transform-origin: 50% 100%;
+/* Idle hint: brightness only — never override img.cube petardFloat (avoids jump after 1st pick) */
+.slot.idle-hint:not(.disabled):not(.opening) .slot-inner {
+  animation: slotInnerIdleGlow 1s ease-in-out;
 }
 
-@keyframes slotInnerIdlePulse {
+@keyframes slotInnerIdleGlow {
   0%,
   100% {
-    transform: rotate(var(--slot-tilt, 0deg)) scale(1);
+    filter: brightness(1);
   }
   50% {
-    transform: rotate(var(--slot-tilt, 0deg)) scale(1.08);
+    filter: brightness(1.14);
   }
 }
 

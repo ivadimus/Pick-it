@@ -1215,7 +1215,8 @@
       if (!canScheduleIdleHint()) return;
 
       slots.forEach((s) => {
-        if (!s.opened) s.el.classList.add("idle-hint");
+        if (s.opened || s.opening || s.el.classList.contains("disabled")) return;
+        s.el.classList.add("idle-hint");
       });
 
       idleHintEndTimer = setTimeout(() => {
