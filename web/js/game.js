@@ -501,14 +501,28 @@
     return 1 - Math.pow(1 - t, 3);
   }
 
-  function finalizePetardLanding() {
+  function snapPetardsToLayout(options = {}) {
+    const { settling = false, clearSettling = false } = options;
     slots.forEach((s) => {
       s.el.style.left = s.layoutX + "%";
       s.el.style.top = s.layoutY + "%";
       s.el.classList.remove("petard-fly-in", "intro-hidden", "disabled", "opening");
       s.el.classList.remove("pickable", "idle-hint", "waiting-first-pick");
+      if (settling) s.el.classList.add("petard-settling");
+      if (clearSettling) s.el.classList.remove("petard-settling");
+    });
+  }
+
+  function beginPetardIdleMotion() {
+    slots.forEach((s) => {
+      if (s.opened || s.el.classList.contains("disabled")) return;
       restartPetardFloat(s.cubeImg);
     });
+  }
+
+  function finalizePetardLanding() {
+    snapPetardsToLayout({ clearSettling: true });
+    beginPetardIdleMotion();
   }
 
   function flyPetardsFromPanel() {
@@ -548,7 +562,7 @@
           cancelAnimationFrame(rafId);
           rafId = null;
         }
-        finalizePetardLanding();
+        snapPetardsToLayout({ settling: true });
         resolve();
       }
 
@@ -1199,7 +1213,7 @@
 
   function enablePicking() {
     canPick = true;
-    finalizePetardLanding();
+    snapPetardsToLayout({ clearSettling: true });
     if (showHandOnFirstPick) {
       const hint = pickHintSlotIndex();
       if (hint !== null) {
@@ -1211,6 +1225,11 @@
       updatePickableSlots();
     }
     scheduleIdleHint();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        beginPetardIdleMotion();
+      });
+    });
   }
 
   function disablePicking() {
@@ -1327,9 +1346,9 @@
   }
 
   async function finishIntroUi() {
-    finalizePetardLanding();
     showPrizeAndInfoPanels();
     showIntroStep("header");
+    await waitForStageLayout();
     await wait(400);
     enablePicking();
   }

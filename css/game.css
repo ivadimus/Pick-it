@@ -1439,7 +1439,8 @@ html.is-touch.game-landscape .info-swing img {
   pointer-events: none;
 }
 
-.slot.petard-fly-in img.cube {
+.slot.petard-fly-in img.cube,
+.slot.petard-settling img.cube {
   animation: none !important;
 }
 
@@ -1512,17 +1513,19 @@ html.is-touch.game-landscape .info-swing img {
   visibility: hidden !important;
 }
 
-.slot.idle-hint {
-  animation: slotIdlePulse 1s ease-in-out;
+/* Idle hint: scale inner only so slot Y never jumps vs --petard-slot-y */
+.slot.idle-hint .slot-inner {
+  animation: slotInnerIdlePulse 1s ease-in-out;
+  transform-origin: 50% 100%;
 }
 
-@keyframes slotIdlePulse {
+@keyframes slotInnerIdlePulse {
   0%,
   100% {
-    transform: translate(-50%, var(--petard-slot-y)) scale(1);
+    transform: rotate(var(--slot-tilt, 0deg)) scale(1);
   }
   50% {
-    transform: translate(-50%, var(--petard-slot-y)) scale(1.08);
+    transform: rotate(var(--slot-tilt, 0deg)) scale(1.08);
   }
 }
 
