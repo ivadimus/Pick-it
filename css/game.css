@@ -667,7 +667,7 @@ html.is-touch.game-landscape .slot[data-index="7"] {
   );
 }
 
-/* Touch landscape: lower petard row (lift = higher) */
+/* Touch landscape: lower petard row (drop = lower) */
 html.is-touch.game-landscape .slot[data-index="0"],
 html.is-touch.game-landscape .slot[data-index="2"],
 html.is-touch.game-landscape .slot[data-index="4"],
@@ -676,7 +676,8 @@ html.is-touch.game-landscape .slot[data-index="6"] {
     -50%,
     calc(
       -50% - 2.5vh + var(--petard-row-drop, 0px) -
-        var(--petard-lower-row-lift, 0px)
+        var(--petard-lower-row-lift, 0px) +
+        var(--petard-lower-row-drop, 0px)
     )
   );
 }
@@ -685,7 +686,8 @@ html.is-touch.game-landscape .slot[data-index="6"] {
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
   --petard-row-drop: 12px;
-  --petard-lower-row-lift: 24px;
+  --petard-lower-row-lift: 0px;
+  --petard-lower-row-drop: 14px;
 }
 
 html.is-touch.game-landscape .slot.show-special-reward img.done {
@@ -921,7 +923,8 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
   --petard-row-drop: 22px;
-  --petard-lower-row-lift: 20px;
+  --petard-lower-row-lift: 0px;
+  --petard-lower-row-drop: 12px;
   --character-face-lift: 24px;
 
   position: relative;
@@ -1280,7 +1283,10 @@ html.is-touch.game-landscape .info-swing img {
 .slot[data-index="6"] {
   transform: translate(
     -50%,
-    calc(-50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px))
+    calc(
+      -50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px) +
+        var(--petard-lower-row-drop, 0px)
+    )
   );
 }
 
