@@ -692,10 +692,7 @@ html.is-touch.game-landscape .stage {
 }
 
 html.is-touch.game-landscape .slot.show-special-reward img.done {
-  bottom: var(
-    --character-reward-bottom,
-    calc(8% + var(--character-face-lift, 10px))
-  );
+  bottom: var(--character-reward-bottom, var(--slot-sku-bottom, 0px));
 }
 
 html.is-touch.game-landscape .slot.reward-sam img.done {
@@ -926,7 +923,7 @@ html.is-touch.game-landscape .info-swing img {
   --character-upper-row-drop: 14px;
   --lower-row-prize-lift: 14px;
   --slot-sku-bottom: 0px;
-  --character-reward-bottom: calc(8% + var(--character-face-lift, 24px));
+  --character-reward-bottom: var(--slot-sku-bottom, 0px);
   --panel-prize-size-mul: 1.1;
 
   position: relative;
@@ -2250,7 +2247,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   z-index: 4;
   width: calc(var(--petard-size) * 1.4);
   height: calc(var(--petard-size) * 1.4);
-  bottom: var(--character-reward-bottom, calc(8% + var(--character-face-lift, 24px)));
+  bottom: var(--character-reward-bottom, var(--slot-sku-bottom, 0px));
   filter: brightness(1);
   will-change: filter;
   animation:
