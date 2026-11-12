@@ -1050,12 +1050,13 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-drop: -4px;
 }
 
-/* Shine composites only with panel PNG — brightens gold border, not black fill */
 .prize-panel-art {
   position: relative;
   width: 100%;
   height: 100%;
   isolation: isolate;
+  --prize-panel-shine-inset: 6px;
+  --prize-panel-shine-mask: url("../Assets/Prize%20Panel.png?v=prize4");
 }
 
 .prize-panel-bg {
