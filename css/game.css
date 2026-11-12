@@ -1101,16 +1101,19 @@ html.is-touch.game-landscape .info-swing img {
   background: linear-gradient(
     100deg,
     transparent 0%,
-    transparent 40%,
-    rgba(255, 248, 220, 0.4) 47%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 240, 180, 0.45) 53%,
-    transparent 60%,
+    transparent 38%,
+    rgba(255, 245, 200, 0.55) 45%,
+    rgba(255, 255, 255, 1) 48.5%,
+    rgba(255, 252, 235, 1) 50%,
+    rgba(255, 255, 255, 1) 51.5%,
+    rgba(255, 235, 160, 0.65) 55%,
+    transparent 62%,
     transparent 100%
   );
-  background-size: 260% 100%;
-  mix-blend-mode: screen;
-  opacity: 0.95;
+  background-size: 240% 100%;
+  mix-blend-mode: plus-lighter;
+  opacity: 1;
+  filter: brightness(1.12);
   -webkit-mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
   mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
   -webkit-mask-repeat: no-repeat;
