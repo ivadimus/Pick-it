@@ -687,6 +687,7 @@ html.is-touch.game-landscape .slot[data-index="3"] {
 /* Touch landscape: reward character faces −15% */
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
+  --character-reward-bottom: 10px;
   --petard-row-drop: 12px;
   --petard-lower-row-lift: 20px;
   --petard-lower-row-drop: 14px;
@@ -1443,7 +1444,7 @@ html.is-touch.game-landscape .info-swing img {
   transform: translateX(-50%);
 }
 
-.slot:not(.disabled):not(.opening):not(.intro-hidden) img.cube {
+.slot:not(.disabled):not(.opening):not(.intro-hidden):not(.petard-settling) img.cube {
   animation: petardFloat var(--float-dur, 2.85s) ease-in-out infinite;
   animation-delay: var(--float-delay, 0s);
 }

@@ -506,17 +506,19 @@
     slots.forEach((s) => {
       s.el.style.left = s.layoutX + "%";
       s.el.style.top = s.layoutY + "%";
-      s.el.classList.remove("petard-fly-in", "intro-hidden", "disabled", "opening");
-      s.el.classList.remove("pickable", "idle-hint", "waiting-first-pick");
       if (settling) s.el.classList.add("petard-settling");
       if (clearSettling) s.el.classList.remove("petard-settling");
+      s.el.classList.remove("petard-fly-in", "intro-hidden", "opening");
+      s.el.classList.remove("pickable", "idle-hint", "waiting-first-pick");
+      if (!s.opened && !s.opening) s.el.classList.remove("disabled");
     });
   }
 
+  /** Release settling — CSS petardFloat starts once (no animation reset). */
   function beginPetardIdleMotion() {
     slots.forEach((s) => {
       if (s.opened || s.el.classList.contains("disabled")) return;
-      restartPetardFloat(s.cubeImg);
+      s.el.classList.remove("petard-settling");
     });
   }
 
