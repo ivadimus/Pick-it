@@ -675,6 +675,11 @@ html.is-touch.game-landscape .slot[data-index="6"] {
   );
 }
 
+/* Touch: petard 4 (index 3) */
+html.is-touch.game-landscape .slot[data-index="3"] {
+  --petard-slot-y: calc(-50% - 2.5vh + var(--petard-row-drop, 0px) + 7px);
+}
+
 /* Touch landscape: reward character faces −15% */
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
