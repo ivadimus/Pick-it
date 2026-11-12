@@ -919,6 +919,7 @@ html.is-touch.game-landscape .info-swing img {
   --petard-lower-row-drop: 12px;
   --character-face-lift: 24px;
   --character-upper-row-drop: 14px;
+  --lower-row-prize-lift: 14px;
 
   position: relative;
   width: 100%;
@@ -1352,6 +1353,14 @@ html.is-touch.game-landscape .info-swing img {
 
 .slot img.prize {
   z-index: 2;
+}
+
+/* Lower row: SKU prizes sit higher inside petard */
+.slot[data-index="0"] img.prize,
+.slot[data-index="2"] img.prize,
+.slot[data-index="4"] img.prize,
+.slot[data-index="6"] img.prize {
+  bottom: var(--lower-row-prize-lift, 14px);
 }
 
 .slot img.cube {
