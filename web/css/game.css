@@ -656,29 +656,21 @@ html.is-touch.game-landscape .prize-panel-items .panel-prize-img {
   max-height: var(--prize-icon-h);
 }
 
-/* Touch landscape: upper petard row nudge (negative = higher) */
+/* Touch landscape: petard row Y (shared with idle-hint pulse) */
 html.is-touch.game-landscape .slot[data-index="1"],
 html.is-touch.game-landscape .slot[data-index="3"],
 html.is-touch.game-landscape .slot[data-index="5"],
 html.is-touch.game-landscape .slot[data-index="7"] {
-  transform: translate(
-    -50%,
-    calc(-50% - 2.5vh + var(--petard-row-drop, 0px))
-  );
+  --petard-slot-y: calc(-50% - 2.5vh + var(--petard-row-drop, 0px));
 }
 
-/* Touch landscape: lower petard row (drop = lower) */
 html.is-touch.game-landscape .slot[data-index="0"],
 html.is-touch.game-landscape .slot[data-index="2"],
 html.is-touch.game-landscape .slot[data-index="4"],
 html.is-touch.game-landscape .slot[data-index="6"] {
-  transform: translate(
-    -50%,
-    calc(
-      -50% - 2.5vh + var(--petard-row-drop, 0px) -
-        var(--petard-lower-row-lift, 0px) +
-        var(--petard-lower-row-drop, 0px)
-    )
+  --petard-slot-y: calc(
+    -50% - 2.5vh + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px) +
+      var(--petard-lower-row-drop, 0px)
   );
 }
 
@@ -686,7 +678,7 @@ html.is-touch.game-landscape .slot[data-index="6"] {
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
   --petard-row-drop: 12px;
-  --petard-lower-row-lift: 0px;
+  --petard-lower-row-lift: 20px;
   --petard-lower-row-drop: 14px;
 }
 
@@ -923,7 +915,7 @@ html.is-touch.game-landscape .info-swing img {
   --prize-panel-items-nudge-x: 5px;
   --petard-size: min(27.3cqh, 157px);
   --petard-row-drop: 22px;
-  --petard-lower-row-lift: 0px;
+  --petard-lower-row-lift: 20px;
   --petard-lower-row-drop: 12px;
   --character-face-lift: 24px;
   --character-upper-row-drop: 14px;
@@ -1272,7 +1264,8 @@ html.is-touch.game-landscape .info-swing img {
   min-width: 52px;
   max-width: 136px;
   height: var(--petard-size);
-  transform: translate(-50%, calc(-50% + var(--petard-row-drop, 0px)));
+  --petard-slot-y: calc(-50% + var(--petard-row-drop, 0px));
+  transform: translate(-50%, var(--petard-slot-y));
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -1282,12 +1275,9 @@ html.is-touch.game-landscape .info-swing img {
 .slot[data-index="2"],
 .slot[data-index="4"],
 .slot[data-index="6"] {
-  transform: translate(
-    -50%,
-    calc(
-      -50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px) +
-        var(--petard-lower-row-drop, 0px)
-    )
+  --petard-slot-y: calc(
+    -50% + var(--petard-row-drop, 0px) - var(--petard-lower-row-lift, 0px) +
+      var(--petard-lower-row-drop, 0px)
   );
 }
 
@@ -1403,18 +1393,10 @@ html.is-touch.game-landscape .info-swing img {
 @keyframes slotIdlePulse {
   0%,
   100% {
-    transform: translate(
-        -50%,
-        calc(-50% + var(--petard-row-drop, 0px))
-      )
-      scale(1);
+    transform: translate(-50%, var(--petard-slot-y)) scale(1);
   }
   50% {
-    transform: translate(
-        -50%,
-        calc(-50% + var(--petard-row-drop, 0px))
-      )
-      scale(1.08);
+    transform: translate(-50%, var(--petard-slot-y)) scale(1.08);
   }
 }
 
