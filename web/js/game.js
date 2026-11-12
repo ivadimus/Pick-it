@@ -145,7 +145,10 @@
   let energy = 8;
   let slots = [];
   let canPick = false;
-  let picking = false;
+
+  function anySlotOpening() {
+    return slots.some((s) => s.opening);
+  }
   let handTargetSlot = null;
   let handAnimTimer = null;
   let showHandOnFirstPick = true;
@@ -285,6 +288,7 @@
         layoutY: pos.y,
         layoutRotate: pos.rotate,
         opened: false,
+        opening: false,
         index,
       };
     });
@@ -395,7 +399,6 @@
     if (vfxLayer) vfxLayer.innerHTML = "";
     setEnergy(8);
     canPick = false;
-    picking = false;
     showHandOnFirstPick = true;
     await runIntro();
   }
@@ -1109,7 +1112,12 @@
   }
 
   function canScheduleIdleHint() {
-    return canPick && !picking && energy > 0 && slots.some((s) => !s.opened);
+    return (
+      canPick &&
+      !anySlotOpening() &&
+      energy > 0 &&
+      slots.some((s) => !s.opened)
+    );
   }
 
   function isHandHintActive() {
@@ -1125,7 +1133,7 @@
     slots.forEach((s) => {
       s.el.classList.remove("waiting-first-pick");
 
-      if (s.opened) {
+      if (s.opened || s.opening) {
         s.el.classList.remove("pickable", "idle-hint");
         s.el.classList.add("disabled");
         return;
@@ -1133,11 +1141,6 @@
       if (!canPick) {
         s.el.classList.remove("pickable", "idle-hint");
         s.el.classList.add("disabled");
-        return;
-      }
-      if (picking) {
-        s.el.classList.remove("pickable", "idle-hint");
-        s.el.classList.remove("disabled");
         return;
       }
       if (isHandHintActive()) {
@@ -1183,7 +1186,6 @@
 
   function enablePicking() {
     canPick = true;
-    picking = false;
     finalizePetardLanding();
     if (showHandOnFirstPick) {
       const hint = pickHintSlotIndex();
@@ -1242,18 +1244,34 @@
     attachCharacterAmbientSparkles(slot);
   }
 
+  function afterPickResolved() {
+    if (energy > 0 && slots.some((s) => !s.opened)) {
+      updatePickableSlots();
+      resetIdleHintSchedule();
+      return;
+    }
+    if (energy === 0 && !anySlotOpening()) {
+      disablePicking();
+      hideHand();
+      scheduleGameCompleteOverlay();
+      return;
+    }
+    updatePickableSlots();
+  }
+
   async function onCubeClick(index) {
-    if (!canPick || picking || energy <= 0) return;
+    if (!canPick || energy <= 0) return;
     if (isHandHintActive() && index !== handTargetSlot) return;
 
     const slot = slots[index];
-    if (!slot || slot.opened) return;
+    if (!slot || slot.opened || slot.opening) return;
 
-    picking = true;
+    slot.opening = true;
     showHandOnFirstPick = false;
-    updatePickableSlots();
     hideHand();
     clearIdleHintTimers();
+    setEnergy(energy - 1);
+    updatePickableSlots();
 
     const center = slotCenterOnStage(slot.el);
     const prize = PRIZES.find((p) => p.id === slot.prizeId);
@@ -1263,43 +1281,35 @@
     slot.cubeImg.style.visibility = "hidden";
     playPetardFirework(center.x, center.y, slot.cubeImg);
 
-    await wait(720);
+    try {
+      await wait(720);
 
-    const fly = document.createElement("img");
-    fly.className = "reveal-prize";
-    fly.src = prize.src;
-    fly.alt = "";
-    fly.style.left = center.x + "px";
-    fly.style.top = center.y + "px";
-    vfxLayer.appendChild(fly);
+      const fly = document.createElement("img");
+      fly.className = "reveal-prize";
+      fly.src = prize.src;
+      fly.alt = "";
+      fly.style.left = center.x + "px";
+      fly.style.top = center.y + "px";
+      vfxLayer.appendChild(fly);
 
-    await wait(420);
+      await wait(420);
 
-    playSlotFlash(center.x, center.y);
-    fly.remove();
+      playSlotFlash(center.x, center.y);
+      fly.remove();
 
-    await wait(140);
+      await wait(140);
 
-    const specialReward = specialRewardForPetard(slot.cubeImg);
-    await revealSlotCharacter(slot, specialReward);
+      const specialReward = specialRewardForPetard(slot.cubeImg);
+      await revealSlotCharacter(slot, specialReward);
 
-    slot.opened = true;
-    slot.el.classList.remove("pickable");
-    slot.el.classList.add("disabled");
+      markPanelPrizeClaimed(prize);
 
-    markPanelPrizeClaimed(prize);
-
-    setEnergy(energy - 1);
-
-    picking = false;
-
-    if (energy > 0 && slots.some((s) => !s.opened)) {
-      updatePickableSlots();
-      resetIdleHintSchedule();
-    } else {
-      disablePicking();
-      hideHand();
-      if (energy === 0) scheduleGameCompleteOverlay();
+      slot.opened = true;
+    } finally {
+      slot.opening = false;
+      slot.el.classList.remove("pickable", "opening");
+      slot.el.classList.add("disabled");
+      afterPickResolved();
     }
   }
 
