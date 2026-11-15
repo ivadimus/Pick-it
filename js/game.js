@@ -514,11 +514,19 @@
     });
   }
 
-  /** Release settling — CSS petardFloat starts once (no animation reset). */
+  /** Release settling — petardFloat starts at rest (no mid-cycle jump from negative delay). */
   function beginPetardIdleMotion() {
     slots.forEach((s) => {
       if (s.opened || s.el.classList.contains("disabled")) return;
-      s.el.classList.remove("petard-settling");
+      if (s.cubeImg) {
+        s.cubeImg.style.setProperty("--float-delay", "0s");
+      }
+    });
+    requestAnimationFrame(() => {
+      slots.forEach((s) => {
+        if (s.opened || s.el.classList.contains("disabled")) return;
+        s.el.classList.remove("petard-settling");
+      });
     });
   }
 
@@ -592,39 +600,68 @@
     });
   }
 
+  function stageScaledPoint(stage, clientX, clientY) {
+    const stageRect = stage.getBoundingClientRect();
+    const scaleX = stage.offsetWidth ? stageRect.width / stage.offsetWidth : 1;
+    const scaleY = stage.offsetHeight ? stageRect.height / stage.offsetHeight : 1;
+    return {
+      x: (clientX - stageRect.left) / scaleX,
+      y: (clientY - stageRect.top) / scaleY,
+    };
+  }
+
   function slotCenterOnStage(slotEl) {
     const stage = document.getElementById("stage");
     if (!stage) return { x: 0, y: 0 };
 
     const stageRect = stage.getBoundingClientRect();
     const slotRect = slotEl.getBoundingClientRect();
-    const scaleX = stage.offsetWidth ? stageRect.width / stage.offsetWidth : 1;
-    const scaleY = stage.offsetHeight ? stageRect.height / stage.offsetHeight : 1;
-
-    return {
-      x: (slotRect.left + slotRect.width / 2 - stageRect.left) / scaleX,
-      y: (slotRect.top + slotRect.height / 2 - stageRect.top) / scaleY,
-    };
+    return stageScaledPoint(
+      stage,
+      slotRect.left + slotRect.width / 2,
+      slotRect.top + slotRect.height / 2
+    );
   }
 
-  /** Bottom-center of SKU area in stage px (aligned with img.prize baseline). */
+  /** Visual center of petard (cube), for hand hint and taps. */
+  function slotPetardCenterOnStage(slot) {
+    const stage = document.getElementById("stage");
+    if (!stage || !slot?.el) return { x: 0, y: 0 };
+
+    const cube = slot.cubeImg || slot.el.querySelector("img.cube");
+    if (cube && cube.getBoundingClientRect().width > 0) {
+      const r = cube.getBoundingClientRect();
+      return stageScaledPoint(stage, r.left + r.width / 2, r.top + r.height / 2);
+    }
+    return slotCenterOnStage(slot.el);
+  }
+
+  /** Bottom-center of SKU area in stage px (aligned with img.prize). */
   function slotSkuRevealPoint(slotEl) {
     const stage = document.getElementById("stage");
     if (!stage) return { x: 0, y: 0 };
 
+    const prizeImg = slotEl.querySelector("img.prize");
+    if (prizeImg) {
+      const r = prizeImg.getBoundingClientRect();
+      if (r.width > 0) {
+        return stageScaledPoint(stage, r.left + r.width / 2, r.bottom);
+      }
+    }
+
     const inner = slotEl.querySelector(".slot-inner");
     const ref = inner || slotEl;
-    const stageRect = stage.getBoundingClientRect();
     const refRect = ref.getBoundingClientRect();
-    const scaleX = stage.offsetWidth ? stageRect.width / stage.offsetWidth : 1;
-    const scaleY = stage.offsetHeight ? stageRect.height / stage.offsetHeight : 1;
     const skuBottom =
       parseFloat(getComputedStyle(slotEl).getPropertyValue("--slot-sku-bottom")) || 0;
+    const stageRect = stage.getBoundingClientRect();
+    const scaleY = stage.offsetHeight ? stageRect.height / stage.offsetHeight : 1;
 
-    return {
-      x: (refRect.left + refRect.width / 2 - stageRect.left) / scaleX,
-      y: (refRect.bottom - stageRect.top) / scaleY - skuBottom / scaleY,
-    };
+    return stageScaledPoint(
+      stage,
+      refRect.left + refRect.width / 2,
+      refRect.bottom - skuBottom * scaleY
+    );
   }
 
   function resetFireworkCanvas() {
@@ -1108,7 +1145,7 @@
   }
 
   function positionHandOnSlot(slot) {
-    const c = slotCenterOnStage(slot.el);
+    const c = slotPetardCenterOnStage(slot);
     handPointer.style.left = c.x + "px";
     handPointer.style.top = c.y + "px";
   }
