@@ -738,6 +738,11 @@ html.is-touch.game-landscape .slot.reward-mole img.done {
   height: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
 }
 
+html.is-touch.game-landscape .slot.reward-mia.show-special-reward img.done,
+html.is-touch.game-landscape .slot.reward-mole.show-special-reward img.done {
+  bottom: calc(var(--character-reward-bottom, 10px) + 20px);
+}
+
 html.is-touch.game-landscape .info-swing img {
   width: 100%;
   height: auto;
@@ -2276,6 +2281,11 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-mia img.done {
   width: calc(var(--petard-size) * 1.22);
   height: calc(var(--petard-size) * 1.22);
+}
+
+.slot.reward-mia.show-special-reward img.done,
+.slot.reward-mole.show-special-reward img.done {
+  bottom: calc(var(--character-reward-bottom, var(--slot-sku-bottom, 0px)) + 10px);
 }
 
 .slot.reward-mia.show-special-reward .slot-inner::before {
