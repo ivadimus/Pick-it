@@ -760,6 +760,13 @@ html.is-touch.game-landscape .slot.reward-mole.show-special-reward img.done {
   );
 }
 
+/* Petard 2 (index 1) */
+html.is-touch.game-landscape .slot[data-index="1"].show-special-reward img.done {
+  bottom: calc(
+    var(--character-reward-bottom-upper, 22px) + var(--character-row-align-offset, 0px) + 24px
+  );
+}
+
 html.is-touch.game-landscape .info-swing img {
   width: 100%;
   height: auto;
@@ -958,6 +965,13 @@ html.is-touch.game-landscape .info-swing img {
   background: transparent;
   overflow: hidden;
   container-type: size;
+}
+
+/* Desktop / web (not touch): lift all opened character faces */
+html:not(.is-touch) .stage {
+  --character-reward-bottom: 18px;
+  --character-reward-bottom-lower: 18px;
+  --character-reward-bottom-upper: 32px;
 }
 
 .top-bar {
