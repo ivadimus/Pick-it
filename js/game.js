@@ -16,8 +16,8 @@
     2: "Assets/web-characters/Mia.png",
     3: "Assets/web-characters/Sanny.png",
     4: "Assets/web-characters/Oscar.png",
-    5: "Assets/web-characters/Peggy.png",
-    6: "Assets/web-characters/Hoppy.png",
+    5: "Assets/web-characters/Hoppy.png",
+    6: "Assets/web-characters/Peggy.png",
     7: "Assets/web-characters/Carrie.png",
     8: "Assets/web-characters/Mole.png",
   };
@@ -108,8 +108,8 @@
     "reward-mia",
     "reward-sanny",
     "reward-oscar",
-    "reward-peggy",
     "reward-hoppy",
+    "reward-peggy",
     "reward-carrie",
     "reward-mole",
   ];
