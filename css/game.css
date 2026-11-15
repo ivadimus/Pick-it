@@ -719,7 +719,11 @@ html.is-touch.game-landscape .slot.reward-sanny img.done {
 html.is-touch.game-landscape .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
   height: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
-  margin-left: 10px;
+  margin-left: 18px;
+}
+
+html.is-touch.game-landscape .slot.reward-hoppy.show-special-reward img.done {
+  translate: 8px -10px;
 }
 
 html.is-touch.game-landscape .slot.reward-oscar img.done {
@@ -2306,7 +2310,11 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
-  margin-left: -4px;
+  margin-left: 10px;
+}
+
+.slot.reward-hoppy.show-special-reward img.done {
+  translate: 8px -10px;
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
