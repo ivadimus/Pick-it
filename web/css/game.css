@@ -677,6 +677,8 @@ html.is-touch.game-landscape .slot[data-index="3"] {
 html.is-touch.game-landscape .stage {
   --character-face-mul: 0.85;
   --character-reward-bottom: 10px;
+  --character-reward-bottom-lower: 10px;
+  --character-reward-bottom-upper: 10px;
   --petard-row-drop: 12px;
   --petard-lower-row-lift: 20px;
   --petard-lower-row-drop: 14px;
