@@ -314,6 +314,43 @@
     slot.inner.style.transform = `rotate(${slot.layoutRotate}deg)`;
   }
 
+  const UPPER_PETARD_ROW = [1, 3, 5, 7];
+  const LOWER_PETARD_ROW = [0, 2, 4, 6];
+
+  /** Same screen baseline for opened characters within a petard row. */
+  function syncRowRewardBaseline(rowIndices) {
+    const stage = document.getElementById("stage");
+    if (!stage || !slots.length) return;
+
+    const stageRect = stage.getBoundingClientRect();
+    if (stageRect.height < 1) return;
+
+    const entries = rowIndices
+      .map((i) => slots[i])
+      .filter((s) => s?.inner)
+      .map((s) => {
+        const innerRect = s.inner.getBoundingClientRect();
+        return {
+          slot: s,
+          innerBottom: innerRect.bottom - stageRect.top,
+        };
+      });
+
+    if (!entries.length) return;
+
+    const minInnerBottom = Math.min(...entries.map((e) => e.innerBottom));
+
+    entries.forEach(({ slot, innerBottom }) => {
+      const offset = Math.round((innerBottom - minInnerBottom) * 10) / 10;
+      slot.el.style.setProperty("--character-row-align-offset", `${offset}px`);
+    });
+  }
+
+  function syncRewardRowBaselines() {
+    syncRowRewardBaseline(UPPER_PETARD_ROW);
+    syncRowRewardBaseline(LOWER_PETARD_ROW);
+  }
+
   function setEnergy(n) {
     energy = n;
     energyValue.textContent = String(n);
@@ -1250,6 +1287,7 @@
     scheduleIdleHint();
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
+        syncRewardRowBaselines();
         requestAnimationFrame(() => {
           beginPetardIdleMotion();
         });
@@ -1299,6 +1337,9 @@
     }
 
     attachCharacterAmbientSparkles(slot);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncRewardRowBaselines);
+    });
   }
 
   function afterPickResolved() {
@@ -1397,6 +1438,7 @@
   }
 
   function reflowStageUi() {
+    syncRewardRowBaselines();
     if (handTargetSlot !== null) {
       const target = slots[handTargetSlot];
       if (target && !target.opened) positionHandOnSlot(target);

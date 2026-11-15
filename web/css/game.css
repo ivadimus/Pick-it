@@ -689,21 +689,20 @@ html.is-touch.game-landscape .slot[data-index="0"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="2"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="4"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="6"].show-special-reward img.done {
-  bottom: var(--character-reward-bottom-lower, 10px);
+  bottom: calc(
+    var(--character-reward-bottom-lower, 10px) + var(--character-row-align-offset, 0px)
+  );
 }
 
 html.is-touch.game-landscape .slot[data-index="1"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="3"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="5"].show-special-reward img.done,
 html.is-touch.game-landscape .slot[data-index="7"].show-special-reward img.done {
-  bottom: var(--character-reward-bottom-upper, 22px);
+  bottom: calc(
+    var(--character-reward-bottom-upper, 22px) + var(--character-row-align-offset, 0px)
+  );
   margin-left: 0;
   translate: 0 0;
-}
-
-/* Petard 4 sits +7px lower on touch — keep upper-row baseline even */
-html.is-touch.game-landscape .slot[data-index="3"].show-special-reward img.done {
-  bottom: calc(var(--character-reward-bottom-upper, 22px) + 7px);
 }
 
 html.is-touch.game-landscape .slot.reward-sam img.done {
@@ -2277,14 +2276,20 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot[data-index="2"].show-special-reward img.done,
 .slot[data-index="4"].show-special-reward img.done,
 .slot[data-index="6"].show-special-reward img.done {
-  bottom: var(--character-reward-bottom-lower, var(--character-reward-bottom, var(--slot-sku-bottom, 0px)));
+  bottom: calc(
+    var(--character-reward-bottom-lower, var(--character-reward-bottom, var(--slot-sku-bottom, 0px))) +
+      var(--character-row-align-offset, 0px)
+  );
 }
 
 .slot[data-index="1"].show-special-reward img.done,
 .slot[data-index="3"].show-special-reward img.done,
 .slot[data-index="5"].show-special-reward img.done,
 .slot[data-index="7"].show-special-reward img.done {
-  bottom: var(--character-reward-bottom-upper, var(--character-reward-bottom, var(--slot-sku-bottom, 0px)));
+  bottom: calc(
+    var(--character-reward-bottom-upper, var(--character-reward-bottom, var(--slot-sku-bottom, 0px))) +
+      var(--character-row-align-offset, 0px)
+  );
   margin-left: 0;
   translate: 0 0;
 }
