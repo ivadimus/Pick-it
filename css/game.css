@@ -753,6 +753,13 @@ html.is-touch.game-landscape .slot.reward-mole img.done {
   height: calc(var(--petard-size) * 1.05 * var(--character-face-mul));
 }
 
+html.is-touch.game-landscape .slot.reward-mia.show-special-reward img.done,
+html.is-touch.game-landscape .slot.reward-mole.show-special-reward img.done {
+  bottom: calc(
+    var(--character-reward-bottom-upper, 22px) + var(--character-row-align-offset, 0px) + 12px
+  );
+}
+
 html.is-touch.game-landscape .info-swing img {
   width: 100%;
   height: auto;
