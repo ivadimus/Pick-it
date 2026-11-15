@@ -1123,8 +1123,8 @@ html.is-touch.game-landscape .info-swing img {
   mix-blend-mode: plus-lighter;
   opacity: 1;
   filter: brightness(1.12);
-  -webkit-mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
-  mask-image: url("../Assets/Prize%20Panel%20frame.png?v=1");
+  -webkit-mask-image: url("../Assets/Prize%20Panel%20frame.png?v=2");
+  mask-image: url("../Assets/Prize%20Panel%20frame.png?v=2");
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
