@@ -772,7 +772,7 @@ html.is-touch.game-landscape .slot.reward-sanny img.done {
 html.is-touch.game-landscape .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
   height: calc(var(--petard-size) * 0.82 * var(--character-face-mul));
-  margin-left: 10px;
+  margin-left: -2px;
 }
 
 html.is-touch.game-landscape .slot.reward-hoppy.show-special-reward img.done {
@@ -781,8 +781,8 @@ html.is-touch.game-landscape .slot.reward-hoppy.show-special-reward img.done {
   );
 }
 
-html.is-touch.game-landscape .slot.reward-hoppy.show-special-reward .slot-inner {
-  translate: 24px -7px;
+html.is-touch.game-landscape #field .slot.reward-hoppy.show-special-reward .slot-inner {
+  transform: rotate(var(--slot-tilt, 5deg)) translate(6px, -7px) !important;
 }
 
 html.is-touch.game-landscape .slot.reward-oscar img.done {
@@ -807,6 +807,14 @@ html.is-touch.game-landscape #field .slot.reward-peggy.show-special-reward .slot
 html.is-touch.game-landscape .slot.reward-carrie img.done {
   width: calc(var(--petard-size) * 1.14 * var(--character-face-mul));
   height: calc(var(--petard-size) * 1.14 * var(--character-face-mul));
+}
+
+html.is-touch.game-landscape #field .slot.reward-carrie.show-special-reward img.done {
+  bottom: calc(var(--character-reward-bottom, 10px) + 18px);
+}
+
+html.is-touch.game-landscape #field .slot.reward-carrie.show-special-reward .slot-inner {
+  transform: rotate(var(--slot-tilt, -11deg)) translateY(-16px) !important;
 }
 
 html.is-touch.game-landscape .slot.reward-mole img.done {
@@ -2450,7 +2458,7 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-hoppy img.done {
   width: calc(var(--petard-size) * 0.82);
   height: calc(var(--petard-size) * 0.82);
-  margin-left: -4px;
+  margin-left: -14px;
 }
 
 .slot.reward-hoppy.show-special-reward img.done {
@@ -2460,14 +2468,14 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
   );
 }
 
-.slot.reward-hoppy.show-special-reward .slot-inner {
-  translate: 22px -5px;
+#field .slot.reward-hoppy.show-special-reward .slot-inner {
+  transform: rotate(var(--slot-tilt, 5deg)) translate(4px, -5px) !important;
 }
 
 .slot.reward-hoppy.show-special-reward .slot-inner::before {
   width: calc(var(--petard-size) * 0.9);
   height: calc(var(--petard-size) * 0.9);
-  margin-left: -16px;
+  margin-left: -26px;
   bottom: 16%;
 }
 
@@ -2509,6 +2517,14 @@ html.is-touch.game-landscape .game-complete-overlay.is-visible .game-complete-re
 .slot.reward-carrie img.done {
   width: calc(var(--petard-size) * 1.14);
   height: calc(var(--petard-size) * 1.14);
+}
+
+#field .slot.reward-carrie.show-special-reward img.done {
+  bottom: calc(var(--character-reward-bottom, var(--slot-sku-bottom, 0px)) + 18px);
+}
+
+#field .slot.reward-carrie.show-special-reward .slot-inner {
+  transform: rotate(var(--slot-tilt, -11deg)) translateY(-14px) !important;
 }
 
 .slot.reward-carrie.show-special-reward .slot-inner::before {
